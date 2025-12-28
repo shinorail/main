@@ -1,25 +1,165 @@
 <!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【公式】篠ノ井乗務区・しのレールラボ 統合サイト</title>
+    <style>
+        /* 全体設定 */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+        }
 
-<html lang="ja"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>【公式】篠ノ井乗務区・しのレールラボ 統合サイト</title> <style> body { margin: 0; padding: 0; font-family: sans-serif; line-height: 1.6; color: #333; background-color: #f4f4f4; } .container { width: 100%; max-width: 800px; margin: 0 auto; padding: 20px; box-sizing: border-box; } header { background: #2c3e50; color: #fff; padding: 20px 0; text-align: center; } .nav-list { list-style: none; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; margin-top: 10px; } .nav-list li { margin: 5px 10px; } .nav-list a { color: #fff; text-decoration: none; font-size: 0.9rem; } .nav-list a.disabled { cursor: default; opacity: 0.6; } .main-card { background: #fff; margin-top: 30px; padding: 40px 20px; border-radius: 8px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); } .status-tag { background: #95a5a6; color: #fff; padding: 4px 12px; border-radius: 4px; font-size: 0.8rem; } h2 { margin: 20px 0; color: #2c3e50; } .btn-omikuji { display: inline-block; margin: 20px 0; padding: 15px 30px; background: #d32f2f; color: #fff; text-decoration: none; border-radius: 30px; font-weight: bold; font-size: 1.1rem; box-shadow: 0 4px 0 #8e1f1f; } .btn-omikuji:active { transform: translateY(2px); box-shadow: 0 2px 0 #8e1f1f; } .sns-link { display: inline-block; margin-top: 10px; color: #1da1f2; text-decoration: none; font-size: 0.9rem; } footer { margin-top: 50px; text-align: center; font-size: 0.8rem; color: #777; } @media (max-width: 600px) { .nav-list { flex-direction: column; } .nav-list li { border-bottom: 1px solid rgba(255,255,255,0.1); padding: 5px 0; } } </style> </head> <body>
+        .container {
+            width: 90%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 40px 0;
+        }
 
-<header> <div class="container"> <h1>篠ノ井乗務区 公式サイト</h1> <nav> <ul class="nav-list"> <li><a href="https://shinorail.github.io/2026/index.html">おみくじサイト</a></li> <li><a href="#" class="disabled">Train-News</a></li> <li><a href="#" class="disabled">活動理念</a></li> <li><a href="#" class="disabled">ラボ</a></li> <li><a href="#" class="disabled">写真記録</a></li> <li><a href="#" class="disabled">運営者情報</a></li> <li><a href="#" class="disabled">お問い合わせ</a></li> </ul> </nav> </div> </header>
+        /* ヘッダー */
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
 
-<main class="container"> <div class="main-card"> <span class="status-tag">リニューアル中</span> <h2>只今、サイト構築中です</h2> <p>篠ノ井乗務区・しのレールラボ統合サイトへお越しいただきありがとうございます。
+        .site-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin: 0;
+        }
 
+        /* メインカード */
+        .main-card {
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
 
-現在、各コンテンツは公開準備中です。</p>
+        .status-badge {
+            display: inline-block;
+            background: #95a5a6;
+            color: #fff;
+            padding: 4px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 20px;
+        }
 
-    <hr style="border:0; border-top:1px solid #eee; margin:30px 0;">
+        h2 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
 
-    <h3>【2周年記念】鉄道おみくじ公開中</h3>
-    <p>2026年正月特設ページはこちらからアクセスいただけます。</p>
-    <a href="[https://shinorail.github.io/2026/index.html](https://shinorail.github.io/2026/index.html)" class="btn-omikuji">▶ 鉄道おみくじを引く</a>
-    
-    <br>
-    <a href="[https://x.com/Shino_Rail](https://x.com/Shino_Rail)" target="_blank" class="sns-link">最新情報は公式X (@Shino_Rail)</a>
+        .description {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        /* おみくじ誘導エリア */
+        .omikuji-section {
+            background: #fff5f5;
+            padding: 25px;
+            border-radius: 12px;
+            border: 2px solid #e74c3c;
+            margin-bottom: 30px;
+        }
+
+        .omikuji-section h3 {
+            margin-top: 0;
+            color: #e74c3c;
+            font-size: 1.1rem;
+        }
+
+        /* 大きく見やすいボタン */
+        .btn-large {
+            display: block;
+            background: #e74c3c;
+            color: #fff;
+            text-decoration: none;
+            padding: 18px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 0 #c0392b;
+            transition: all 0.2s;
+        }
+
+        .btn-large:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 #c0392b;
+        }
+
+        /* SNSリンク */
+        .sns-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: #1da1f2;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* フッター */
+        footer {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #999;
+            margin-top: 40px;
+        }
+
+        /* レスポンシブ調整（スマホ向け） */
+        @media (max-width: 480px) {
+            .container { padding: 20px 0; }
+            .main-card { padding: 20px; }
+            .site-title { font-size: 1.2rem; }
+            .btn-large { font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1 class="site-title">篠ノ井乗務区 公式サイト</h1>
+    </header>
+
+    <main class="main-card">
+        <span class="status-badge">リニューアル公開準備中</span>
+        
+        <h2>サイト統合のお知らせ</h2>
+        <p class="description">
+            現在、篠ノ井乗務区・しのレールラボの統合サイトを構築中です。完成まで今しばらくお待ちください。
+        </p>
+
+        <div class="omikuji-section">
+            <h3>【2周年記念】鉄道おみくじ</h3>
+            <p style="font-size: 0.9rem; margin-bottom: 20px;">
+                2026年正月特設サイトを公開しました。<br>
+                カウントダウンおよびおみくじはこちらから！
+            </p>
+            <a href="https://shinorail.github.io/2026/index.html" class="btn-large">
+                おみくじサイトへ移動する
+            </a>
+        </div>
+
+        <p style="font-size: 0.85rem; color: #888;">最新情報はX（旧Twitter）をご確認ください</p>
+        <a href="https://x.com/Shino_Rail" target="_blank" class="sns-link">公式X @Shino_Rail</a>
+    </main>
+
+    <footer>
+        <p>運営：篠ノ井乗務区</p>
+        <p>Copyright &copy; 2025 篠ノ井乗務区 All Rights Reserved.</p>
+    </footer>
 </div>
-</main>
 
-<footer> <p>運営：篠ノ井乗務区</p> <p>Copyright &copy; 2025 篠ノ井乗務区 All Rights Reserved.</p> </footer>
-
-</body> </html>
+</body>
+</html>
