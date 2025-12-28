@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お知らせ全般 | 篠ノ井乗務区の公式ホームページ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="preloader">
+        <div class="loader-content">
+            <div class="spinner"></div>
+            <p id="loading-text">読み込み中... 0%</p>
+        </div>
+    </div>
+
+    <div class="important-info-bar">
+        【重要】お問い合わせ窓口は一時的に非公開となっております。 <a href="general-news.html#contact-temporary-closure">詳細はこちら</a>
+    </div>
+
+    <header>
+        <h1>お知らせ全般 (General-News)</h1>
+    </header>
+
+    <main>
+        <div id="search-container">
+            <input type="text" id="search-input" placeholder="キーワードを入力して検索">
+            <button onclick="searchSite()">検索</button>
+        </div>
+        <div id="search-results"></div>
+
+        <section class="card news-archive">
+            <h2>📝 サイト運営に関するお知らせ</h2>
+            
+            <div id="general-news-list">
+                <p style="text-align:center;">お知らせを読み込み中...</p>
+            </div>
+            
+            <p style="text-align: center;">-- 記事の終わり --</p>
+        </section>
+        
+        <section class="info-footer card">
+             <p class="ai-note">当サイトでは、Google Geminiなどの生成AI技術を活用し、サービスの品質向上に努めております。</p>
+        </section>
+    </main>
+
+    <script src="navigation.js"></script>
+    <script src="load_news.js"></script>
+</body>
+</html>

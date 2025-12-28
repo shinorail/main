@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>篠ノ井乗務区の公式ホームページ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+   
+
+    <!-- ====== 重要なお知らせバー ====== -->
+    <div class="important-info-bar">
+        【重要】お問い合わせフォームのシステムメンテナンスについて
+        <a href="#">詳細はこちら</a>
+    </div>
+
+    <!-- ====== ナビゲーションメニュー ====== -->
+    <nav class="navbar">
+        <div class="nav-title">篠ノ井乗務区</div>
+        <div class="nav-menu-button" onclick="toggleMenu()">☰</div>
+        <ul class="nav-list">
+            <li><a href="index.html">ホーム</a></li>
+            <li><a href="train-news.html">お知らせ</a></li>
+            <li><a href="mission.html">活動理念</a></li>
+            <li><a href="operator-info.html">運営情報</a></li>
+        </ul>
+    </nav>
+
+    <header>
+        <h1 class="fade-in">篠ノ井乗務区 公式ホームページ</h1>
+    </header>
+
+    <main>
+
+        <!-- ====== 検索フォーム ====== -->
+        <div id="search-container" class="fade-in">
+            <input type="text" id="search-input" placeholder="キーワードを入力して検索">
+            <button onclick="searchSite()">検索</button>
+        </div>
+
+        <div id="search-results"></div>
+
+        <!-- ====== 最新ニュース（JSONから自動生成） ====== -->
+        <section class="card news-section fade-in">
+            <h2>📢 最新のお知らせ</h2>
+            <div class="news-list" id="news-list"></div>
+            <div class="buttons">
+                <a href="train-news.html" class="button">お知らせ一覧を見る</a>
+            </div>
+        </section>
+
+        <!-- ====== 活動理念 ====== -->
+        <section class="card mission-intro fade-in">
+            <h2>🔰 私たちの活動理念</h2>
+            <p>
+                篠ノ井乗務区は、鉄道の魅力や現場の文化を広く伝えることを目的に立ち上げられた
+                鉄道情報プロジェクトです。鉄道文化の共有、地域とのつながり、記録と継承を主な理念としています。
+            </p>
+            <div class="buttons">
+                <a href="mission.html" class="button">活動理念の詳細へ</a>
+            </div>
+        </section>
+
+        <!-- ====== 外部サイトリンク ====== -->
+        <section class="card social-link fade-in">
+            <h2>🌐 公式外部サイト</h2>
+            <p>旧Google Sites版はこちらからアクセスできます。</p>
+
+            <div class="buttons">
+                <a href="https://sites.google.com/view/shinonoi-links/" target="_blank" class="button" style="background-color: #f6b500;">
+                    <img src="image_dbd00c.jpg" alt="公式外部サイトバッジ" style="height: 18px; vertical-align: middle; margin-right: 5px;">
+                    公式外部サイトへ移動
+                </a>
+            </div>
+
+            <small>※本サイトは旧バージョンです。</small>
+        </section>
+
+    </main>
+
+    <!-- ====== 1本化したJS ====== -->
+    <script src="script.js"></script>
+
+</body>
+</html>

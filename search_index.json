@@ -1,0 +1,15 @@
+[
+    {
+        "id": 1,
+        "title": "篠ノ井乗務区の公式ホームページ",
+        "url": "index.html",
+        "keywords": "鉄道 魅力を発信 長野県 路線紹介 沿線風景 Train-News 活動理念 沿革 お問い合わせ Gemini"
+    },
+    {
+        "id": 2,
+        "title": "Train-News",
+        "url": "train-news.html",
+        "keywords": "鉄道 ニュース JR東日本 長野支社 211系 横須賀色 キハ110系 秋田リレー号色 復刻"
+    }
+    // 今後ページが増えたら、ここに要素を追加してください
+]
