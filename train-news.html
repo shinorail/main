@@ -3,138 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Train-News - 篠ノ井乗務区</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Train-News 閲覧室 - 篠ノ井乗務区</title>
     <style>
-        .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-        .news-card { background: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
-        .news-card:hover { transform: translateY(-5px); border-color: #004da0; }
-        .news-card h3 { margin: 0 0 10px; color: #004da0; font-size: 1.1em; }
-        .news-card p { font-size: 0.85em; color: #666; }
-
-        /* モーダル */
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; }
-        .modal-content { background: #fff; width: 95%; max-width: 900px; height: 90vh; border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; position: relative; }
-        .modal-close { position: absolute; top: 10px; right: 20px; background: #004da0; color: #fff; padding: 5px 15px; border-radius: 20px; cursor: pointer; z-index: 2100; font-weight: bold; }
+        body { margin: 0; font-family: "Helvetica Neue", Arial, sans-serif; background: #eef2f5; color: #333; }
+        .header-simple { background: #004da0; color: white; padding: 20px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
         
-        iframe { width: 100%; border: none; flex: 1; }
+        /* ニュース一覧のデザイン（見やすさ重視） */
+        .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 20px; }
+        .news-card { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); cursor: pointer; border-left: 5px solid #004da0; transition: 0.2s; }
+        .news-card:hover { transform: scale(1.02); box-shadow: 0 6px 12px rgba(0,0,0,0.1); }
+        .news-card h3 { margin: 0 0 10px; font-size: 1.2em; color: #004da0; }
+        .news-card p { margin: 5px 0; font-size: 0.9em; line-height: 1.5; }
 
-        /* コメントエリア */
-        .comment-area { height: 250px; background: #f4f4f4; border-top: 2px solid #004da0; padding: 20px; overflow-y: auto; }
-        .comment-item { border-bottom: 1px solid #ddd; padding: 10px 0; font-size: 0.9em; }
-        .comment-form { padding: 20px; background: #fff; border-top: 1px solid #ddd; display: flex; gap: 10px; flex-wrap: wrap; }
-        .comment-form input, .comment-form textarea { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
-        .comment-form input { flex: 1; min-width: 150px; }
-        .comment-form textarea { flex: 2; min-width: 250px; height: 40px; }
-        .comment-form button { background: #004da0; color: white; border: none; padding: 0 20px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        /* 全画面表示のビューワー */
+        .viewer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; display: none; flex-direction: column; z-index: 3000; }
+        .viewer-header { background: #333; color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .close-btn { background: #d93025; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        
+        iframe { width: 100%; flex: 1; border: none; }
+
+        /* コメント欄（右側または下側に配置） */
+        .viewer-main { display: flex; flex: 1; overflow: hidden; }
+        .comment-sidebar { width: 350px; background: #f8f9fa; border-left: 1px solid #ddd; display: flex; flex-direction: column; }
+        .comment-list { flex: 1; overflow-y: auto; padding: 20px; font-size: 0.9em; }
+        .comment-item { background: white; padding: 10px; border-radius: 5px; margin-bottom: 10px; border: 1px solid #eee; }
+        .comment-form { padding: 15px; background: white; border-top: 1px solid #ddd; }
+        .comment-form input, .comment-form textarea { width: 100%; margin-bottom: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; padding: 8px; }
+
+        @media (max-width: 800px) {
+            .viewer-main { flex-direction: column; }
+            .comment-sidebar { width: 100%; height: 40%; }
+        }
     </style>
 </head>
 <body>
 
-<header></header>
-<nav></nav>
+<div class="header-simple">
+    <h1 style="margin:0; font-size: 1.5em;">Train-News 閲覧専用ページ</h1>
+</div>
 
 <div class="container">
-    <h2>Train-News</h2>
-    <p>発行された新聞のバックナンバーをご覧いただけます。クリックで詳細表示とコメントが可能です。</p>
-    <div id="loading">読み込み中...</div>
+    <div id="loading" style="text-align:center; padding: 50px;">記事を読み込んでいます...</div>
     <div id="news-list" class="news-grid"></div>
 </div>
 
-<div id="pdf-modal" class="modal">
-    <div class="modal-content">
-        <span class="modal-close" onclick="closeModal()">× 閉じる</span>
-        <iframe id="pdf-viewer" src=""></iframe>
-        
-        <div class="comment-area">
-            <h4 style="margin:0 0 10px; color:#004da0;">コメント</h4>
-            <div id="comment-list"></div>
+<div id="viewer" class="viewer-overlay">
+    <div class="viewer-header">
+        <span id="viewer-title" style="font-weight:bold;">記事詳細</span>
+        <button class="close-btn" onclick="closeViewer()">閲覧を終了する</button>
+    </div>
+    <div class="viewer-main">
+        <iframe id="pdf-frame" src=""></iframe>
+        <div class="comment-sidebar">
+            <div style="padding: 10px 20px; background: #004da0; color:white; font-size:0.9em;">読者コメント</div>
+            <div id="comment-list" class="comment-list"></div>
+            <form id="comment-form" class="comment-form">
+                <input type="hidden" id="target-id">
+                <input type="text" id="user-name" placeholder="お名前" required>
+                <textarea id="user-msg" placeholder="感想・コメントを入力..." required></textarea>
+                <button type="submit" style="width:100%; background:#004da0; color:white; border:none; padding:10px; cursor:pointer; font-weight:bold;">送信する</button>
+            </form>
         </div>
-
-        <form id="comment-form" class="comment-form">
-            <input type="hidden" id="target-id">
-            <input type="text" id="user-name" placeholder="名前" required>
-            <textarea id="user-comment" placeholder="感想を入力..." required></textarea>
-            <button type="submit" id="submit-btn">送信</button>
-        </form>
     </div>
 </div>
 
-<footer></footer>
-
-<script src="menu.js"></script>
 <script>
     const scriptUrl = "https://script.google.com/macros/s/AKfycbwbUTBxVeTkRlAJ1dnBlgcmpGaWI9B0SeMwkwKSwAJYjRDAtVcX67QwA5FcNGaJE9Cq/exec";
 
-    // 記事一覧の取得
+    // ニュース読み込み
     async function loadNews() {
         try {
-            const response = await fetch(scriptUrl + "?sheet=新聞");
-            const data = await response.json();
+            const res = await fetch(scriptUrl + "?sheet=新聞");
+            const data = await res.json();
             const list = document.getElementById('news-list');
             document.getElementById('loading').style.display = 'none';
 
             data.reverse().forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'news-card';
-                card.onclick = () => openModal(item.URL, item.号数);
+                card.onclick = () => openViewer(item.URL, item.号数, item.見出し);
                 card.innerHTML = `
                     <h3>第 ${item.号数} 号</h3>
-                    <p><strong>発行日:</strong> ${item.発行日}</p>
+                    <p><strong>${item.発行日}</strong></p>
                     <p>${item.見出し}</p>
                 `;
                 list.appendChild(card);
             });
-        } catch (e) {
-            document.getElementById('loading').innerText = "エラーが発生しました。";
-        }
+        } catch(e) { document.getElementById('loading').innerText = "読み込みエラー"; }
     }
 
-    // モーダル表示とコメント読み込み
-    async function openModal(url, id) {
+    // ビューワー起動
+    function openViewer(url, id, title) {
         document.getElementById('target-id').value = id;
-        document.getElementById('pdf-viewer').src = url;
-        document.getElementById('pdf-modal').style.display = 'flex';
+        document.getElementById('viewer-title').innerText = "第 " + id + " 号：" + title;
+        document.getElementById('pdf-frame').src = url;
+        document.getElementById('viewer').style.display = 'flex';
         document.body.style.overflow = 'hidden';
         loadComments(id);
     }
 
-    function closeModal() {
-        document.getElementById('pdf-modal').style.display = 'none';
+    function closeViewer() {
+        document.getElementById('viewer').style.display = 'none';
         document.body.style.overflow = 'auto';
-        document.getElementById('pdf-viewer').src = "";
+        document.getElementById('pdf-frame').src = "";
     }
 
     // コメント取得
     async function loadComments(id) {
         const list = document.getElementById('comment-list');
         list.innerHTML = "読み込み中...";
-        const response = await fetch(scriptUrl + "?action=getComments&id=" + id);
-        const data = await response.json();
-        list.innerHTML = data.length ? "" : "まだコメントはありません。";
+        const res = await fetch(scriptUrl + "?action=getComments&id=" + id);
+        const data = await res.json();
+        list.innerHTML = data.length ? "" : "<p style='color:#888;'>まだコメントはありません</p>";
         data.forEach(c => {
             const div = document.createElement('div');
             div.className = 'comment-item';
-            div.innerHTML = `<strong>${c.名前}</strong> <small style="color:#888;">${c.日付}</small><br>${c.内容}`;
+            div.innerHTML = `<strong>${c.名前}</strong> <small style="color:#999;">${c.日付}</small><br>${c.内容}`;
             list.appendChild(div);
         });
     }
 
-    // コメント送信
+    // コメント投稿
     document.getElementById('comment-form').onsubmit = async (e) => {
         e.preventDefault();
-        const btn = document.getElementById('submit-btn');
-        btn.disabled = true;
         const id = document.getElementById('target-id').value;
         const data = {
             action: "postComment",
             id: id,
             name: document.getElementById('user-name').value,
-            comment: document.getElementById('user-comment').value
+            comment: document.getElementById('user-msg').value
         };
         await fetch(scriptUrl, { method: 'POST', body: JSON.stringify(data) });
-        document.getElementById('user-comment').value = "";
-        btn.disabled = false;
+        document.getElementById('user-msg').value = "";
         loadComments(id);
     };
 
