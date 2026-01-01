@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>よくある質問 - 篠ノ井乗務区</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .faq-item {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        .faq-question {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #004da0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.3s;
+        }
+        .faq-question:hover {
+            background: #eef4fb;
+        }
+        .faq-question::after {
+            content: '+';
+            font-size: 1.2em;
+        }
+        .faq-item.open .faq-question::after {
+            content: '-';
+        }
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease-out;
+            background: #fff;
+            line-height: 1.8;
+            color: #444;
+        }
+        .faq-item.open .faq-answer {
+            padding: 15px 20px;
+            max-height: 500px;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+
+<header></header>
+<nav></nav>
+
+<div class="container">
+    <div class="faq-container">
+        <h2 style="text-align: center; margin-bottom: 30px;">よくある質問</h2>
+
+        <div class="faq-item">
+            <div class="faq-question">篠ノ井乗務区とは何ですか？</div>
+            <div class="faq-answer">
+                当サイトは、信州の鉄道文化や現場の魅力を伝えるために個人で運営している鉄道情報プロジェクトです。実在の鉄道会社や組織とは直接の関係はありません。
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">掲載されている写真は自由に使えますか？</div>
+            <div class="faq-answer">
+                当サイトに掲載されている写真や文章の著作権は、原則として篠ノ井乗務区に帰属します。無断転載・営利目的の利用は固くお断りしております。引用の際は、利用規約に基づき適切に行ってください。
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">団体化の予定はありますか？</div>
+            <div class="faq-answer">
+                現在は個人主導のプロジェクトですが、2026年以降、同じ志を持つ方々と協力し、より社会的な信頼を得られる組織としての「団体化」を本格的に検討しています。
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">情報の修正を依頼したいのですが。</div>
+            <div class="faq-answer">
+                掲載内容に誤りがある場合は、お手数ですが「お問い合わせフォーム」より詳細をご連絡ください。確認のうえ、速やかに対応させていただきます。
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px;">
+            <p>解決しない場合は、こちらからお問い合わせください。</p>
+            <a href="contact.html" style="color: #004da0; font-weight: bold;">お問い合わせフォームへ</a>
+        </div>
+    </div>
+</div>
+
+<footer></footer>
+
+<script src="menu.js"></script>
+<script>
+    // FAQのアコーディオン動作
+    document.querySelectorAll('.faq-question').forEach(q => {
+        q.addEventListener('click', () => {
+            q.parentElement.classList.toggle('open');
+        });
+    });
+</script>
+</body>
+</html>
