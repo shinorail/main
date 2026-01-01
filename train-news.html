@@ -3,83 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Train-News - 篠ノ井乗務区</title>
+    <title>Train-News 一覧 - 篠ノ井乗務区</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* ニュース記事特有の装飾のみ追加 */
-        .article-date {
-            font-size: 14px;
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .news-item {
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            background: #fff;
+            text-decoration: none;
+            color: #333;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+        .news-item:hover {
+            border-color: #004da0;
+            background: #f0f7ff;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .news-meta {
+            display: flex;
+            align-items: center;
+            font-size: 0.85em;
             color: #666;
-            margin-bottom: 20px;
-            display: block;
+            margin-bottom: 10px;
         }
-        .news-box {
-            background-color: #f0f7ff;
-            padding: 15px;
-            border-left: 5px solid #004da0;
-            margin: 20px 0;
-        }
-        .highlight {
+        .news-no {
+            background: #004da0;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 3px;
+            margin-right: 10px;
             font-weight: bold;
-            color: #d32f2f;
+        }
+        .news-title {
+            display: block;
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #004da0;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+        .news-summary {
+            font-size: 0.9em;
+            line-height: 1.5;
+            color: #444;
+            flex-grow: 1;
+        }
+        #loading {
+            text-align: center;
+            padding: 50px;
+            color: #666;
         }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>篠ノ井乗務区 公式サイト</h1>
-</header>
-
-<nav>
-    <a href="index.html">ホーム</a>
-    <a href="train-news.html">Train-News</a>
-    <a href="mission.html">活動理念</a>
-    <a href="history.html">沿革</a>
-    <a href="contact.html">問い合わせ</a>
-</nav>
+<header></header>
+<nav></nav>
 
 <div class="container">
-    <h2>【JR東日本長野支社】211系に「横須賀色」、キハ110系に「秋田リレー号色」を復刻！</h2>
-    <span class="article-date">掲載日：2025年11月7日 発表（JR東日本長野支社）</span>
-
-    <p>JR東日本長野支社は、沿線地域のさらなる活性化に繋げるべく、長野総合車両センター所属車両の塗色変更を実施し、地域にゆかりのある懐かしいカラーリングを復刻すると発表しました。</p>
-
-    <h3>1. 211系に「横須賀色」が登場</h3>
-    <ul>
-        <li>対象車両：211系 6両編成1本</li>
-        <li>デザイン：2015年まで中央本線などで活躍した<span class="highlight">115系の「横須賀色」</span>をイメージした帯色に変更。</li>
-        <li>主な運行区間：信越本線 長野駅〜中央本線 立川駅間。</li>
-    </ul>
-
-    <h3>2. キハ110系に「秋田リレー号色」が復刻</h3>
-    <ul>
-        <li>対象車両：キハ110系 1両編成1本</li>
-        <li>デザイン：1997年まで運行していた特急<span class="highlight">「秋田リレー号」</span>の塗色に復刻。</li>
-        <li>主な運行区間：信越本線 長野駅〜上越線 長岡駅間。</li>
-    </ul>
-
-    <div class="news-box">
-        <h3>📅 運行開始日・関連イベント</h3>
-        <p><strong>定期運用開始時期</strong></p>
-        <ul>
-            <li>キハ110系（秋田リレー号色）：2025年12月後半より</li>
-            <li>211系（横須賀色）：2026年1月後半より</li>
-        </ul>
-        <p><strong>塗色変更車両お披露目撮影会</strong></p>
-        <ul>
-            <li>キハ110系：2025年12月20日（土）</li>
-            <li>211系：2026年1月18日（日）</li>
-        </ul>
-    </div>
-
-    <p>詳細および撮影会の募集に関する情報は、以下のプレスリリースをご確認ください。</p>
-    <p><a href="https://www.jreast.co.jp/press/2025/nagano/20251107_na01.pdf" target="_blank">JR東日本長野支社プレスリリース（PDF）</a></p>
+    <h2>Train-News（サイト内新聞）</h2>
+    <p>篠ノ井乗務区が発行する広報紙や、号外ニュースの一覧です。</p>
+    
+    <div id="loading">新聞データを連結中...</div>
+    <div id="news-list" class="news-grid"></div>
 </div>
 
-<footer>
-    <p>運営：篠ノ井乗務区 &copy; 2026 All Rights Reserved.</p>
-</footer>
+<footer></footer>
+
+<script src="menu.js"></script>
+<script>
+    // 統合したGASのURL
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbwbUTBxVeTkRlAJ1dnBlgcmpGaWI9B0SeMwkwKSwAJYjRDAtVcX67QwA5FcNGaJE9Cq/exec";
+
+    async function loadTrainNews() {
+        try {
+            // パラメータ ?sheet=新聞 を付けて呼び出し
+            const response = await fetch(scriptUrl + "?sheet=新聞");
+            const data = await response.json();
+            
+            document.getElementById('loading').style.display = 'none';
+            const list = document.getElementById('news-list');
+
+            // 新しい順に表示（reverse）
+            data.reverse().forEach(item => {
+                const a = document.createElement('a');
+                a.className = 'news-item';
+                a.href = item.URL; // PDFまたはHTMLへのリンク
+                
+                a.innerHTML = `
+                    <div class="news-meta">
+                        <span class="news-no">${item.号数}</span>
+                        <span class="news-date">${item.日付}</span>
+                    </div>
+                    <span class="news-title">${item.タイトル}</span>
+                    <p class="news-summary">${item.概要}</p>
+                `;
+                list.appendChild(a);
+            });
+        } catch (e) {
+            document.getElementById('loading').innerHTML = "<p>新聞データの取得に失敗しました。<br>スプレッドシートの「新聞」シートを確認してください。</p>";
+        }
+    }
+
+    loadTrainNews();
+</script>
 
 </body>
 </html>
