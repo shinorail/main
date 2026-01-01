@@ -1,227 +1,67 @@
-//* ============================= */
-/* 0. 全体設定 (リセットとフォント) */
-/* ============================= */
+/* 全体の基本設定 */
 body {
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+    line-height: 1.6;
+    color: #333;
     margin: 0;
     padding: 0;
-    font-family: 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
-    background-color: #f8f9fa; /* ページ全体の背景色（ごく薄いグレー） */
-    color: #212529; /* 基本の文字色（濃いグレー） */
+    background-color: #f4f4f4;
 }
 
-a {
-    color: #1a237e; /* リンクの文字色（濃紺） */
+/* ヘッダー・ナビゲーション */
+header {
+    background-color: #004da0;
+    color: #ffffff;
+    padding: 1rem 0;
+    text-align: center;
+}
+
+nav {
+    background-color: #003366;
+    padding: 10px;
+    text-align: center;
+}
+
+nav a {
+    color: white;
     text-decoration: none;
+    margin: 0 15px;
+    font-weight: bold;
 }
 
-a:hover {
+nav a:hover {
     text-decoration: underline;
 }
 
-/* 中央寄せ用コンテナ */
+/* コンテンツエリア */
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
 }
 
-
-/* ============================= */
-/* １．重要なお知らせバー (濃い赤) */
-/* ============================= */
-.important-notice {
-    background-color: #c62828; /* 濃い赤に変更 */
-    color: #ffffff; /* 文字色は白 */
-    padding: 12px 20px;
-    text-align: center;
-    font-size: 14px;
-    font-weight: bold;
-}
-
-
-/* ============================= */
-/* ２．ヘッダーとナビゲーション (濃紺) */
-/* ============================= */
-.header-nav {
-    background-color: #1a237e; /* 濃紺に変更 */
-    padding: 15px 0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.header-nav .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.site-title {
-    color: #ffffff;
+/* 見出しのデザイン */
+h1 {
+    margin: 0;
     font-size: 24px;
-    margin: 0;
-}
-
-.nav-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-}
-
-.nav-list li {
-    margin-left: 25px;
-}
-
-.nav-list a {
-    color: #ffffff; /* ナビゲーションの文字色も白 */
-    font-weight: bold;
-    padding: 5px 0;
-    transition: color 0.3s;
-}
-
-.nav-list a:hover {
-    color: #e3f2fd; /* ホバー時に薄い青に変化 */
-    text-decoration: none;
-}
-
-
-/* ============================= */
-/* ３．メインコンテンツ */
-/* ============================= */
-main {
-    padding: 40px 0;
 }
 
 h2 {
-    color: #1a237e; /* 大見出しは濃紺 */
-    border-bottom: 2px solid #1a237e;
-    padding-bottom: 5px;
-    margin-top: 30px;
-}
-
-h3 {
-    color: #1a237e;
-}
-
-/* ラボのウェルカムボックス (トップページ用) */
-.lab-welcome {
-    border: 1px solid #c62828; /* アクセントカラーで枠線 */
-    padding: 20px;
-    margin-top: 20px;
-    background-color: #ffffff;
-}
-
-/* アクションボタンのスタイル (トップページ用) */
-.action-links {
-    margin: 30px 0;
-    text-align: center;
-}
-
-.button {
-    display: inline-block;
-    padding: 10px 20px;
-    margin: 0 10px;
-    border-radius: 5px;
-    font-weight: bold;
-    transition: background-color 0.3s;
-}
-
-.button.primary {
-    background-color: #1a237e;
-    color: #ffffff;
-    border: 1px solid #1a237e;
-}
-
-.button.secondary {
-    background-color: #ffffff;
-    color: #1a237e;
-    border: 1px solid #1a237e;
-}
-
-.button.primary:hover {
-    background-color: #3f51b5;
-}
-
-.button.secondary:hover {
-    background-color: #e3f2fd;
-}
-
-
-/* ============================= */
-/* ４．フッター */
-/* ============================= */
-.site-footer {
-    background-color: #333333; /* 暗い色 */
-    color: #cccccc;
-    padding: 20px 0;
-    font-size: 12px;
-    text-align: center;
-}
-
-.site-footer p {
-    margin: 5px 0;
-}
-
-
-/* ============================= */
-/* ５．お知らせページ専用スタイル */
-/* ============================= */
-
-.news-list-section {
-    border-top: 1px solid #cccccc;
-}
-
-.news-item {
-    padding: 15px 0;
-    border-bottom: 1px dashed #dddddd; /* 点線で区切ります */
-    display: flex; /* 要素を横に並べるために使用 */
-    align-items: center;
-    gap: 15px;
-}
-
-.news-date {
-    font-size: 14px;
-    color: #6c757d; /* 日付は控えめな色 */
-    flex-shrink: 0;
-    width: 90px;
-}
-
-.news-category {
-    font-size: 12px;
-    padding: 3px 8px;
-    border-radius: 3px;
-    color: #ffffff;
-    font-weight: bold;
-    flex-shrink: 0;
-}
-
-/* カテゴリーごとの背景色を設定 */
-.official-category {
-    background-color: #1a237e; /* 濃紺（メインカラー） */
-}
-
-.lab-category {
-    background-color: #c62828; /* 濃い赤（アクセントカラー） */
-}
-
-.site-category {
-    background-color: #6c757d; /* グレー */
-}
-
-.news-title {
-    font-weight: normal;
-    font-size: 16px;
-    color: #212529;
-}
-
-.news-title:hover {
-    color: #1a237e;
-    text-decoration: none;
-}
-
-
-/* ６．最新のお知らセクション (ハイライト) */
-.news-new {
-    background-color: #fffde7; /* 非常に薄い黄色で背景をハイライト */
-    border-left: 5px solid #c62828; /* アクセントカラーの赤で左側にラインを追加 */
+    border-left: 5px solid #004da0;
     padding-left: 10px;
+    color: #004da0;
+    font-size: 20px;
+}
+
+/* フッター */
+footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 12px;
+    color: #777;
+    background-color: #e0e0e0;
+    margin-top: 40px;
 }
