@@ -257,3 +257,45 @@ footer { text-align: center; padding: 20px; font-size: 12px; background: #e0e0e0
         grid-template-columns: 1fr;
     }
 }
+header {
+    background-color: #004da0; /* 画像のメインカラーに近い青 */
+    color: white;
+    padding: 30px 20px;
+    text-align: center;
+}
+header h1 {
+    margin: 0;
+    font-size: 1.8em;
+    letter-spacing: 2px;
+}
+
+nav {
+    background-color: #002b5b; /* 画像の下部、濃い紺色 */
+    padding: 12px 0;
+}
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 0.95em;
+    font-weight: bold;
+    padding: 5px 10px;
+}
+nav a:hover, nav a.active {
+    background-color: rgba(255,255,255,0.1);
+    border-radius: 4px;
+}
+
+/* モバイル対応：項目が増えたので折り返しを許可 */
+@media (max-width: 600px) {
+    nav ul { gap: 10px; }
+    nav a { font-size: 0.85em; }
+}
