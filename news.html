@@ -2,96 +2,37 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>お知らせ・サーバー情報 - 篠ノ井乗務区</title>
+    <title>お知らせ - 篠ノ井乗務区</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<header>
-    <h1>篠ノ井乗務区 公式サイト</h1>
-</header>
-
-<nav>
-    <a href="index.html">ホーム</a>
-    <a href="train-news.html">Train-News</a>
-    <a href="news.html">お知らせ</a>
-    <a href="history.html">沿革</a>
-    <a href="contact.html">問い合わせ</a>
-</nav>
-
-<div class="container">
-    
-    <section>
-        <h2>管理者からのお知らせ</h2>
-        <div class="news-box">
-            <p><strong>【2周年記念】お正月おみくじ公開のお知らせ</strong></p>
-            <p>2026年1月1日より、2周年を記念した特設サイトを公開しました。</p>
-            <p><a href="https://shinorail.github.io/shinonoi-2026/">👉 特設サイトはこちら</a></p>
-        </div>
-    </section>
-
-    <section>
+    <header></header><nav></nav>
+    <div class="container">
         <h2>更新情報</h2>
         <div id="loading-area">
-            <p style="text-align: center; font-size: 14px; color: #666;">列車がデータを運んでいます...</p>
-            <div class="loading-rail">
-                <div class="train-icon train-active"></div>
-            </div>
+            <div class="loading-rail"><div class="train-icon"></div></div>
         </div>
-
-        <ul id="update-list" class="update-list">
-            </ul>
-    </section>
-
-</div>
-
-<footer>
-    <p>運営：篠ノ井乗務区 &copy; 2026 All Rights Reserved.</p>
-</footer>
-
-<script>
-const spreadsheetUrl = "https://script.google.com/macros/s/AKfycbwbUTBxVeTkRlAJ1dnBlgcmpGaWI9B0SeMwkwKSwAJYjRDAtVcX67QwA5FcNGaJE9Cq/exec";
-
-async function loadNews() {
-    try {
-        const response = await fetch(spreadsheetUrl);
-        const data = await response.json();
-        
-        const loadingArea = document.getElementById('loading-area');
-        const listContainer = document.getElementById('update-list');
-        
-        // 読み込み中表示を消す
-        loadingArea.style.display = 'none';
-
-        if (data.length === 0) {
-            listContainer.innerHTML = '<li>現在お知らせはありません。</li>';
-            return;
+        <ul id="update-list" class="update-list"></ul>
+    </div>
+    <footer></footer>
+    <script src="menu.js"></script>
+    <script>
+        const spreadsheetUrl = "https://script.google.com/macros/s/AKfycbwbUTBxVeTkRlAJ1dnBlgcmpGaWI9B0SeMwkwKSwAJYjRDAtVcX67QwA5FcNGaJE9Cq/exec";
+        async function loadNews() {
+            try {
+                const response = await fetch(spreadsheetUrl);
+                const data = await response.json();
+                document.getElementById('loading-area').style.display = 'none';
+                const list = document.getElementById('update-list');
+                data.reverse().forEach((item, i) => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<span class="badge">${item.カテゴリ || '更新'}</span> ${item.日付} - ${item.内容}`;
+                    list.appendChild(li);
+                    setTimeout(() => li.classList.add('show'), i * 150);
+                });
+            } catch (e) { document.getElementById('loading-area').innerText = "脱線しました。"; }
         }
-
-        // データを新しい順にしてDOM作成
-        data.reverse().forEach((item, index) => {
-            const li = document.createElement('li');
-            li.innerHTML = `
-                <span class="update-date">${item.日付 || ''}</span>
-                <span class="badge badge-news">${item.カテゴリ || '更新'}</span>
-                <span>${item.内容 || ''}</span>
-            `;
-            listContainer.appendChild(li);
-
-            // 少しずつ遅らせて表示（鉄道が走っていくように）
-            setTimeout(() => {
-                li.classList.add('show');
-            }, index * 200); // 200msずつずらして表示
-        });
-    } catch (error) {
-        document.getElementById('loading-area').innerHTML = '<p>データの連結に失敗しました（脱線）</p>';
-        console.error("Error:", error);
-    }
-}
-
-loadNews();
-</script>
-
+        loadNews();
+    </script>
 </body>
 </html>
