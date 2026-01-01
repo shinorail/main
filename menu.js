@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // 2. ナビゲーション（メニュー）の挿入
-    // 既存メニューに加えて、ご指定の4項目を統合した構成です
     const nav = document.querySelector('nav');
     if (nav) {
         nav.innerHTML = `
@@ -27,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function() {
         `;
     }
 
-    // 3. フッターの挿入（AI活用の明記・メンテナンス表示・著作権）
+    // 3. フッターの挿入（AI活用の明記・お問い合わせリンク・著作権）
     const footer = document.querySelector('footer');
     if (footer) {
         footer.innerHTML = `
@@ -35,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 <p>当サイトでは、Google Geminiなどの生成AI技術を活用し、サービスの品質向上に努めております。</p>
                 
                 <p>お問い合わせは以下のフォームよりお願いいたします。<br>
-                <strong>お問い合わせフォーム ＜システムメンテナンス中＞</strong></p>
+                <a href="contact.html" style="color: #004da0; font-weight: bold; text-decoration: underline;">お問い合わせフォーム</a> ＜システムメンテナンス中＞</p>
                 
                 <div style="margin: 20px 0;">
                     <a href="policy.html" style="color:#666; text-decoration:none; margin: 0 10px;">規約・ポリシー</a>
