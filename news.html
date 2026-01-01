@@ -2,14 +2,30 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>お知らせ - 篠ノ井乗務区</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* スマホ向け調整 */
+        @media (max-width: 600px) {
+            .update-list li {
+                flex-direction: column; /* 日付、バッジ、内容を縦に並べる */
+                align-items: flex-start;
+                gap: 5px;
+            }
+            .update-date {
+                font-size: 0.8em;
+                min-width: auto;
+            }
+        }
+    </style>
 </head>
 <body>
     <header></header><nav></nav>
     <div class="container">
         <h2>更新情報</h2>
         <div id="loading-area">
+            <p style="text-align: center; font-size: 14px; color: #666;">列車がデータを運んでいます...</p>
             <div class="loading-rail"><div class="train-icon"></div></div>
         </div>
         <ul id="update-list" class="update-list"></ul>
@@ -26,11 +42,17 @@
                 const list = document.getElementById('update-list');
                 data.reverse().forEach((item, i) => {
                     const li = document.createElement('li');
-                    li.innerHTML = `<span class="badge">${item.カテゴリ || '更新'}</span> ${item.日付} - ${item.内容}`;
+                    li.innerHTML = `
+                        <span class="update-date">${item.日付 || ''}</span>
+                        <span class="badge">${item.カテゴリ || '更新'}</span>
+                        <span class="update-text">${item.内容 || ''}</span>
+                    `;
                     list.appendChild(li);
                     setTimeout(() => li.classList.add('show'), i * 150);
                 });
-            } catch (e) { document.getElementById('loading-area').innerText = "脱線しました。"; }
+            } catch (e) { 
+                document.getElementById('loading-area').innerHTML = "<p>データの連結に失敗しました（脱線）</p>"; 
+            }
         }
         loadNews();
     </script>
