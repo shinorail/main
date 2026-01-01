@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // 2. ナビゲーション（メニュー）の挿入
+    // 既存メニューに加えて、ご指定の4項目を統合した構成です
     const nav = document.querySelector('nav');
     if (nav) {
         nav.innerHTML = `
@@ -18,23 +19,31 @@ document.addEventListener("DOMContentLoaded", function() {
                 <li><a href="news.html">お知らせ</a></li>
                 <li><a href="train-news.html">Train-News</a></li>
                 <li><a href="mission.html">活動理念</a></li>
-                <li><a href="history.html">沿革</a></li>
-                <li><a href="contact.html">問い合わせ</a></li>
+                <li><a href="photo.html">写真記録</a></li>
+                <li><a href="contact.html">お問い合わせ</a></li>
+                <li><a href="faq.html">よくある質問</a></li>
+                <li><a href="links.html">SNS/外部リンク</a></li>
             </ul>
         `;
     }
 
-    // 3. フッターの挿入（規約・ポリシーへのリンク付き）
+    // 3. フッターの挿入（AI活用の明記・メンテナンス表示・著作権）
     const footer = document.querySelector('footer');
     if (footer) {
-        const year = new Date().getFullYear();
         footer.innerHTML = `
-            <div class="footer-inner">
-                <p>
+            <div class="footer-inner" style="text-align: center; padding: 20px; font-size: 0.9em; line-height: 1.8; color: #555; border-top: 1px solid #ddd;">
+                <p>当サイトでは、Google Geminiなどの生成AI技術を活用し、サービスの品質向上に努めております。</p>
+                
+                <p>お問い合わせは以下のフォームよりお願いいたします。<br>
+                <strong>お問い合わせフォーム ＜システムメンテナンス中＞</strong></p>
+                
+                <div style="margin: 20px 0;">
                     <a href="policy.html" style="color:#666; text-decoration:none; margin: 0 10px;">規約・ポリシー</a>
-                </p>
-                <p>&copy; 2024-${year} 篠ノ井乗務区 All Rights Reserved.</p>
-                <p style="font-size: 0.8em; margin-top: 5px;">おかげさまで設立2周年</p>
+                </div>
+
+                <p style="font-weight: bold; margin-bottom: 5px;">運営：篠ノ井乗務区</p>
+                <p style="margin: 0;">&copy; 2025 篠ノ井乗務区 All Rights Reserved.</p>
+                <p style="font-size: 0.8em; color: #888;">本サイトに掲載の文章・画像・データの無断転載を禁じます。</p>
             </div>
         `;
     }
@@ -54,16 +63,12 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     // 5. トップページ用：最新のお知らせ自動取得機能
-    // index.html に id="top-news-list" がある場合のみ実行
     const topNewsContainer = document.getElementById('top-news-list');
     if (topNewsContainer) {
         loadTopNews(topNewsContainer);
     }
 });
 
-/**
- * お知らせデータを取得して表示する関数
- */
 async function loadTopNews(container) {
     const scriptUrl = "https://script.google.com/macros/s/AKfycbwbUTBxVeTkRlAJ1dnBlgcmpGaWI9B0SeMwkwKSwAJYjRDAtVcX67QwA5FcNGaJE9Cq/exec";
     const loadingMsg = document.getElementById('news-loading');
@@ -71,13 +76,11 @@ async function loadTopNews(container) {
     try {
         const response = await fetch(scriptUrl);
         const data = await response.json();
-        
         if (loadingMsg) loadingMsg.style.display = 'none';
 
-        // 最新の3件を表示
         data.reverse().slice(0, 3).forEach(item => {
             const li = document.createElement('li');
-            li.style.cssText = "padding: 10px 0; border-bottom: 1px dashed #eee; display: flex; gap: 15px; font-size: 0.95em;";
+            li.style.cssText = "padding: 10px 0; border-bottom: 1px dashed #eee; display: flex; gap: 15px; font-size: 0.95em; text-align: left;";
             li.innerHTML = `
                 <span style="color: #666; font-family: monospace; white-space: nowrap;">${item.日付}</span>
                 <span style="background: #004da0; color: white; padding: 2px 6px; border-radius: 3px; font-size: 0.75em; height: fit-content;">${item.カテゴリ}</span>
