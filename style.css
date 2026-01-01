@@ -208,3 +208,52 @@ h2 { border-left: 5px solid #004da0; padding-left: 10px; color: #004da0; }
 }
 
 footer { text-align: center; padding: 20px; font-size: 12px; background: #e0e0e0; }
+/* --- レスポンシブ対応（画面幅 600px 以下のスマホ向け） --- */
+@media (max-width: 600px) {
+    header {
+        padding: 1rem 0;
+    }
+
+    h1 {
+        font-size: 18px; /* スマホではタイトルを少し小さく */
+    }
+
+    nav {
+        flex-wrap: wrap; /* メニューが入り切らない場合に折り返す */
+        gap: 5px;
+        padding: 8px;
+    }
+
+    nav a {
+        font-size: 12px; /* メニュー文字を小さく */
+        padding: 4px 8px;
+        flex: 1 1 30%; /* 3列くらいに並べる */
+        text-align: center;
+    }
+
+    .container {
+        margin: 10px;
+        padding: 15px;
+        border-radius: 0; /* スマホでは角丸をなくして広く使う */
+    }
+
+    h2 {
+        font-size: 18px;
+    }
+
+    /* ニュースリストの文字サイズ調整 */
+    .update-list li {
+        font-size: 14px;
+        flex-direction: column; /* 日付と内容を縦に並べる */
+        align-items: flex-start;
+    }
+
+    .update-date {
+        margin-bottom: 5px;
+    }
+
+    /* ホームのリンクカードを縦1列に */
+    .link-grid {
+        grid-template-columns: 1fr;
+    }
+}
