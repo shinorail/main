@@ -65,3 +65,46 @@ footer {
     background-color: #e0e0e0;
     margin-top: 40px;
 }
+/* 鉄道アニメーションのコンテナ */
+.loading-rail {
+    position: relative;
+    width: 100%;
+    height: 40px;
+    border-bottom: 2px solid #666; /* 線路 */
+    margin: 20px 0;
+    overflow: hidden;
+}
+
+/* 電車のアイコン（簡易的な形） */
+.train-icon {
+    position: absolute;
+    bottom: 2px;
+    left: -100px;
+    width: 60px;
+    height: 20px;
+    background-color: #004da0;
+    border-radius: 3px 10px 3px 3px;
+    border-top: 4px solid #fff; /* 窓 */
+}
+
+/* 走るアニメーション */
+@keyframes train-run {
+    0% { left: -100px; }
+    100% { left: 100%; }
+}
+
+.train-active {
+    animation: train-run 1.5s linear infinite;
+}
+
+/* ニュースがだんだん出てくる演出 */
+.update-list li {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.5s ease-out;
+}
+
+.update-list li.show {
+    opacity: 1;
+    transform: translateY(0);
+}
