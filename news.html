@@ -3,72 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>お知らせ | 【公式】篠ノ井乗務区・しのレールラボ 統合サイト</title>
+    <title>お知らせ・サーバー情報 - 篠ノ井乗務区</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="important-notice">
-        【重要】お問い合わせ窓口を総合化します。詳細をご確認ください。
-    </div>
+<header>
+    <h1>篠ノ井乗務区 公式サイト</h1>
+</header>
 
-    <header class="header-nav">
-        <div class="container">
-            <h1 class="site-title">篠ノ井乗務区 公式サイト</h1>
-            <nav>
-                <ul class="nav-list">
-                    <li><a href="index.html">ホーム</a></li>
-                    <li><a href="train-news.html">Train-News</a></li>
-                    <li><a href="mission.html">活動理念</a></li>
-                    <li><a href="lab.html">ラボ</a></li> 
-                    <li><a href="photos.html">写真記録</a></li>
-                    <li><a href="about.html">運営者情報</a></li>
-                    <li><a href="contact.html">お問い合わせ</a></li>
-                    <li><a href="links.html">SNS/外部リンク</a></li>
-                </ul>
-            </nav>
+<nav>
+    <a href="index.html">ホーム</a>
+    <a href="train-news.html">Train-News</a>
+    <a href="news.html">お知らせ</a>
+    <a href="history.html">沿革</a>
+    <a href="contact.html">問い合わせ</a>
+</nav>
+
+<div class="container">
+    
+    <section>
+        <h2>管理者からのお知らせ</h2>
+        <div class="news-box">
+            <p><strong>【2周年記念】お正月おみくじ公開のお知らせ</strong></p>
+            <p>2026年1月1日より、2周年を記念した特設サイトを公開しました。</p>
+            <p><a href="https://shinorail.github.io/shinonoi-2026/">👉 特設サイトはこちら</a></p>
         </div>
-    </header>
+    </section>
 
-    <main class="container">
-        <h2>お知らせ</h2>
-        
-        <section class="news-list-section">
-            
-            <article class="news-item news-new">
-                <time datetime="2025-12-11" class="news-date">2025.12.11</time>
-                <span class="news-category site-category">[サイト]</span>
-                <a href="#" class="news-title">ホームページにアクセスカウンターを近日追加します。</a>
-            </article>
-
-            <article class="news-item">
-                <time datetime="2025-12-01" class="news-date">2025.12.01</time>
-                <span class="news-category lab-category">[ラボ]</span>
-                <a href="news/news-detail-003.html" class="news-title">制作中の新作クイズゲームに関する開発進捗報告を公開しました。</a>
-            </article>
-
-            <article class="news-item">
-                <time datetime="2025-11-30" class="news-date">2025.11.30</time>
-                <span class="news-category official-category">[公式サイト]</span>
-                <a href="news/news-detail-002.html" class="news-title">【重要】問い合わせ窓口の総合化について詳細ページを更新しました。</a>
-            </article>
-
-            <article class="news-item">
-                <time datetime="2025-11-20" class="news-date">2025.11.20</time>
-                <span class="news-category site-category">[サイト]</span>
-                <a href="news/news-detail-001.html" class="news-title">ホームページを篠ノ井乗務区・しのレールラボ統合サイトとしてGitHub Pagesへ移行しました。</a>
-            </article>
-
-            </section>
-        
-    </main>
-
-    <footer class="site-footer">
-        <div class="container">
-            <p>運営：篠ノ井乗務区</p>
-            <p>Copyright &copy; 2025 篠ノ井乗務区 All Rights Reserved. 本サイトに掲載の文章・画像・データの無断転載を禁じます。</p>
+    <section>
+        <h2>更新情報</h2>
+        <div id="loading-area">
+            <p style="text-align: center; font-size: 14px; color: #666;">列車がデータを運んでいます...</p>
+            <div class="loading-rail">
+                <div class="train-icon train-active"></div>
+            </div>
         </div>
-    </footer>
+
+        <ul id="update-list" class="update-list">
+            </ul>
+    </section>
+
+</div>
+
+<footer>
+    <p>運営：篠ノ井乗務区 &copy; 2026 All Rights Reserved.</p>
+</footer>
+
+<script>
+const spreadsheetUrl = "https://script.google.com/macros/s/AKfycbwbUTBxVeTkRlAJ1dnBlgcmpGaWI9B0SeMwkwKSwAJYjRDAtVcX67QwA5FcNGaJE9Cq/exec";
+
+async function loadNews() {
+    try {
+        const response = await fetch(spreadsheetUrl);
+        const data = await response.json();
+        
+        const loadingArea = document.getElementById('loading-area');
+        const listContainer = document.getElementById('update-list');
+        
+        // 読み込み中表示を消す
+        loadingArea.style.display = 'none';
+
+        if (data.length === 0) {
+            listContainer.innerHTML = '<li>現在お知らせはありません。</li>';
+            return;
+        }
+
+        // データを新しい順にしてDOM作成
+        data.reverse().forEach((item, index) => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <span class="update-date">${item.日付 || ''}</span>
+                <span class="badge badge-news">${item.カテゴリ || '更新'}</span>
+                <span>${item.内容 || ''}</span>
+            `;
+            listContainer.appendChild(li);
+
+            // 少しずつ遅らせて表示（鉄道が走っていくように）
+            setTimeout(() => {
+                li.classList.add('show');
+            }, index * 200); // 200msずつずらして表示
+        });
+    } catch (error) {
+        document.getElementById('loading-area').innerHTML = '<p>データの連結に失敗しました（脱線）</p>';
+        console.error("Error:", error);
+    }
+}
+
+loadNews();
+</script>
 
 </body>
 </html>
