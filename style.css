@@ -21,6 +21,54 @@ nav {
     padding: 10px;
     text-align: center;
 }
+/* ナビゲーション全体の調整 */
+nav {
+    background-color: #002b5b;
+    padding: 5px 0;
+    overflow-x: auto; /* 横にはみ出した時にスクロール可能にする */
+    -webkit-overflow-scrolling: touch;
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 5px 10px;
+    display: flex;
+    justify-content: center; /* パソコンでは中央寄せ */
+    gap: 10px;
+    white-space: nowrap; /* 文字を改行させない */
+}
+
+/* スマホ用の設定（画面幅が768px以下のとき） */
+@media (max-width: 768px) {
+    nav ul {
+        justify-content: flex-start; /* 左詰めに変更 */
+        display: grid;
+        grid-template-columns: repeat(4, 1fr); /* 4列に並べる */
+        gap: 5px;
+        white-space: normal; /* セル内での改行を許可 */
+    }
+
+    nav li {
+        margin: 0;
+    }
+
+    nav a {
+        display: block;
+        font-size: 0.75em; /* 文字を少し小さく */
+        padding: 8px 2px;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 4px;
+    }
+}
+
+/* さらに小さい画面（500px以下）の場合 */
+@media (max-width: 500px) {
+    nav ul {
+        grid-template-columns: repeat(3, 1fr); /* 3列にして押しやすくする */
+    }
+}
 
 nav a {
     color: white;
