@@ -17,24 +17,13 @@
             padding: 20px;
             border-radius: 8px;
             background: #fff;
-            text-decoration: none;
-            color: #333;
+            cursor: pointer;
             transition: 0.3s;
-            display: flex;
-            flex-direction: column;
         }
         .news-item:hover {
             border-color: #004da0;
             background: #f0f7ff;
             transform: translateY(-3px);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-        .news-meta {
-            display: flex;
-            align-items: center;
-            font-size: 0.85em;
-            color: #666;
-            margin-bottom: 10px;
         }
         .news-no {
             background: #004da0;
@@ -43,26 +32,44 @@
             border-radius: 3px;
             margin-right: 10px;
             font-weight: bold;
+            font-size: 0.85em;
         }
         .news-title {
             display: block;
             font-weight: bold;
-            font-size: 1.1em;
             color: #004da0;
-            margin-bottom: 10px;
-            line-height: 1.4;
+            margin: 10px 0;
         }
-        .news-summary {
-            font-size: 0.9em;
-            line-height: 1.5;
-            color: #444;
-            flex-grow: 1;
+
+        /* PDFプレビュー用モーダル */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
         }
-        #loading {
-            text-align: center;
-            padding: 50px;
-            color: #666;
+        .modal-content {
+            width: 90%;
+            height: 85%;
+            background: white;
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
         }
+        .modal-close {
+            align-self: flex-end;
+            margin-right: 5%;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            padding: 10px;
+        }
+        iframe { width: 100%; height: 100%; border: none; }
     </style>
 </head>
 <body>
@@ -72,51 +79,66 @@
 
 <div class="container">
     <h2>Train-News（サイト内新聞）</h2>
-    <p>篠ノ井乗務区が発行する広報紙や、号外ニュースの一覧です。</p>
+    <p>見たい記事をクリックすると、その場で新聞を閲覧できます。</p>
     
     <div id="loading">新聞データを連結中...</div>
     <div id="news-list" class="news-grid"></div>
+</div>
+
+<div id="pdf-modal" class="modal">
+    <span class="modal-close" onclick="closeModal()">× 閉じる</span>
+    <div class="modal-content">
+        <iframe id="pdf-viewer" src=""></iframe>
+    </div>
 </div>
 
 <footer></footer>
 
 <script src="menu.js"></script>
 <script>
-    // 統合したGASのURL
     const scriptUrl = "https://script.google.com/macros/s/AKfycbwbUTBxVeTkRlAJ1dnBlgcmpGaWI9B0SeMwkwKSwAJYjRDAtVcX67QwA5FcNGaJE9Cq/exec";
 
     async function loadTrainNews() {
         try {
-            // パラメータ ?sheet=新聞 を付けて呼び出し
             const response = await fetch(scriptUrl + "?sheet=新聞");
             const data = await response.json();
-            
             document.getElementById('loading').style.display = 'none';
             const list = document.getElementById('news-list');
 
-            // 新しい順に表示（reverse）
             data.reverse().forEach(item => {
-                const a = document.createElement('a');
-                a.className = 'news-item';
-                a.href = item.URL; // PDFまたはHTMLへのリンク
+                const div = document.createElement('div');
+                div.className = 'news-item';
+                // クリックでPDFを表示する関数を呼ぶ
+                div.onclick = () => openModal(item.URL);
                 
-                a.innerHTML = `
+                div.innerHTML = `
                     <div class="news-meta">
                         <span class="news-no">${item.号数}</span>
-                        <span class="news-date">${item.日付}</span>
+                        <span style="font-size:0.85em;color:#666;">${item.日付}</span>
                     </div>
                     <span class="news-title">${item.タイトル}</span>
-                    <p class="news-summary">${item.概要}</p>
+                    <p style="font-size:0.9em;color:#444;">${item.概要}</p>
                 `;
-                list.appendChild(a);
+                list.appendChild(div);
             });
         } catch (e) {
-            document.getElementById('loading').innerHTML = "<p>新聞データの取得に失敗しました。<br>スプレッドシートの「新聞」シートを確認してください。</p>";
+            document.getElementById('loading').innerText = "取得失敗";
         }
+    }
+
+    function openModal(url) {
+        document.getElementById('pdf-viewer').src = url;
+        document.getElementById('pdf-modal').style.display = 'flex';
+        document.body.style.overflow = 'hidden'; // 背景スクロール禁止
+    }
+
+    function closeModal() {
+        document.getElementById('pdf-modal').style.display = 'none';
+        document.getElementById('pdf-viewer').src = "";
+        document.body.style.overflow = 'auto'; // スクロール再開
     }
 
     loadTrainNews();
 </script>
-
 </body>
 </html>
