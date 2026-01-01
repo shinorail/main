@@ -12,29 +12,31 @@
         .news-card h3 { margin: 0 0 10px; color: #004da0; font-size: 1.1em; }
         .news-card p { margin: 5px 0; font-size: 0.9em; color: #444; }
 
+        /* ビューワー（ポップアップ） */
         .viewer-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #fff; display: none; flex-direction: column; z-index: 9999;
         }
         .viewer-header {
-            background: #004da0; color: white; padding: 15px 20px;
+            background: #004da0; color: white; padding: 12px 20px;
             display: flex; justify-content: space-between; align-items: center;
         }
-        .viewer-header h2 { margin: 0; font-size: 1.1em; }
+        .viewer-header h2 { margin: 0; font-size: 1em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .close-btn {
-            background: #ff4444; color: white; border: none; padding: 8px 15px;
-            border-radius: 4px; cursor: pointer; font-weight: bold;
+            background: #ff4444; color: white; border: none; padding: 6px 12px;
+            border-radius: 4px; cursor: pointer; font-weight: bold; flex-shrink: 0;
         }
 
         .viewer-body { display: flex; flex: 1; overflow: hidden; background: #525659; }
-        #pdf-frame { flex: 2; border: none; background: #fff; }
+        #pdf-frame { flex: 1; border: none; background: #fff; width: 100%; height: 100%; }
 
+        /* コメントサイドバー（PC） */
         .comment-sidebar {
             width: 350px; background: #f4f4f4; display: flex; flex-direction: column;
             border-left: 1px solid #ccc;
         }
         .comment-list { flex: 1; overflow-y: auto; padding: 15px; }
-        .comment-item { background: #fff; padding: 10px; border-radius: 4px; margin-bottom: 10px; border: 1px solid #ddd; font-size: 0.9em; }
+        .comment-item { background: #fff; padding: 10px; border-radius: 4px; margin-bottom: 10px; border: 1px solid #ddd; font-size: 0.85em; }
         .comment-form { padding: 15px; background: #eee; border-top: 1px solid #ccc; }
         .comment-form input, .comment-form textarea {
             width: 100%; padding: 8px; margin-bottom: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;
@@ -43,11 +45,16 @@
         .submit-btn {
             width: 100%; background: #004da0; color: white; border: none; padding: 10px; cursor: pointer; font-weight: bold;
         }
-        .submit-btn:disabled { background: #888 !important; cursor: not-allowed; }
+        .submit-btn:disabled { background: #888 !important; }
 
+        /* スマホ用レイアウト：記事7割、コメント3割 */
         @media (max-width: 800px) {
             .viewer-body { flex-direction: column; }
-            .comment-sidebar { width: 100%; height: 40%; border-left: none; border-top: 1px solid #ccc; }
+            #pdf-frame { flex: 7; } /* 記事を大きく */
+            .comment-sidebar { flex: 3; width: 100%; border-left: none; border-top: 1px solid #ccc; }
+            .comment-list { padding: 10px; }
+            .comment-form { padding: 10px; }
+            .comment-form textarea { height: 40px; }
         }
     </style>
 </head>
@@ -58,25 +65,25 @@
 
 <div class="container">
     <h2>Train-News 一覧</h2>
-    <div id="loading" style="text-align:center; padding: 20px;">記事データを取得中...</div>
+    <div id="loading" style="text-align:center; padding: 20px;">読み込み中...</div>
     <div id="news-list" class="news-grid"></div>
 </div>
 
 <div id="viewer" class="viewer-overlay">
     <div class="viewer-header">
         <h2 id="v-title">記事タイトル</h2>
-        <button class="close-btn" onclick="closeViewer()">× 閉じる</button>
+        <button class="close-btn" onclick="closeViewer()">閉じる</button>
     </div>
     <div class="viewer-body">
         <iframe id="pdf-frame" src=""></iframe>
         <div class="comment-sidebar">
-            <div style="background:#ddd; padding:8px 15px; font-weight:bold; font-size:0.9em;">読者コメント</div>
+            <div style="background:#ddd; padding:5px 15px; font-weight:bold; font-size:0.8em;">コメント</div>
             <div id="comment-list" class="comment-list"></div>
             <form id="comment-form" class="comment-form">
                 <input type="hidden" id="target-id">
                 <input type="text" id="u-name" placeholder="名前" required>
-                <textarea id="u-msg" placeholder="コメントを入力..." required></textarea>
-                <button type="submit" id="submit-btn" class="submit-btn">投稿する</button>
+                <textarea id="u-msg" placeholder="コメントを入力" required></textarea>
+                <button type="submit" id="submit-btn" class="submit-btn">投稿</button>
             </form>
         </div>
     </div>
@@ -90,36 +97,35 @@
 
     async function loadNews() {
         try {
-            const res = await fetch(scriptUrl + "?sheet=新聞");
+            // エラー対策：パラメータを正確に付与
+            const res = await fetch(scriptUrl + "?sheet=" + encodeURIComponent("新聞"));
             const data = await res.json();
+            
+            if (data.error) throw new Error(data.error);
+
             document.getElementById('loading').style.display = 'none';
             const list = document.getElementById('news-list');
             
             data.reverse().forEach(item => {
-                // undefined対策：スプレッドシートの項目名が違う場合に備え、存在する値を使用
-                const gosu = item.号数 || "不明";
-                const date = item.発行日 || "日付未設定";
-                const title = item.見出し || "（見出しなし）";
+                const gosu = item.号数 || "号外";
+                const date = item.発行日 || "";
+                const title = item.見出し || "無題";
                 const pdfUrl = item.URL || "";
 
                 const card = document.createElement('div');
                 card.className = 'news-card';
                 card.onclick = () => openViewer(pdfUrl, gosu, title);
-                card.innerHTML = `
-                    <h3>第 ${gosu} 号</h3>
-                    <p><strong>発行日:</strong> ${date}</p>
-                    <p>${title}</p>
-                `;
+                card.innerHTML = `<h3>第 ${gosu} 号</h3><p><strong>${date}</strong></p><p>${title}</p>`;
                 list.appendChild(card);
             });
         } catch(e) { 
-            document.getElementById('loading').innerText = "データの取得に失敗しました。"; 
+            document.getElementById('loading').innerText = "データの取得に失敗しました。GASのデプロイとシート名を確認してください。"; 
         }
     }
 
     function openViewer(url, id, title) {
         document.getElementById('target-id').value = id;
-        document.getElementById('v-title').innerText = "第 " + id + " 号 " + title;
+        document.getElementById('v-title').innerText = "第" + id + "号 " + title;
         document.getElementById('pdf-frame').src = url;
         document.getElementById('viewer').style.display = 'flex';
         document.body.style.overflow = 'hidden';
@@ -134,18 +140,18 @@
 
     async function loadComments(id) {
         const list = document.getElementById('comment-list');
-        list.innerHTML = "読込中...";
+        list.innerHTML = "<small>読込中...</small>";
         try {
-            const res = await fetch(scriptUrl + "?action=getComments&id=" + id);
+            const res = await fetch(scriptUrl + "?action=getComments&id=" + encodeURIComponent(id));
             const data = await res.json();
-            list.innerHTML = data.length ? "" : "<p style='font-size:0.8em; color:#888;'>まだコメントはありません</p>";
+            list.innerHTML = data.length ? "" : "<small style='color:#999;'>コメントはありません</small>";
             data.forEach(c => {
                 const div = document.createElement('div');
                 div.className = 'comment-item';
                 div.innerHTML = `<strong>${c.名前}</strong><br>${c.内容}`;
                 list.appendChild(div);
             });
-        } catch(e) { list.innerHTML = "読込エラー"; }
+        } catch(e) { list.innerHTML = "<small>エラー</small>"; }
     }
 
     document.getElementById('comment-form').onsubmit = async (e) => {
@@ -167,10 +173,10 @@
             document.getElementById('u-msg').value = "";
             await loadComments(id);
         } catch(error) {
-            alert("送信に失敗しました。");
+            alert("送信失敗");
         } finally {
             btn.disabled = false;
-            btn.innerText = "投稿する";
+            btn.innerText = "投稿";
         }
     };
 
