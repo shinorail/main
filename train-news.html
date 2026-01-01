@@ -3,48 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Train-News (鉄道) | 篠ノ井乗務区の公式ホームページ</title>
+    <title>Train-News - 篠ノ井乗務区</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* ニュース記事特有の装飾のみ追加 */
+        .article-date {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+            display: block;
+        }
+        .news-box {
+            background-color: #f0f7ff;
+            padding: 15px;
+            border-left: 5px solid #004da0;
+            margin: 20px 0;
+        }
+        .highlight {
+            font-weight: bold;
+            color: #d32f2f;
+        }
+    </style>
 </head>
 <body>
-    <div id="preloader">
-        <div class="loader-content">
-            <div class="spinner"></div>
-            <p id="loading-text">読み込み中... 0%</p>
-        </div>
+
+<header>
+    <h1>篠ノ井乗務区 公式サイト</h1>
+</header>
+
+<nav>
+    <a href="index.html">ホーム</a>
+    <a href="train-news.html">Train-News</a>
+    <a href="mission.html">活動理念</a>
+    <a href="history.html">沿革</a>
+    <a href="contact.html">問い合わせ</a>
+</nav>
+
+<div class="container">
+    <h2>【JR東日本長野支社】211系に「横須賀色」、キハ110系に「秋田リレー号色」を復刻！</h2>
+    <span class="article-date">掲載日：2025年11月7日 発表（JR東日本長野支社）</span>
+
+    <p>JR東日本長野支社は、沿線地域のさらなる活性化に繋げるべく、長野総合車両センター所属車両の塗色変更を実施し、地域にゆかりのある懐かしいカラーリングを復刻すると発表しました。</p>
+
+    <h3>1. 211系に「横須賀色」が登場</h3>
+    <ul>
+        <li>対象車両：211系 6両編成1本</li>
+        <li>デザイン：2015年まで中央本線などで活躍した<span class="highlight">115系の「横須賀色」</span>をイメージした帯色に変更。</li>
+        <li>主な運行区間：信越本線 長野駅〜中央本線 立川駅間。</li>
+    </ul>
+
+    <h3>2. キハ110系に「秋田リレー号色」が復刻</h3>
+    <ul>
+        <li>対象車両：キハ110系 1両編成1本</li>
+        <li>デザイン：1997年まで運行していた特急<span class="highlight">「秋田リレー号」</span>の塗色に復刻。</li>
+        <li>主な運行区間：信越本線 長野駅〜上越線 長岡駅間。</li>
+    </ul>
+
+    <div class="news-box">
+        <h3>📅 運行開始日・関連イベント</h3>
+        <p><strong>定期運用開始時期</strong></p>
+        <ul>
+            <li>キハ110系（秋田リレー号色）：2025年12月後半より</li>
+            <li>211系（横須賀色）：2026年1月後半より</li>
+        </ul>
+        <p><strong>塗色変更車両お披露目撮影会</strong></p>
+        <ul>
+            <li>キハ110系：2025年12月20日（土）</li>
+            <li>211系：2026年1月18日（日）</li>
+        </ul>
     </div>
 
-    <div class="important-info-bar">
-        【重要】お問い合わせ窓口は一時的に非公開となっております。 <a href="general-news.html#contact-temporary-closure">詳細はこちら</a>
-    </div>
+    <p>詳細および撮影会の募集に関する情報は、以下のプレスリリースをご確認ください。</p>
+    <p><a href="https://www.jreast.co.jp/press/2025/nagano/20251107_na01.pdf" target="_blank">JR東日本長野支社プレスリリース（PDF）</a></p>
+</div>
 
-    <header>
-        <h1>Train-News (鉄道関連)</h1>
-    </header>
+<footer>
+    <p>運営：篠ノ井乗務区 &copy; 2026 All Rights Reserved.</p>
+</footer>
 
-    <main>
-        <div id="search-container">
-            <input type="text" id="search-input" placeholder="キーワードを入力して検索">
-            <button onclick="searchSite()">検索</button>
-        </div>
-        <div id="search-results"></div>
-
-        <section class="card news-archive">
-            <h2>🚅 鉄道に関するお知らせ</h2>
-            
-            <div id="train-news-list"> 
-                <p style="text-align:center;">お知らせを読み込み中...</p>
-            </div>
-            
-            <p style="text-align: center;">-- 記事の終わり --</p>
-        </section>
-        
-        <section class="info-footer card">
-             <p class="ai-note">当サイトでは、Google Geminiなどの生成AI技術を活用し、サービスの品質向上に努めております。</p>
-        </section>
-    </main>
-
-    <script src="navigation.js"></script>
-    <script src="load_news.js"></script>
 </body>
 </html>
