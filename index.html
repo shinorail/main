@@ -3,180 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>【公式】篠ノ井乗務区・しのレールラボ 統合サイト</title>
+    <title>ホーム - 篠ノ井乗務区</title>
+    <link rel="stylesheet" href="style.css">
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: sans-serif;
-            background-color: #f0f2f5;
-            color: #333;
-            line-height: 1.6;
-        }
-
-        .container {
-            width: 90%;
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 40px 0;
-        }
-
-        .main-card {
-            background: #fff;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        /* index専用スタイル */
+        .omikuji-box {
+            background: linear-gradient(135deg, #fff5f5 0%, #fff0f0 100%);
+            border: 2px solid #d32f2f;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
             text-align: center;
         }
-
-        .btn-roadmap {
+        .omikuji-box h3 {
+            color: #d32f2f;
+            margin-top: 0;
+        }
+        .btn-omikuji {
             display: inline-block;
-            margin-top: 15px;
-            padding: 8px 16px;
-            background: #f0f2f5;
-            color: #555;
+            background-color: #d32f2f;
+            color: white;
+            padding: 10px 20px;
             text-decoration: none;
             border-radius: 5px;
-            font-size: 0.85rem;
-            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .sns-info {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 5px solid #2196f3;
+        }
+        .link-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .link-card {
+            background: #f0f0f0;
+            padding: 15px;
+            text-align: center;
+            text-decoration: none;
+            color: #004da0;
+            font-weight: bold;
+            border-radius: 5px;
             border: 1px solid #ddd;
         }
-
-        .omikuji-section {
-            background: #fff5f5;
-            padding: 20px;
-            border-radius: 12px;
-            border: 2px solid #e74c3c;
-            margin: 25px 0;
+        .link-card:hover {
+            background: #e0e0e0;
         }
 
-        .btn-large {
-            display: block;
-            background: #e74c3c;
-            color: #fff;
-            text-decoration: none;
-            padding: 15px;
-            border-radius: 10px;
-            font-weight: bold;
-            box-shadow: 0 4px 0 #c0392b;
-        }
-
-        /* ポップアップ（モーダル）のスタイル */
-        .modal {
+        /* ポップアップのスタイル */
+        .popup-overlay {
             display: none;
             position: fixed;
-            z-index: 1000;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.6);
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
         }
-
-        .modal-content {
-            background-color: #fff;
-            margin: 15% auto;
-            padding: 25px;
-            width: 85%;
+        .popup-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
             max-width: 400px;
-            border-radius: 12px;
-            text-align: left;
-            position: relative;
+            width: 85%;
+            text-align: center;
         }
-
-        .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 1.5rem;
+        .btn-close {
+            background-color: #004da0;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
             cursor: pointer;
-            color: #999;
+            font-weight: bold;
+            margin-top: 15px;
         }
-
-        .status-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 12px;
-            font-size: 0.9rem;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 5px;
-        }
-
-        .label-pending { color: #999; font-weight: bold; }
-        .label-working { color: #f39c12; font-weight: bold; }
-        .label-done { color: #2ecc71; font-weight: bold; }
-
-        footer { text-align: center; font-size: 0.8rem; color: #999; margin-top: 40px; }
     </style>
 </head>
 <body>
 
+<header></header>
+<nav></nav>
+
 <div class="container">
-    <main class="main-card">
-        <h2 style="font-size: 1.2rem; margin-top: 0;">統合サイト 公開準備中</h2>
-        <p style="font-size: 0.9rem; color: #666;">現在、サイトのリニューアル作業を行っております。</p>
-        
-        <div class="btn-roadmap" onclick="openModal()">▶ 開発ロードマップを見る</div>
+    <section class="omikuji-box">
+        <h3>【2周年記念】お正月おみくじ公開のお知らせ</h3>
+        <p>本年も篠ノ井乗務区をご利用いただきありがとうございました。<br>
+        2026年1月1日午前0時より、2周年を記念した「鉄道おみくじ」を特設サイトにて公開いたします。</p>
+        <p>1日1回、画像として保存やシェアも可能です。新年の運試しにぜひお楽しみください。</p>
+        <a href="https://shinorail.github.io/shinonoi-2026/" class="btn-omikuji">2周年特設サイトはこちら</a>
+    </section>
 
-        <div class="omikuji-section">
-            <p style="font-size: 0.9rem; margin-bottom: 15px;"><strong>【2周年記念】鉄道おみくじ</strong></p>
-            <a href="https://shinorail.github.io/2026/index.html" class="btn-large">おみくじサイトへ</a>
-        </div>
+    <section>
+        <p>ようこそ、篠ノ井乗務区の公式ホームページへ。</p>
+        <p>当サイトは、鉄道の魅力を発信することを目的に運営されています。長野県を中心とした路線紹介、沿線風景の記録、現役鉄道ファンとのつながりを大切にしながら情報をお届けします。</p>
+    </section>
 
-        <a href="https://x.com/Shino_Rail" target="_blank" style="color:#1da1f2; text-decoration:none; font-size:0.9rem; font-weight:bold;">公式X @Shino_Rail</a>
-    </main>
+    <section class="sns-info">
+        <p><strong>◇ 最新情報は X（旧Twitter）で発信中！</strong></p>
+        <p><a href="https://x.com/Shino_Rail" target="_blank">@Shino_Rail</a></p>
+        <p style="font-size: 0.85em; color: #666;">※本アカウントのDMは告知専用です。お問い合わせには対応いたしかねます。</p>
+    </section>
 
-    <footer>
-        <p>Copyright &copy; 2025 篠ノ井乗務区 All Rights Reserved.</p>
-    </footer>
-</div>
-
-<div id="roadmapModal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn" onclick="closeModal()">&times;</span>
-        <h3 style="margin-top: 0; font-size: 1.1rem; border-bottom: 2px solid #3498db; padding-bottom: 10px;">開発ロードマップ</h3>
-        
-        <div style="margin-top: 20px;">
-            <div class="status-item">
-                <span>おみくじ特設サイト</span>
-                <span class="label-done">完了</span>
-            </div>
-            <div class="status-item">
-                <span>サイト基盤構築</span>
-                <span class="label-working">作業中</span>
-            </div>
-            <div class="status-item">
-                <span>篠ノ井乗務区 本編統合</span>
-                <span class="label-working">作業中</span>
-            </div>
-            <div class="status-item">
-                <span>しのレールラボ 移行</span>
-                <span class="label-pending">未着手</span>
-            </div>
-        </div>
-        
-        <p style="font-size: 0.8rem; color: #888; margin-top: 15px; text-align: center;">順次公開予定です。お楽しみに！</p>
+    <div class="link-grid">
+        <a href="mission.html" class="link-card">▶ 活動理念を見る</a>
+        <a href="history.html" class="link-card">▶ 沿革を見る</a>
+        <a href="contact.html" class="link-card">▶ お問い合わせはこちら</a>
     </div>
 </div>
 
+<div id="popup-overlay" class="popup-overlay">
+    <div class="popup-content">
+        <h3>お知らせ</h3>
+        <p>現在、本サイトへの移設を順次進めております。一部準備中のコンテンツがございますが、何卒ご了承ください。</p>
+        <button onclick="closePopup()" class="btn-close">確認しました</button>
+    </div>
+</div>
+
+<footer></footer>
+
+<script src="menu.js"></script>
+
 <script>
-    const modal = document.getElementById("roadmapModal");
-
-    function openModal() {
-        modal.style.display = "block";
-    }
-
-    function closeModal() {
-        modal.style.display = "none";
-    }
-
-    // 枠外をクリックしたときも閉じる
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            closeModal();
+    // ページ読み込み時にポップアップ判定
+    window.addEventListener('load', function() {
+        if (!sessionStorage.getItem('visited_shinorail')) {
+            document.getElementById('popup-overlay').style.display = 'flex';
         }
+    });
+
+    function closePopup() {
+        document.getElementById('popup-overlay').style.display = 'none';
+        sessionStorage.setItem('visited_shinorail', 'true');
     }
 </script>
+
+</body>
+</html>
 
 </body>
 </html>
