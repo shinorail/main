@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html lang="ja"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>お知らせ詳細 - 篠ノ井乗務区</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style> /* ===== 詳細ページ専用デザイン ===== */ .news-detail-content { background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 30px; } .news-date { color: #666; font-size: 14px; margin-bottom: 10px; } .news-title { color: #004da0; border-bottom: 2px solid #004da0; padding-bottom: 10px; margin-bottom: 20px; font-size: 1.5rem; } .news-body { line-height: 1.8; color: #333; } .news-body p { margin-bottom: 1.5em; } .back-link { display: inline-block; margin-top: 20px; color: #004da0; text-decoration: none; font-weight: bold; } .back-link:hover { text-decoration: underline; }
+
+/* アンケートや通知のスタイルはindexと共通 */ .survey-toggle{position:fixed;bottom:20px;right:20px;background:#004da0;color:#fff;padding:12px 20px;border-radius:30px;font-weight:bold;cursor:pointer;z-index:1000} .survey-popup{position:fixed;bottom:80px;right:20px;width:300px;background:#fff;border-radius:10px;box-shadow:0 5px 20px rgba(0,0,0,.2);display:none;flex-direction:column;z-index:1000} .survey-header{background:#004da0;color:#fff;padding:10px;display:flex;justify-content:space-between} .survey-body{padding:15px} .s-submit{width:100%;background:#004da0;color:#fff;border:none;padding:12px;border-radius:4px;font-weight:bold} </style>
+
+</head>
+
+<body>
+
+<header></header> <nav></nav>
+
+<div class="container">
+
+<article class="news-detail-content"> <div class="news-date">2026年1月5日</div> <h2 class="news-title">コメント投稿に関するご案内</h2>
+
+<div class="news-body"> <p>いつも篠ノ井乗務区の公式ホームページをご覧いただき、誠にありがとうございます。</p>
+
+<p>
+  当サイトでは、皆様からいただいたコメントを管理者が確認した後に公開させていただいております。<br>
+  そのため、投稿から掲載までにお時間をいただく場合がございます。
+</p>
+
+<p>
+  不適切な内容を含むコメントは公開を控えさせていただくことがございますので、あらかじめご了承ください。<br>
+  皆様が安心して交流できる場となりますよう、ご理解とご協力をお願い申し上げます。
+</p>
+</div>
+
+<a href="news.html" class="back-link">← お知らせ一覧へ戻る</a>
+
+</article>
+
+</div>
+
+<div id="survey-toggle" class="survey-toggle" onclick="toggleSurvey()">📩 アンケート協力</div> <div id="survey-container" class="survey-popup"> <div class="survey-header"> <span>閲覧者アンケート</span> <button onclick="toggleSurvey()">×</button> </div> <form id="survey-form" class="survey-body"> <textarea id="msg" rows="3" placeholder="ご自由にお書きください"></textarea> <button class="s-submit">送信する</button> </form> </div>
+
+<footer></footer>
+
+<script src="menu.js"></script>
+
+<script> function toggleSurvey(){ const s=document.getElementById('survey-container'); s.style.display=s.style.display==='flex'?'none':'flex'; } </script>
+
+</body> </html>
