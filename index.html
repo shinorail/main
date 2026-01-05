@@ -1,77 +1,219 @@
 <!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ホーム - 篠ノ井乗務区</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* index専用デザイン */
+        .omikuji-box {
+            background: linear-gradient(135deg, #fff5f5 0%, #fff0f0 100%);
+            border: 2px solid #d32f2f;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .omikuji-box h3 { color: #d32f2f; margin-top: 0; }
+        .btn-omikuji {
+            display: inline-block;
+            background-color: #d32f2f;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .sns-info {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 5px solid #2196f3;
+        }
+        .link-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .link-card {
+            background: #f0f0f0;
+            padding: 15px;
+            text-align: center;
+            text-decoration: none;
+            color: #004da0;
+            font-weight: bold;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            transition: 0.3s;
+        }
+        .link-card:hover { background: #e0e0e0; }
 
-<html lang="ja"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>ホーム - 篠ノ井乗務区</title> <link rel="stylesheet" href="style.css"> <style> .omikuji-box { background: linear-gradient(135deg, #fff5f5 0%, #fff0f0 100%); border: 2px solid #d32f2f; padding: 20px; border-radius: 10px; margin-bottom: 30px; text-align: center; } .omikuji-box h3 { color: #d32f2f; margin-top: 0; } .btn-omikuji { display: inline-block; background-color: #d32f2f; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 10px; } .sns-info { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 20px 0; border-left: 5px solid #2196f3; } #survey-container { position: fixed; bottom: 20px; right: 20px; z-index: 1000; display: none; align-items: center; justify-content: center; } .survey-card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); width: 280px; border-top: 5px solid #004da0; } .survey-card h4 { margin: 0 0 10px; color: #004da0; } .survey-options { display: flex; justify-content: space-between; margin-bottom: 15px; } .survey-options label { display: flex; flex-direction: column; align-items: center; font-size: 12px; cursor: pointer; } #s-thanks { display: none; text-align: center; color: #388e3c; font-weight: bold; } .survey-toggle { position: fixed; bottom: 20px; right: 20px; background: #004da0; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.3); z-index: 999; } </style> </head> <body>
+        /* 移設案内ポップアップ */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        .popup-content { background: white; padding: 30px; border-radius: 10px; max-width: 400px; width: 85%; text-align: center; }
+        .btn-close { background-color: #004da0; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 15px; font-weight: bold; }
 
-<header></header> <nav></nav>
+        /* アンケートポップアップ */
+        .survey-toggle {
+            position: fixed; bottom: 20px; right: 20px; background: #004da0; color: white;
+            padding: 12px 20px; border-radius: 30px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 1500; font-size: 14px; font-weight: bold;
+        }
+        .survey-popup {
+            position: fixed; bottom: 80px; right: 20px; width: 300px; background: white;
+            border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); display: none;
+            flex-direction: column; z-index: 1500; border: 1px solid #004da0; overflow: hidden;
+        }
+        .survey-header { background: #004da0; color: white; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; }
+        .survey-header button { background: none; border: none; color: white; cursor: pointer; font-size: 20px; }
+        .survey-body { padding: 15px; }
+        .s-group { margin-bottom: 15px; }
+        .s-group label { display: block; font-size: 12px; color: #666; margin-bottom: 5px; }
+        .s-group textarea { width: 100%; border: 1px solid #ddd; padding: 8px; box-sizing: border-box; border-radius: 4px; resize: none; }
+        .s-rating { display: flex; justify-content: space-between; }
+        .s-rating input { display: none; }
+        .s-rating label { flex: 1; text-align: center; background: #eee; margin: 0 2px; padding: 8px 0; cursor: pointer; border-radius: 4px; font-weight: bold; }
+        .s-rating input:checked + label { background: #004da0; color: white; }
+        .s-submit { width: 100%; background: #004da0; color: white; border: none; padding: 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
 
-<div class="container"> <div class="omikuji-box"> <h3>今日の鉄道運勢</h3> <p>あなたの今日のラッキー車両は何でしょうか？</p> <a href="#" class="btn-omikuji" onclick="alert('おみくじ機能は準備中です！')">おみくじを引く</a> </div>
+        @media (max-width: 600px) { .survey-popup { width: calc(100% - 40px); bottom: 75px; right: 20px; } }
+    </style>
+</head>
+<body>
 
-<section class="card">
-    <h2>篠ノ井乗務区へようこそ</h2>
-    <p>当サイトは、信州を中心とした鉄道の魅力を発信する個人プロジェクトです。路線の紹介や、日々の運行に関するニュースをお届けします。</p>
-    
-    <div class="sns-info">
-        <strong>公式X（旧Twitter）公開中！</strong><br>
-        最新の運行情報や撮影記録をリアルタイムで発信しています。
+<header></header>
+<nav></nav>
+
+<div class="container">
+    <section class="omikuji-box">
+        <h3>【2周年記念】お正月おみくじ公開のお知らせ</h3>
+        <p>2026年1月1日午前0時より、2周年を記念した「鉄道おみくじ」を特設サイトにて公開いたします。新年の運試しにぜひお楽しみください。</p>
+        <a href="https://shinorail.github.io/shinonoi-2026/" class="btn-omikuji">2周年特設サイトはこちら</a>
+    </section>
+
+    <section>
+        <p>ようこそ、篠ノ井乗務区の公式ホームページへ。</p>
+        <p>当サイトは、鉄道の魅力を発信することを目的に運営されています。長野県を中心とした路線紹介、沿線風景の記録、現役鉄道ファンとのつながりを大切にしながら情報をお届けします。</p>
+    </section>
+
+    <section class="sns-info">
+        <p><strong>◇ 最新情報は X（旧Twitter）で発信中！</strong></p>
+        <p><a href="https://x.com/Shino_Rail" target="_blank">@Shino_Rail</a></p>
+        <p style="font-size: 0.85em; color: #666;">※本アカウントのDMは告知専用です。お問い合わせには対応いたしかねます。</p>
+    </section>
+
+    <div class="link-grid">
+        <a href="mission.html" class="link-card">▶ 活動理念を見る</a>
+        <a href="history.html" class="link-card">▶ 沿革を見る</a>
+        <a href="news.html" class="link-card">▶ お知らせを見る</a>
     </div>
-</section>
-
-<div class="link-grid">
-    <a href="train-news.html" class="link-card">
-        <h3>Train-News</h3>
-        <p>最新の車両情報や鉄道ニュースをチェック。</p>
-    </a>
-    <a href="mission.html" class="link-card">
-        <h3>活動理念</h3>
-        <p>私たちが目指す鉄道情報の発信について。</p>
-    </a>
-</div>
 </div>
 
-<div class="survey-toggle" onclick="toggleSurvey()">📝</div>
+<div id="popup-overlay" class="popup-overlay">
+    <div class="popup-content">
+        <h3>お知らせ</h3>
+        <p>現在、旧サイト（Google Sites）から本サイトへの移設を順次進めております。何卒ご了承ください。</p>
+        <button onclick="closePopup()" class="btn-close">確認しました</button>
+    </div>
+</div>
 
-<div id="survey-container"> <div class="survey-card"> <div style="text-align: right; cursor: pointer;" onclick="toggleSurvey()">×</div> <div id="survey-form-area"> <h4>サイトの満足度</h4> <form id="survey-form"> <div class="survey-options"> <label><input type="radio" name="s-rate" value="5" checked>5</label> <label><input type="radio" name="s-rate" value="4">4</label> <label><input type="radio" name="s-rate" value="3">3</label> <label><input type="radio" name="s-rate" value="2">2</label> <label><input type="radio" name="s-rate" value="1">1</label> </div> <textarea id="s-msg" placeholder="ご意見（任意）" style="width:100%; height:60px; margin-bottom:10px; border:1px solid #ddd;"></textarea> <button type="submit" id="s-btn" class="btn-omikuji" style="width:100%; border:none; cursor:pointer;">送信</button> </form> </div> <div id="s-thanks">送信完了しました！</div> </div> </div>
+<div id="survey-toggle" class="survey-toggle" onclick="toggleSurvey()">📩 アンケート協力</div>
+<div id="survey-container" class="survey-popup">
+    <div class="survey-header"><span>閲覧者アンケート</span><button onclick="toggleSurvey()">×</button></div>
+    <form id="survey-form" class="survey-body">
+        <div class="s-group">
+            <label>サイトの満足度 (1-5)</label>
+            <div class="s-rating">
+                <input type="radio" name="s-rate" id="sr1" value="1"><label for="sr1">1</label>
+                <input type="radio" name="s-rate" id="sr2" value="2"><label for="sr2">2</label>
+                <input type="radio" name="s-rate" id="sr3" value="3" checked><label for="sr3">3</label>
+                <input type="radio" name="s-rate" id="sr4" value="4"><label for="sr4">4</label>
+                <input type="radio" name="s-rate" id="sr5" value="5"><label for="sr5">5</label>
+            </div>
+        </div>
+        <div class="s-group">
+            <label>メッセージ（任意）</label>
+            <textarea id="s-msg" rows="3" placeholder="ご自由にお書きください"></textarea>
+        </div>
+        <button type="submit" id="s-btn" class="s-submit">送信する</button>
+    </form>
+    <div id="s-thanks" style="display:none; padding: 30px 15px; text-align: center;">
+        <div style="font-size: 30px; margin-bottom: 10px;">🚊</div>
+        <h3 style="margin: 0 0 10px 0; color: #004da0; font-size: 16px;">ありがとうございました</h3>
+        <p style="font-size: 12px; color: #666;">ご協力感謝いたします。</p>
+    </div>
+</div>
 
 <footer></footer>
 
 <script src="menu.js"></script>
 
-<script> const scriptUrl = "https://script.google.com/macros/s/AKfycbwbUTBxVeTkRlAJ1dnBlgcmpGaWI9B0SeMwkwKSwAJYjRDAtVcX67QwA5FcNGaJE9Cq/exec";
+<script>
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbwbUTBxVeTkRlAJ1dnBlgcmpGaWI9B0SeMwkwKSwAJYjRDAtVcX67QwA5FcNGaJE9Cq/exec";
 
-function toggleSurvey() {
-    const p = document.getElementById(&#39;survey-container&#39;);
-    p.style.display = (p.style.display === &#39;flex&#39;) ? &#39;none&#39; : &#39;flex&#39;;
-}
-
-document.getElementById(&#39;survey-form&#39;).addEventListener(&#39;submit&#39;, async (e) =&gt; {
-    e.preventDefault();
-    const btn = document.getElementById(&#39;s-btn&#39;);
-    btn.disabled = true; btn.innerText = &quot;送信中...&quot;;
-    
-    const data = {
-        name: &quot;匿名&quot;,
-        rating: document.querySelector(&#39;input[name=&quot;s-rate&quot;]:checked&#39;).value,
-        message: document.getElementById(&#39;s-msg&#39;).value || &quot;（未入力）&quot;
-    };
-
-    try {
-        await fetch(scriptUrl, { method: &#39;POST&#39;, body: JSON.stringify(data) });
-        document.getElementById(&#39;survey-form&#39;).style.display = &#39;none&#39;;
-        document.getElementById(&#39;s-thanks&#39;).style.display = &#39;block&#39;;
-        setTimeout(() =&gt; {
-            toggleSurvey();
-            setTimeout(() =&gt; {
-                document.getElementById(&#39;survey-form&#39;).style.display = &#39;block&#39;;
-                document.getElementById(&#39;s-thanks&#39;).style.display = &#39;none&#39;;
-                btn.disabled = false; btn.innerText = &quot;送信&quot;;
-                document.getElementById(&#39;survey-form&#39;).reset();
-            }, 500);
-        }, 3000);
-    } catch (e) {
-        alert(&quot;送信に失敗しました。&quot;);
-        btn.disabled = false; btn.innerText = &quot;送信&quot;;
+    // 移設案内ポップアップ制御
+    window.addEventListener('load', () => {
+        if (!sessionStorage.getItem('visited_shinorail')) {
+            document.getElementById('popup-overlay').style.display = 'flex';
+        }
+    });
+    function closePopup() {
+        document.getElementById('popup-overlay').style.display = 'none';
+        sessionStorage.setItem('visited_shinorail', 'true');
     }
-});
+
+    // アンケートポップアップ制御
+    function toggleSurvey() {
+        const p = document.getElementById('survey-container');
+        p.style.display = (p.style.display === 'flex') ? 'none' : 'flex';
+    }
+
+    // アンケート送信
+    document.getElementById('survey-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('s-btn');
+        btn.disabled = true; btn.innerText = "送信中...";
+        
+        const data = {
+            name: "匿名",
+            rating: document.querySelector('input[name="s-rate"]:checked').value,
+            message: document.getElementById('s-msg').value || "（未入力）"
+        };
+
+        try {
+            await fetch(scriptUrl, { method: 'POST', body: JSON.stringify(data) });
+            document.getElementById('survey-form').style.display = 'none';
+            document.getElementById('s-thanks').style.display = 'block';
+            setTimeout(() => {
+                toggleSurvey();
+                setTimeout(() => {
+                    document.getElementById('survey-form').style.display = 'block';
+                    document.getElementById('s-thanks').style.display = 'none';
+                    btn.disabled = false; btn.innerText = "送信する";
+                    document.getElementById('survey-form').reset();
+                }, 500);
+            }, 3000);
+        } catch (e) {
+            alert("送信に失敗しました。");
+            btn.disabled = false; btn.innerText = "送信する";
+        }
+    });
 </script>
 
-</body> </html>
+</body>
+</html>
