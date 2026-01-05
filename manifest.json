@@ -1,0 +1,22 @@
+{
+  "name": "篠ノ井乗務区 公式アプリ",
+  "short_name": "篠ノ井乗務区",
+  "description": "信州の鉄道文化を伝える、篠ノ井乗務区の公式アプリです。",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#004da0",
+  "icons": [
+    {
+      "src": "1.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "1.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}
