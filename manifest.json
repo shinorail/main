@@ -1,23 +1,8 @@
 {
   "name": "篠ノ井乗務区",
-  "short_name": "篠ノ井",
-  "start_url": "/index.html",
+  "short_name": "篠ノ井乗務区",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#004da0",
-  "orientation": "portrait",
-  "scope": "/",
-  "prefer_related_applications": false,
-  "icons": [
-    {
-      "src": "icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ]
+  "theme_color": "#004da0"
 }
