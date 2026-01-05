@@ -6,8 +6,6 @@
 <title>ホーム - 篠ノ井乗務区</title>
 
 <link rel="stylesheet" href="style.css">
-<link rel="alternate" hreflang="ja" href="index.html">
-<link rel="alternate" hreflang="en" href="index.html?lang=en">
 <meta name="theme-color" content="#004da0">
 
 <style>
@@ -29,11 +27,6 @@
 .modal-close{
   position:absolute;top:8px;right:12px;cursor:pointer;font-size:20px
 }
-.lang-btn{
-  position:fixed;top:15px;right:15px;
-  background:#eee;padding:6px 10px;border-radius:5px;
-  cursor:pointer;font-size:13px;z-index:2000
-}
 </style>
 </head>
 
@@ -42,10 +35,9 @@
 <header></header>
 <nav></nav>
 
-<div class="lang-btn" onclick="toggleLang()">English</div>
-
 <div class="container">
 
+<!-- PWA誘致ボタン -->
 <div id="install-btn" class="install-btn hidden">
 アプリとして利用する
 </div>
@@ -111,7 +103,7 @@ const scriptUrl="https://script.google.com/macros/s/AKfycbwbUTBxVeTkRlAJ1dnBlgcm
 
 let deferredPrompt=null;
 
-/* PWA */
+/* PWA 誘致 */
 window.addEventListener("beforeinstallprompt",e=>{
  e.preventDefault();
  deferredPrompt=e;
@@ -138,10 +130,13 @@ document.getElementById("survey-form").addEventListener("submit",async e=>{
  const btn=document.getElementById("s-btn");
  btn.disabled=true;
 
- await fetch(scriptUrl,{method:"POST",body:JSON.stringify({
-  rating:document.querySelector('[name="s-rate"]:checked').value,
-  message:document.getElementById("s-msg").value
- })});
+ await fetch(scriptUrl,{
+  method:"POST",
+  body:JSON.stringify({
+   rating:document.querySelector('[name="s-rate"]:checked').value,
+   message:document.getElementById("s-msg").value || "（未入力）"
+  })
+ });
 
  document.getElementById("survey-form").style.display="none";
  document.getElementById("s-thanks").style.display="block";
@@ -152,32 +147,12 @@ document.getElementById("survey-form").addEventListener("submit",async e=>{
  },1500);
 });
 
-/* 翻訳 */
-function toggleLang(){
- const u=new URL(location.href);
- if(u.searchParams.get("lang")==="en"){
-  u.searchParams.delete("lang");
- }else{
-  u.searchParams.set("lang","en");
- }
- location.href=u.toString();
-}
-
-if(new URLSearchParams(location.search).get("lang")==="en"){
- const s=document.createElement("script");
- s.src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
- document.body.appendChild(s);
- window.googleTranslateElementInit=()=>{
-  new google.translate.TranslateElement({pageLanguage:"ja"},document.body);
- };
-}
-
-/* オフライン */
+/* オフライン時アンケート非表示 */
 if(!navigator.onLine){
  document.getElementById("survey-toggle").style.display="none";
 }
 
-/* インストール済み */
+/* インストール済み判定 */
 if(window.matchMedia('(display-mode: standalone)').matches){
  document.getElementById("install-btn").style.display="none";
 }
