@@ -11,44 +11,75 @@ const STATIC_ASSETS = [
   "icon-512.png"
 ];
 
-// インストール
+/* =========================
+   インストール
+========================= */
 self.addEventListener("install", event => {
+  // 新SWを即待機解除（更新通知前提）
   self.skipWaiting();
+
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => cache.addAll(STATIC_ASSETS))
   );
 });
 
-// 有効化（古いキャッシュ削除）
+/* =========================
+   有効化
+========================= */
 self.addEventListener("activate", event => {
   event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
-        keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))
-      )
-    )
+    Promise.all([
+      // 古いキャッシュ削除
+      caches.keys().then(keys =>
+        Promise.all(
+          keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))
+        )
+      ),
+      // 全クライアント制御
+      self.clients.claim()
+    ])
   );
-  self.clients.claim();
 });
 
-// フェッチ制御
+/* =========================
+   フェッチ制御
+========================= */
 self.addEventListener("fetch", event => {
   const url = new URL(event.request.url);
 
-  // 外部POST（アンケート等）はSW無関与
+  // POSTや外部APIはSW非介入
   if (event.request.method !== "GET") return;
   if (url.hostname.includes("script.google.com")) return;
 
-  // HTMLナビゲーション
+  // HTMLナビゲーション（オフライン対応）
   if (event.request.mode === "navigate") {
     event.respondWith(
-      fetch(event.request).catch(() => caches.match(OFFLINE_URL))
+      fetch(event.request)
+        .then(response => {
+          // 最新HTMLをキャッシュ更新
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then(cache =>
+            cache.put(event.request, copy)
+          );
+          return response;
+        })
+        .catch(() => caches.match(OFFLINE_URL))
     );
     return;
   }
 
-  // 静的ファイル
+  // 静的リソース
   event.respondWith(
-    caches.match(event.request).then(res => res || fetch(event.request))
+    caches.match(event.request).then(cached => {
+      if (cached) return cached;
+
+      return fetch(event.request).then(response => {
+        const copy = response.clone();
+        caches.open(CACHE_NAME).then(cache =>
+          cache.put(event.request, copy)
+        );
+        return response;
+      });
+    })
   );
 });
