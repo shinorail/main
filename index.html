@@ -1,162 +1,97 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ホーム - 篠ノ井乗務区</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        /* index専用デザイン */
-        .omikuji-box {
-            background: linear-gradient(135deg, #fff5f5 0%, #fff0f0 100%);
-            border: 2px solid #d32f2f;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        .omikuji-box h3 { color: #d32f2f; margin-top: 0; }
-        .btn-omikuji {
-            display: inline-block;
-            background-color: #d32f2f;
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-        .sns-info {
-            background-color: #e3f2fd;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 20px 0;
-            border-left: 5px solid #2196f3;
-        }
-        .link-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 30px;
-        }
-        .link-card {
-            background: #f0f0f0;
-            padding: 15px;
-            text-align: center;
-            text-decoration: none;
-            color: #004da0;
-            font-weight: bold;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            transition: 0.3s;
-        }
-        .link-card:hover { background: #e0e0e0; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        /* 移設案内ポップアップ */
-        .popup-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-        }
-        .popup-content { background: white; padding: 30px; border-radius: 10px; max-width: 400px; width: 85%; text-align: center; }
-        .btn-close { background-color: #004da0; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 15px; font-weight: bold; }
+<title>ホーム - 篠ノ井乗務区</title>
 
-        /* アンケートポップアップ */
-        .survey-toggle {
-            position: fixed; bottom: 20px; right: 20px; background: #004da0; color: white;
-            padding: 12px 20px; border-radius: 30px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            z-index: 1500; font-size: 14px; font-weight: bold;
-        }
-        .survey-popup {
-            position: fixed; bottom: 80px; right: 20px; width: 300px; background: white;
-            border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); display: none;
-            flex-direction: column; z-index: 1500; border: 1px solid #004da0; overflow: hidden;
-        }
-        .survey-header { background: #004da0; color: white; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; }
-        .survey-header button { background: none; border: none; color: white; cursor: pointer; font-size: 20px; }
-        .survey-body { padding: 15px; }
-        .s-group { margin-bottom: 15px; }
-        .s-group label { display: block; font-size: 12px; color: #666; margin-bottom: 5px; }
-        .s-group textarea { width: 100%; border: 1px solid #ddd; padding: 8px; box-sizing: border-box; border-radius: 4px; resize: none; }
-        .s-rating { display: flex; justify-content: space-between; }
-        .s-rating input { display: none; }
-        .s-rating label { flex: 1; text-align: center; background: #eee; margin: 0 2px; padding: 8px 0; cursor: pointer; border-radius: 4px; font-weight: bold; }
-        .s-rating input:checked + label { background: #004da0; color: white; }
-        .s-submit { width: 100%; background: #004da0; color: white; border: none; padding: 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+<!-- ===== PWA ===== -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#004da0">
 
-        @media (max-width: 600px) { .survey-popup { width: calc(100% - 40px); bottom: 75px; right: 20px; } }
-    </style>
+<!-- ===== iOS ===== -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="篠ノ井乗務区">
+<link rel="apple-touch-icon" href="icon-192.png">
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+/* ===== 共通 ===== */
+#net-status, #update-bar, #cache-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 8px;
+  text-align: center;
+  font-weight: bold;
+  z-index: 3000;
+  display: none;
+}
+#net-status { background: #d32f2f; color: #fff; }
+#update-bar { background: #ff9800; color: #000; cursor: pointer; }
+#cache-bar { background: #4caf50; color: #fff; }
+
+/* ===== iOS追加案内 ===== */
+#ios-guide {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #004da0;
+  color: #fff;
+  padding: 15px 20px;
+  border-radius: 10px;
+  display: none;
+  z-index: 2500;
+  font-size: 14px;
+}
+
+/* ===== トップ文言 ===== */
+#top-message { font-size: 1em; margin-bottom: 20px; }
+
+/* ===== タブレット最適化 ===== */
+@media (min-width: 768px) {
+  .container {
+    max-width: 900px;
+    margin: auto;
+  }
+  .link-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+</style>
 </head>
+
 <body>
+
+<div id="net-status">現在オフラインです</div>
+<div id="update-bar" onclick="location.reload()">新しいバージョンがあります。タップして更新</div>
+<div id="cache-bar">オフライン準備が完了しました</div>
+
+<div id="ios-guide">
+  このサイトはアプリとして使えます<br>
+  Safariの共有 →「ホーム画面に追加」
+</div>
 
 <header></header>
 <nav></nav>
 
 <div class="container">
-    <section class="omikuji-box">
-        <h3>【2周年記念】お正月おみくじ公開のお知らせ</h3>
-        <p>2026年1月1日午前0時より、2周年を記念した「鉄道おみくじ」を特設サイトにて公開いたします。新年の運試しにぜひお楽しみください。</p>
-        <a href="https://shinorail.github.io/shinonoi-2026/" class="btn-omikuji">2周年特設サイトはこちら</a>
-    </section>
 
-    <section>
-        <p>ようこそ、篠ノ井乗務区の公式ホームページへ。</p>
-        <p>当サイトは、鉄道の魅力を発信することを目的に運営されています。長野県を中心とした路線紹介、沿線風景の記録、現役鉄道ファンとのつながりを大切にしながら情報をお届けします。</p>
-    </section>
+<p id="top-message">
+ようこそ、篠ノ井乗務区の公式ホームページへ。
+</p>
 
-    <section class="sns-info">
-        <p><strong>◇ 最新情報は X（旧Twitter）で発信中！</strong></p>
-        <p><a href="https://x.com/Shino_Rail" target="_blank">@Shino_Rail</a></p>
-        <p style="font-size: 0.85em; color: #666;">※本アカウントのDMは告知専用です。お問い合わせには対応いたしかねます。</p>
-    </section>
-
-    <div class="link-grid">
-        <a href="mission.html" class="link-card">▶ 活動理念を見る</a>
-        <a href="history.html" class="link-card">▶ 沿革を見る</a>
-        <a href="news.html" class="link-card">▶ お知らせを見る</a>
-    </div>
+<div class="link-grid">
+  <a href="mission.html" class="link-card">活動理念</a>
+  <a href="history.html" class="link-card">沿革</a>
+  <a href="news.html" class="link-card">お知らせ</a>
 </div>
 
-<div id="popup-overlay" class="popup-overlay">
-    <div class="popup-content">
-        <h3>お知らせ</h3>
-        <p>現在、旧サイト（Google Sites）から本サイトへの移設を順次進めております。何卒ご了承ください。</p>
-        <button onclick="closePopup()" class="btn-close">確認しました</button>
-    </div>
-</div>
-
-<div id="survey-toggle" class="survey-toggle" onclick="toggleSurvey()">📩 アンケート協力</div>
-<div id="survey-container" class="survey-popup">
-    <div class="survey-header"><span>閲覧者アンケート</span><button onclick="toggleSurvey()">×</button></div>
-    <form id="survey-form" class="survey-body">
-        <div class="s-group">
-            <label>サイトの満足度 (1-5)</label>
-            <div class="s-rating">
-                <input type="radio" name="s-rate" id="sr1" value="1"><label for="sr1">1</label>
-                <input type="radio" name="s-rate" id="sr2" value="2"><label for="sr2">2</label>
-                <input type="radio" name="s-rate" id="sr3" value="3" checked><label for="sr3">3</label>
-                <input type="radio" name="s-rate" id="sr4" value="4"><label for="sr4">4</label>
-                <input type="radio" name="s-rate" id="sr5" value="5"><label for="sr5">5</label>
-            </div>
-        </div>
-        <div class="s-group">
-            <label>メッセージ（任意）</label>
-            <textarea id="s-msg" rows="3" placeholder="ご自由にお書きください"></textarea>
-        </div>
-        <button type="submit" id="s-btn" class="s-submit">送信する</button>
-    </form>
-    <div id="s-thanks" style="display:none; padding: 30px 15px; text-align: center;">
-        <div style="font-size: 30px; margin-bottom: 10px;">🚊</div>
-        <h3 style="margin: 0 0 10px 0; color: #004da0; font-size: 16px;">ありがとうございました</h3>
-        <p style="font-size: 12px; color: #666;">ご協力感謝いたします。</p>
-    </div>
 </div>
 
 <footer></footer>
@@ -164,55 +99,58 @@
 <script src="menu.js"></script>
 
 <script>
-    const scriptUrl = "https://script.google.com/macros/s/AKfycbwbUTBxVeTkRlAJ1dnBlgcmpGaWI9B0SeMwkwKSwAJYjRDAtVcX67QwA5FcNGaJE9Cq/exec";
+/* ===== Service Worker 登録 + 更新検知 ===== */
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js").then(reg => {
 
-    // 移設案内ポップアップ制御
-    window.addEventListener('load', () => {
-        if (!sessionStorage.getItem('visited_shinorail')) {
-            document.getElementById('popup-overlay').style.display = 'flex';
-        }
-    });
-    function closePopup() {
-        document.getElementById('popup-overlay').style.display = 'none';
-        sessionStorage.setItem('visited_shinorail', 'true');
+    // 初回キャッシュ完了
+    if (!localStorage.getItem("cached")) {
+      navigator.serviceWorker.ready.then(() => {
+        document.getElementById("cache-bar").style.display = "block";
+        setTimeout(() => {
+          document.getElementById("cache-bar").style.display = "none";
+        }, 3000);
+        localStorage.setItem("cached", "true");
+      });
     }
 
-    // アンケートポップアップ制御
-    function toggleSurvey() {
-        const p = document.getElementById('survey-container');
-        p.style.display = (p.style.display === 'flex') ? 'none' : 'flex';
-    }
-
-    // アンケート送信
-    document.getElementById('survey-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const btn = document.getElementById('s-btn');
-        btn.disabled = true; btn.innerText = "送信中...";
-        
-        const data = {
-            name: "匿名",
-            rating: document.querySelector('input[name="s-rate"]:checked').value,
-            message: document.getElementById('s-msg').value || "（未入力）"
-        };
-
-        try {
-            await fetch(scriptUrl, { method: 'POST', body: JSON.stringify(data) });
-            document.getElementById('survey-form').style.display = 'none';
-            document.getElementById('s-thanks').style.display = 'block';
-            setTimeout(() => {
-                toggleSurvey();
-                setTimeout(() => {
-                    document.getElementById('survey-form').style.display = 'block';
-                    document.getElementById('s-thanks').style.display = 'none';
-                    btn.disabled = false; btn.innerText = "送信する";
-                    document.getElementById('survey-form').reset();
-                }, 500);
-            }, 3000);
-        } catch (e) {
-            alert("送信に失敗しました。");
-            btn.disabled = false; btn.innerText = "送信する";
+    // 更新検知
+    reg.addEventListener("updatefound", () => {
+      const newWorker = reg.installing;
+      newWorker.addEventListener("statechange", () => {
+        if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+          document.getElementById("update-bar").style.display = "block";
         }
+      });
     });
+  });
+}
+
+/* ===== オンライン／オフライン ===== */
+function updateNetworkUI() {
+  const offline = !navigator.onLine;
+  document.getElementById("net-status").style.display = offline ? "block" : "none";
+  document.getElementById("top-message").innerText = offline
+    ? "現在オフラインです。通信が回復すると通常表示に戻ります。"
+    : "ようこそ、篠ノ井乗務区の公式ホームページへ。";
+}
+window.addEventListener("online", updateNetworkUI);
+window.addEventListener("offline", updateNetworkUI);
+updateNetworkUI();
+
+/* ===== iOSのみ ホーム画面案内 ===== */
+(function () {
+  const ua = navigator.userAgent;
+  const isIOS = /iPhone|iPad/.test(ua);
+  const isStandalone = window.navigator.standalone === true;
+
+  if (isIOS && !isStandalone && !localStorage.getItem("ios_guide")) {
+    const g = document.getElementById("ios-guide");
+    g.style.display = "block";
+    setTimeout(() => g.style.display = "none", 8000);
+    localStorage.setItem("ios_guide", "shown");
+  }
+})();
 </script>
 
 </body>
