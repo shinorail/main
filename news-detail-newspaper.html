@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>コメント投稿に関するお知らせ - 篠ノ井乗務区【報道発表】</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+/* ===== 新聞記事風デザイン ===== */
+.news-detail-content {
+    background: #fff;
+    padding: 25px 30px;
+    border-radius: 5px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+    font-family: "BIZ UDPGothic", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif; /* 新聞によくあるフォント */
+    line-height: 1.7;
+    color: #333;
+}
+.newspaper-meta {
+    font-size: 13px;
+    color: #666;
+    border-bottom: 1px dashed #ccc;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    text-align: right; /* 日付を右寄せに */
+}
+.newspaper-lead {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    line-height: 1.6;
+    color: #000;
+}
+.news-title {
+    color: #000; /* 新聞は黒色が多い */
+    font-size: 2.2em; /* 見出しを大きく */
+    font-weight: 900; /* 極太 */
+    margin-bottom: 15px;
+    line-height: 1.3;
+    text-align: center; /* 中央寄せ */
+    border-bottom: 3px solid #000; /* 強い下線 */
+    padding-bottom: 10px;
+}
+.news-subtitle {
+    font-size: 1.4em;
+    font-weight: bold;
+    color: #004da0;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    border-left: 5px solid #004da0;
+    padding-left: 10px;
+}
+.news-body p {
+    margin-bottom: 1.2em; /* 段落間隔を調整 */
+    text-indent: 1em; /* 段落の始まりを字下げ */
+    text-align: justify; /* 両端揃え */
+}
+.news-body ul {
+    list-style-type: disc;
+    margin-left: 25px;
+    margin-bottom: 1.5em;
+}
+.news-body li {
+    margin-bottom: 0.5em;
+}
+.quote-box {
+    background: #f8f8f8;
+    border: 1px solid #ddd;
+    padding: 15px 20px;
+    margin: 25px 0;
+    font-style: italic;
+    color: #555;
+    border-radius: 5px;
+}
+.quote-box::before {
+    content: "◇ ";
+    font-weight: bold;
+    color: #004da0;
+}
+
+
+/* アンケートや通知のスタイルはindexと共通 */
+.survey-toggle{position:fixed;bottom:20px;right:20px;background:#004da0;color:#fff;padding:12px 20px;border-radius:30px;font-weight:bold;cursor:pointer;z-index:1000}
+.survey-popup{position:fixed;bottom:80px;right:20px;width:300px;background:#fff;border-radius:10px;box-shadow:0 5px 20px rgba(0,0,0,.2);display:none;flex-direction:column;z-index:1000}
+.survey-header{background:#004da0;color:#fff;padding:10px;display:flex;justify-content:space-between}
+.survey-body{padding:15px}
+.s-submit{width:100%;background:#004da0;color:#fff;border:none;padding:12px;border-radius:4px;font-weight:bold}
+.back-link {
+    display: block; /* ブロック要素にして中央寄せしやすく */
+    text-align: center; /* 中央寄せ */
+    margin-top: 30px;
+    color: #004da0;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 8px 15px;
+    border: 1px solid #004da0;
+    border-radius: 5px;
+    width: fit-content; /* 内容に合わせた幅 */
+    margin-left: auto; /* 中央寄せ */
+    margin-right: auto; /* 中央寄せ */
+}
+.back-link:hover {
+    background: #e3f2fd;
+    text-decoration: none;
+}
+</style>
+
+</head>
+
+<body>
+
+<header></header>
+<nav></nav>
+
+<div class="container">
+
+<article class="news-detail-content">
+    <div class="newspaper-meta">
+        【2026年1月5日 篠ノ井乗務区 報道発表】
+    </div>
+    <h1 class="news-title">
+        <ruby>鉄道<rt>てつどう</rt></ruby>愛好家の交流<ruby>促進<rt>そくしん</rt></ruby>へ<br>
+        <ruby>篠ノ井乗務区<rt>しののいじょうむく</rt></ruby>HP、コメント<ruby>投稿<rt>とうこう</rt></ruby>の<ruby>適正化<rt>てきせいか</rt></ruby>を実施
+    </h1>
+    <p class="newspaper-lead">
+        篠ノ井乗務区は、公式ホームページにおける利用者間の健全な交流を促進するため、コメント投稿の運用方法を<ruby>見直<rt>みなお</rt></ruby>し、<ruby>管理者<rt>かんりしゃ</rt></ruby>による<ruby>事前承認制<rt>じぜんしょうにんせい</rt></ruby>を改めて<ruby>周知徹底<rt>しゅうちてってい</rt></ruby>することを発表しました。
+    </p>
+
+    <div class="news-body">
+        <h2 class="news-subtitle">◆ 健全なコミュニティ形成を目指して</h2>
+        <p>
+            日頃より篠ノ井乗務区の公式ホームページをご利用いただき、厚く御礼申し上げます。当乗務区では、地域の皆様や鉄道愛好家の皆様が気軽に情報交換できる場を提供してまいりました。しかし、より安全で質の高い交流環境を維持するため、この度、コメント投稿に関する運用方針を再確認し、<ruby>適切<rt>てきせつ</rt></ruby>な管理体制のもとで運営していく運びとなりました。
+        </p>
+
+        <h2 class="news-subtitle">◆ コメント公開までのプロセス</h2>
+        <p>
+            現在、当サイトへお寄せいただいた全てのコメントは、当乗務区の管理者が内容を個別に確認させていただいております。これにより、以下のような投稿を未然に防ぎ、皆様に安心してご利用いただけるよう努めております。
+        </p>
+        <ul>
+            <li>公序良俗に反する内容</li>
+            <li>個人情報を含む内容</li>
+            <li>特定の個人や団体を誹謗中傷する内容</li>
+            <li>その他、サイト運営に不適切と判断される内容</li>
+        </ul>
+        <p>
+            このため、コメントを投稿いただいてから実際にサイト上に表示されるまで、お時間を頂戴する場合がございます。何卒、ご理解とご協力を賜りますようお願い申し上げます。
+        </p>
+
+        <div class="quote-box">
+            「皆様に楽しんでいただけるホームページを目指して、今後もより良いコンテンツ提供とサイト運営に努めてまいります。貴重なご意見・ご感想をお待ちしております。」<br>
+            （篠ノ井乗務区 広報担当）
+        </div>
+
+        <p>
+            皆様の温かいご意見や活発な交流が、当サイトの活性化に繋がるものと確信しております。今後とも、篠ノ井乗務区公式ホームページをどうぞよろしくお願い申し上げます。
+        </p>
+    </div>
+
+    <a href="news.html" class="back-link">← お知らせ一覧へ戻る</a>
+
+</article>
+
+</div>
+
+<div id="survey-toggle" class="survey-toggle" onclick="toggleSurvey()">📩 アンケート協力</div>
+
+<div id="survey-container" class="survey-popup">
+    <div class="survey-header">
+        <span>閲覧者アンケート</span>
+        <button onclick="toggleSurvey()">×</button>
+    </div>
+
+    <form id="survey-form" class="survey-body">
+        <textarea id="msg" rows="3" placeholder="ご意見・ご感想をお聞かせください"></textarea>
+        <button class="s-submit">送信する</button>
+    </form>
+
+    <div id="survey-thanks" style="display:none;padding:20px;text-align:center">
+        <strong>ありがとうございました。</strong><br>
+        <small>アンケート送信後、アプリ利用もぜひご検討ください。</small>
+    </div>
+</div>
+
+<footer></footer>
+
+<script src="menu.js"></script>
+
+<div id="google_translate_element" style="display:none"></div>
+<script>
+function googleTranslateElementInit() {
+    new google.translate.TranslateElement(
+        { pageLanguage:'ja', includedLanguages:'ja,en', autoDisplay:false },
+        'google_translate_element'
+    );
+}
+</script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<script>
+/* ===== アンケート ===== */
+function toggleSurvey(){
+    const s=document.getElementById('survey-container');
+    s.style.display=s.style.display==='flex'?'none':'flex';
+}
+
+/* オフライン時はアンケート非表示 */
+function surveyVisibility(){
+    document.getElementById('survey-toggle').style.display =
+        navigator.onLine ? 'block' : 'none';
+}
+window.addEventListener('online',surveyVisibility);
+window.addEventListener('offline',surveyVisibility);
+surveyVisibility();
+
+/* ===== Service Worker & 更新自動反映 ===== */
+let waitingSW=null;
+
+if('serviceWorker'in navigator){
+    navigator.serviceWorker.register('sw.js').then(reg=>{
+        if(reg.waiting) waitingSW=reg.waiting;
+
+        reg.addEventListener('updatefound',()=>{
+            const nw=reg.installing;
+            nw.addEventListener('statechange',()=>{
+                if(nw.state==='installed'&&navigator.serviceWorker.controller){
+                    waitingSW=nw;
+                    showUpdate();
+                }
+            });
+        });
+    });
+}
+
+function showUpdate(){
+    if(window.innerWidth>=768) return;
+    const t=document.getElementById('update-toast');
+    t.style.display='block';
+    setTimeout(()=>{
+        if(waitingSW) waitingSW.postMessage({action:'skipWaiting'});
+        location.reload();
+    },2000);
+}
+</script>
+
+</body>
+</html>
