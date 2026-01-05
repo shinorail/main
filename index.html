@@ -1,179 +1,77 @@
 <!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ホーム - 篠ノ井乗務区</title>
+
+<html lang="ja"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>ホーム - 篠ノ井乗務区</title> <link rel="stylesheet" href="style.css"> <style> .omikuji-box { background: linear-gradient(135deg, #fff5f5 0%, #fff0f0 100%); border: 2px solid #d32f2f; padding: 20px; border-radius: 10px; margin-bottom: 30px; text-align: center; } .omikuji-box h3 { color: #d32f2f; margin-top: 0; } .btn-omikuji { display: inline-block; background-color: #d32f2f; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 10px; } .sns-info { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 20px 0; border-left: 5px solid #2196f3; } #survey-container { position: fixed; bottom: 20px; right: 20px; z-index: 1000; display: none; align-items: center; justify-content: center; } .survey-card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); width: 280px; border-top: 5px solid #004da0; } .survey-card h4 { margin: 0 0 10px; color: #004da0; } .survey-options { display: flex; justify-content: space-between; margin-bottom: 15px; } .survey-options label { display: flex; flex-direction: column; align-items: center; font-size: 12px; cursor: pointer; } #s-thanks { display: none; text-align: center; color: #388e3c; font-weight: bold; } .survey-toggle { position: fixed; bottom: 20px; right: 20px; background: #004da0; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.3); z-index: 999; } </style> </head> <body>
+
+<header></header> <nav></nav>
+
+<div class="container"> <div class="omikuji-box"> <h3>今日の鉄道運勢</h3> <p>あなたの今日のラッキー車両は何でしょうか？</p> <a href="#" class="btn-omikuji" onclick="alert('おみくじ機能は準備中です！')">おみくじを引く</a> </div>
+
+<section class="card">
+    <h2>篠ノ井乗務区へようこそ</h2>
+    <p>当サイトは、信州を中心とした鉄道の魅力を発信する個人プロジェクトです。路線の紹介や、日々の運行に関するニュースをお届けします。</p>
     
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#004da0">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
-    <link rel="icon" href="1.jpg" type="image/jpeg">
-    <link rel="apple-touch-icon" href="1.jpg">
-    
-    <link rel="stylesheet" href="style.css">
-    <style>
-        /* index専用デザイン */
-        .omikuji-box {
-            background: linear-gradient(135deg, #fff5f5 0%, #fff0f0 100%);
-            border: 2px solid #d32f2f;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        .omikuji-box h3 { color: #d32f2f; margin-top: 0; }
-        .btn-omikuji {
-            display: inline-block;
-            background-color: #d32f2f;
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-        .sns-info {
-            background-color: #e3f2fd;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 20px 0;
-            border-left: 5px solid #2196f3;
-        }
-        /* アンケートポップアップ */
-        #survey-container {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        .survey-card {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            max-width: 500px;
-            width: 90%;
-            position: relative;
-        }
-    </style>
-</head>
-<body>
-
-    <header></header>
-    <nav></nav>
-
-    <main class="container">
-        <section class="omikuji-box">
-            <h3>今日の運勢をチェック</h3>
-            <p>篠ノ井乗務区 鉄道おみくじ</p>
-            <div id="omikuji-result" style="font-size: 1.5em; font-weight: bold; margin: 15px 0; min-height: 1.6em;"></div>
-            <button onclick="drawOmikuji()" class="btn-omikuji">おみくじを引く</button>
-        </section>
-
-        <section>
-            <h2>篠ノ井乗務区へようこそ</h2>
-            <p>信州の鉄道文化と、現場の熱意を伝えるプロジェクト。私たちは鉄道の記録と継承を大切にしています。</p>
-            
-            <div class="sns-info">
-                <strong>【公式SNS】</strong> 最新情報は X（旧Twitter）にて発信中です。
-            </div>
-        </section>
-
-        <section style="margin-top: 40px; text-align: center;">
-            <button onclick="toggleSurvey()" style="background:#004da0; color:white; border:none; padding:15px 25px; border-radius:30px; cursor:pointer; font-weight:bold;">
-                📋 サイト改善アンケートにご協力ください
-            </button>
-        </section>
-    </main>
-
-    <div id="survey-container">
-        <div class="survey-card">
-            <button onclick="toggleSurvey()" style="position:absolute; right:15px; top:10px; background:none; border:none; font-size:24px; cursor:pointer;">&times;</button>
-            <h3>アンケート</h3>
-            <form id="survey-form">
-                <p>このサイトの使いやすさは？</p>
-                <label><input type="radio" name="s-rate" value="満足" required> 満足</label>
-                <label><input type="radio" name="s-rate" value="普通"> 普通</label>
-                <label><input type="radio" name="s-rate" value="不満"> 不満</label>
-                <p>ご意見・ご要望</p>
-                <textarea id="s-msg" style="width:100%; height:80px; margin-bottom:15px;"></textarea>
-                <button type="submit" id="s-btn" style="width:100%; background:#004da0; color:white; border:none; padding:12px; border-radius:5px; font-weight:bold;">送信する</button>
-            </form>
-            <div id="s-thanks" style="display:none; text-align:center; padding:20px;">
-                <h4>送信ありがとうございました！</h4>
-            </div>
-        </div>
+    <div class="sns-info">
+        <strong>公式X（旧Twitter）公開中！</strong><br>
+        最新の運行情報や撮影記録をリアルタイムで発信しています。
     </div>
+</section>
 
-    <footer></footer>
+<div class="link-grid">
+    <a href="train-news.html" class="link-card">
+        <h3>Train-News</h3>
+        <p>最新の車両情報や鉄道ニュースをチェック。</p>
+    </a>
+    <a href="mission.html" class="link-card">
+        <h3>活動理念</h3>
+        <p>私たちが目指す鉄道情報の発信について。</p>
+    </a>
+</div>
+</div>
 
-    <script src="menu.js"></script>
-    <script>
-        // PWA サービスワーカーの登録
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then(reg => console.log('PWA Service Worker 登録成功'))
-                    .catch(err => console.log('PWA 登録失敗', err));
-            });
-        }
+<div class="survey-toggle" onclick="toggleSurvey()">📝</div>
 
-        const scriptUrl = "https://script.google.com/macros/s/AKfycbwbUTBxVeTkRlAJ1dnBlgcmpGaWI9B0SeMwkwKSwAJYjRDAtVcX67QwA5FcNGaJE9Cq/exec";
+<div id="survey-container"> <div class="survey-card"> <div style="text-align: right; cursor: pointer;" onclick="toggleSurvey()">×</div> <div id="survey-form-area"> <h4>サイトの満足度</h4> <form id="survey-form"> <div class="survey-options"> <label><input type="radio" name="s-rate" value="5" checked>5</label> <label><input type="radio" name="s-rate" value="4">4</label> <label><input type="radio" name="s-rate" value="3">3</label> <label><input type="radio" name="s-rate" value="2">2</label> <label><input type="radio" name="s-rate" value="1">1</label> </div> <textarea id="s-msg" placeholder="ご意見（任意）" style="width:100%; height:60px; margin-bottom:10px; border:1px solid #ddd;"></textarea> <button type="submit" id="s-btn" class="btn-omikuji" style="width:100%; border:none; cursor:pointer;">送信</button> </form> </div> <div id="s-thanks">送信完了しました！</div> </div> </div>
 
-        // おみくじ機能
-        function drawOmikuji() {
-            const results = [
-                "大吉：特急あずさのように絶好調！",
-                "中吉：各駅停車でゆっくり進めば吉。",
-                "小吉：リゾートビューふるさとで癒やされよう。",
-                "吉：篠ノ井線経由で目的地へ順調！",
-                "末吉：安全第一で指差し確認を忘れずに。"
-            ];
-            const result = results[Math.floor(Math.random() * results.length)];
-            document.getElementById('omikuji-result').innerText = result;
-        }
+<footer></footer>
 
-        // アンケートポップアップ制御
-        function toggleSurvey() {
-            const p = document.getElementById('survey-container');
-            p.style.display = (p.style.display === 'flex') ? 'none' : 'flex';
-        }
+<script src="menu.js"></script>
 
-        // アンケート送信
-        document.getElementById('survey-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('s-btn');
-            btn.disabled = true; btn.innerText = "送信中...";
-            
-            const data = {
-                name: "匿名",
-                rating: document.querySelector('input[name="s-rate"]:checked').value,
-                message: document.getElementById('s-msg').value || "（未入力）"
-            };
+<script> const scriptUrl = "https://script.google.com/macros/s/AKfycbwbUTBxVeTkRlAJ1dnBlgcmpGaWI9B0SeMwkwKSwAJYjRDAtVcX67QwA5FcNGaJE9Cq/exec";
 
-            try {
-                await fetch(scriptUrl, { method: 'POST', body: JSON.stringify(data) });
-                document.getElementById('survey-form').style.display = 'none';
-                document.getElementById('s-thanks').style.display = 'block';
-                setTimeout(() => {
-                    toggleSurvey();
-                    setTimeout(() => {
-                        document.getElementById('survey-form').style.display = 'block';
-                        document.getElementById('s-thanks').style.display = 'none';
-                        btn.disabled = false; btn.innerText = "送信する";
-                        document.getElementById('survey-form').reset();
-                    }, 500);
-                }, 3000);
-            } catch (e) {
-                alert("送信に失敗しました。");
-                btn.disabled = false; btn.innerText = "送信する";
-            }
-        });
-    </script>
-</body>
-</html>
+function toggleSurvey() {
+    const p = document.getElementById(&#39;survey-container&#39;);
+    p.style.display = (p.style.display === &#39;flex&#39;) ? &#39;none&#39; : &#39;flex&#39;;
+}
+
+document.getElementById(&#39;survey-form&#39;).addEventListener(&#39;submit&#39;, async (e) =&gt; {
+    e.preventDefault();
+    const btn = document.getElementById(&#39;s-btn&#39;);
+    btn.disabled = true; btn.innerText = &quot;送信中...&quot;;
+    
+    const data = {
+        name: &quot;匿名&quot;,
+        rating: document.querySelector(&#39;input[name=&quot;s-rate&quot;]:checked&#39;).value,
+        message: document.getElementById(&#39;s-msg&#39;).value || &quot;（未入力）&quot;
+    };
+
+    try {
+        await fetch(scriptUrl, { method: &#39;POST&#39;, body: JSON.stringify(data) });
+        document.getElementById(&#39;survey-form&#39;).style.display = &#39;none&#39;;
+        document.getElementById(&#39;s-thanks&#39;).style.display = &#39;block&#39;;
+        setTimeout(() =&gt; {
+            toggleSurvey();
+            setTimeout(() =&gt; {
+                document.getElementById(&#39;survey-form&#39;).style.display = &#39;block&#39;;
+                document.getElementById(&#39;s-thanks&#39;).style.display = &#39;none&#39;;
+                btn.disabled = false; btn.innerText = &quot;送信&quot;;
+                document.getElementById(&#39;survey-form&#39;).reset();
+            }, 500);
+        }, 3000);
+    } catch (e) {
+        alert(&quot;送信に失敗しました。&quot;);
+        btn.disabled = false; btn.innerText = &quot;送信&quot;;
+    }
+});
+</script>
+
+</body> </html>
