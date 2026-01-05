@@ -10,7 +10,7 @@
 <meta name="theme-color" content="#004da0">
 
 <style>
-/* ===== index専用UI（元デザイン保持） ===== */
+/* ===== index専用デザイン（元UI基準） ===== */
 .omikuji-box {
   background: linear-gradient(135deg, #fff5f5 0%, #fff0f0 100%);
   border: 2px solid #d32f2f;
@@ -27,18 +27,21 @@
   text-decoration:none;
   font-weight:bold;
 }
+
 .sns-info {
   background:#e3f2fd;
   padding:15px;
   border-radius:5px;
   border-left:5px solid #2196f3;
 }
+
 .link-grid {
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
   gap:15px;
   margin-top:30px;
 }
+
 .link-card {
   background:#f0f0f0;
   padding:15px;
@@ -48,76 +51,21 @@
   font-weight:bold;
   border-radius:5px;
   border:1px solid #ddd;
+  transition:.2s;
 }
+.link-card:hover { background:#e0e0e0; }
 
-/* ===== アンケート ===== */
-.survey-toggle {
-  position:fixed;
-  bottom:20px; right:20px;
-  background:#004da0; color:#fff;
-  padding:12px 20px;
-  border-radius:30px;
-  font-weight:bold;
-  cursor:pointer;
-  z-index:1500;
+/* ===== アプリ追加カード ===== */
+.install-card {
+  background:#004da0;
+  color:#fff;
+  border-radius:8px;
 }
-.survey-popup {
-  position:fixed;
-  bottom:80px; right:20px;
-  width:300px;
-  background:#fff;
-  border-radius:10px;
-  box-shadow:0 5px 20px rgba(0,0,0,.2);
-  display:none;
-  flex-direction:column;
-  z-index:1500;
-}
-.survey-header {
-  background:#004da0; color:#fff;
-  padding:10px 15px;
-  display:flex;
-  justify-content:space-between;
-}
-.s-rating { display:flex; }
-.s-rating input { display:none; }
-.s-rating label {
-  flex:1; margin:2px;
-  background:#eee;
-  text-align:center;
-  padding:8px 0;
-  border-radius:4px;
-  cursor:pointer;
-}
-.s-rating input:checked + label {
-  background:#004da0; color:#fff;
-}
-
-/* ===== PWA誘致（中央） ===== */
-#pwa-after {
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.5);
-  z-index:4000;
-  justify-content:center;
-  align-items:center;
-}
-#pwa-box {
-  background:#fff;
-  width:90%;
-  max-width:360px;
-  padding:24px;
-  border-radius:12px;
-  text-align:center;
-  position:relative;
-}
-#pwa-box button.close {
-  position:absolute;
-  top:8px; right:10px;
-  border:none;
-  background:none;
-  font-size:20px;
-  cursor:pointer;
+.install-card span {
+  display:block;
+  font-size:13px;
+  font-weight:normal;
+  margin-top:6px;
 }
 </style>
 </head>
@@ -128,10 +76,13 @@
 <nav></nav>
 
 <div class="container">
+
   <section class="omikuji-box">
     <h3>【2周年記念】お正月おみくじ</h3>
     <p>現在公開中（1月31日まで）</p>
-    <a href="https://shinorail.github.io/shinonoi-2026/" class="btn-omikuji">特設サイトはこちら</a>
+    <a href="https://shinorail.github.io/shinonoi-2026/" class="btn-omikuji">
+      特設サイトはこちら
+    </a>
   </section>
 
   <p>ようこそ、篠ノ井乗務区の公式ホームページへ。</p>
@@ -142,44 +93,18 @@
   </section>
 
   <div class="link-grid">
+
+    <!-- ★ アプリ追加（インストール済みなら非表示） -->
+    <a href="#" id="install-btn" class="link-card install-card">
+      📱 アプリを追加
+      <span>ホーム画面に追加できます</span>
+    </a>
+
     <a href="mission.html" class="link-card">活動理念</a>
     <a href="history.html" class="link-card">沿革</a>
     <a href="news.html" class="link-card">お知らせ</a>
   </div>
-</div>
 
-<!-- アンケート -->
-<div id="survey-toggle" class="survey-toggle">📩 アンケート協力</div>
-
-<div id="survey" class="survey-popup">
-  <div class="survey-header">
-    <span>閲覧者アンケート</span>
-    <button onclick="toggleSurvey()">×</button>
-  </div>
-  <form id="survey-form" style="padding:15px">
-    <div class="s-rating">
-      <input type="radio" name="rate" id="r1" value="1"><label for="r1">1</label>
-      <input type="radio" name="rate" id="r2" value="2"><label for="r2">2</label>
-      <input type="radio" name="rate" id="r3" value="3" checked><label for="r3">3</label>
-      <input type="radio" name="rate" id="r4" value="4"><label for="r4">4</label>
-      <input type="radio" name="rate" id="r5" value="5"><label for="r5">5</label>
-    </div>
-    <textarea id="msg" rows="3" style="width:100%;margin-top:10px"></textarea>
-    <button type="submit" style="width:100%;margin-top:10px">送信</button>
-  </form>
-  <div id="thanks" style="display:none;padding:20px;text-align:center">
-    <strong>ありがとうございました</strong>
-  </div>
-</div>
-
-<!-- PWA誘致 -->
-<div id="pwa-after">
-  <div id="pwa-box">
-    <button class="close">×</button>
-    <h3>アプリとして使いませんか？</h3>
-    <p>ホーム画面に追加できます</p>
-    <button id="pwa-install">アプリを利用する</button>
-  </div>
 </div>
 
 <footer></footer>
@@ -199,44 +124,38 @@ window.addEventListener('beforeinstallprompt', e => {
   deferredPrompt = e;
 });
 
+/* インストール済み判定 */
 function isInstalled() {
   return window.matchMedia('(display-mode: standalone)').matches
     || window.navigator.standalone === true;
 }
 
-/* ===== アンケート ===== */
-const survey = document.getElementById('survey');
-document.getElementById('survey-toggle').onclick = toggleSurvey;
+/* インストールボタン制御 */
+const installBtn = document.getElementById('install-btn');
 
-function toggleSurvey() {
-  if (!navigator.onLine) return;
-  survey.style.display = survey.style.display === 'flex' ? 'none' : 'flex';
+if (isInstalled()) {
+  installBtn.style.display = 'none';
 }
 
-document.getElementById('survey-form').onsubmit = e => {
+installBtn.addEventListener('click', async e => {
   e.preventDefault();
-  document.getElementById('survey-form').style.display = 'none';
-  document.getElementById('thanks').style.display = 'block';
 
-  setTimeout(() => {
-    survey.style.display = 'none';
-    if (!isInstalled() && deferredPrompt) {
-      document.getElementById('pwa-after').style.display = 'flex';
-    }
-  }, 1000);
-};
+  // Android / PC
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    return;
+  }
 
-/* ===== PWA誘致 ===== */
-document.querySelector('#pwa-box .close').onclick = () => {
-  document.getElementById('pwa-after').style.display = 'none';
-};
+  // iOS → 図解ページ
+  if (/iphone|ipad|ipod/i.test(navigator.userAgent)) {
+    location.href = 'install方法.html';
+    return;
+  }
 
-document.getElementById('pwa-install').onclick = async () => {
-  if (!deferredPrompt) return;
-  deferredPrompt.prompt();
-  await deferredPrompt.userChoice;
-  deferredPrompt = null;
-};
+  alert('このブラウザではアプリ追加に対応していません。');
+});
 </script>
 
 </body>
