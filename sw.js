@@ -1,47 +1,54 @@
-const CACHE_NAME = 'shino-rail-v1';
-const urlsToCache = [
-  '/',
-  'index.html',
-  'style.css',
-  'menu.js',
-  '1.jpg'
+const CACHE_NAME = "shinorail-v3";
+const OFFLINE_URL = "offline.html";
+
+const STATIC_ASSETS = [
+  "./",
+  "index.html",
+  "style.css",
+  "menu.js",
+  "offline.html",
+  "icon-192.png",
+  "icon-512.png"
 ];
 
-// インストール時にキャッシュ
-self.addEventListener('install', (event) => {
+// インストール
+self.addEventListener("install", event => {
+  self.skipWaiting();
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(urlsToCache))
+    caches.open(CACHE_NAME).then(cache => cache.addAll(STATIC_ASSETS))
   );
 });
 
-// フェッチ処理
-self.addEventListener('fetch', (event) => {
+// 有効化（古いキャッシュ削除）
+self.addEventListener("activate", event => {
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(
+        keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))
+      )
+    )
+  );
+  self.clients.claim();
+});
+
+// フェッチ制御
+self.addEventListener("fetch", event => {
+  const url = new URL(event.request.url);
+
+  // 外部POST（アンケート等）はSW無関与
+  if (event.request.method !== "GET") return;
+  if (url.hostname.includes("script.google.com")) return;
+
+  // HTMLナビゲーション
+  if (event.request.mode === "navigate") {
+    event.respondWith(
+      fetch(event.request).catch(() => caches.match(OFFLINE_URL))
+    );
+    return;
+  }
+
+  // 静的ファイル
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      // キャッシュがあればそれを返し、なければネットワークへ
-      return response || fetch(event.request).catch(() => {
-        // ネットワークが失敗（オフライン）かつ、HTMLリクエストの場合にのみメッセージを出す
-        if (event.request.mode === 'navigate') {
-          return new Response(`
-            <html>
-              <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>オフライン - 篠ノ井乗務区</title>
-                <link rel="stylesheet" href="style.css">
-              </head>
-              <body style="text-align:center; padding:50px; font-family:sans-serif;">
-                <img src="1.jpg" alt="Logo" style="width:100px; border-radius:15px; margin-bottom:20px;">
-                <h2>オフラインです</h2>
-                <p>現在インターネットに接続されていないため、新しい情報を読み込めません。</p>
-                <button onclick="window.location.reload()" style="padding:10px 20px; background:#004da0; color:white; border:none; border-radius:5px;">再読み込み</button>
-              </body>
-            </html>
-          `, {
-            headers: { 'Content-Type': 'text/html; charset=utf-8' }
-          });
-        }
-      });
-    })
+    caches.match(event.request).then(res => res || fetch(event.request))
   );
 });
