@@ -3,95 +3,174 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>ホーム - 篠ノ井乗務区</title>
 
-<!-- ===== PWA ===== -->
+<link rel="stylesheet" href="style.css">
 <link rel="manifest" href="manifest.json">
+
 <meta name="theme-color" content="#004da0">
 
-<!-- ===== iOS ===== -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="篠ノ井乗務区">
-<link rel="apple-touch-icon" href="icon-192.png">
-
-<link rel="stylesheet" href="style.css">
-
 <style>
-/* ===== 共通 ===== */
-#net-status, #update-bar, #cache-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  padding: 8px;
-  text-align: center;
-  font-weight: bold;
-  z-index: 3000;
-  display: none;
-}
-#net-status { background: #d32f2f; color: #fff; }
-#update-bar { background: #ff9800; color: #000; cursor: pointer; }
-#cache-bar { background: #4caf50; color: #fff; }
-
-/* ===== iOS追加案内 ===== */
-#ios-guide {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #004da0;
-  color: #fff;
-  padding: 15px 20px;
+/* index専用デザイン（元基準） */
+.omikuji-box {
+  background: linear-gradient(135deg, #fff5f5 0%, #fff0f0 100%);
+  border: 2px solid #d32f2f;
+  padding: 20px;
   border-radius: 10px;
-  display: none;
-  z-index: 2500;
-  font-size: 14px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+.omikuji-box h3 { color:#d32f2f; margin-top:0; }
+
+.btn-omikuji {
+  display:inline-block;
+  background:#d32f2f;
+  color:#fff;
+  padding:10px 20px;
+  border-radius:5px;
+  text-decoration:none;
+  font-weight:bold;
 }
 
-/* ===== トップ文言 ===== */
-#top-message { font-size: 1em; margin-bottom: 20px; }
+.sns-info {
+  background:#e3f2fd;
+  padding:15px;
+  border-radius:5px;
+  margin:20px 0;
+  border-left:5px solid #2196f3;
+}
 
-/* ===== タブレット最適化 ===== */
-@media (min-width: 768px) {
-  .container {
-    max-width: 900px;
-    margin: auto;
-  }
-  .link-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
+.link-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:15px;
+  margin-top:30px;
+}
+
+.link-card {
+  background:#f0f0f0;
+  padding:15px;
+  text-align:center;
+  text-decoration:none;
+  color:#004da0;
+  font-weight:bold;
+  border-radius:5px;
+  border:1px solid #ddd;
+}
+.link-card:hover { background:#e0e0e0; }
+
+/* PWAインストールトースト */
+#pwa-install {
+  display:none;
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#004da0;
+  color:#fff;
+  padding:12px 18px;
+  border-radius:8px;
+  box-shadow:0 4px 10px rgba(0,0,0,.3);
+  z-index:3000;
+  font-size:14px;
+}
+#pwa-install button {
+  margin-left:10px;
+  background:#fff;
+  color:#004da0;
+  border:none;
+  padding:6px 10px;
+  border-radius:4px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+/* アンケート */
+.survey-toggle {
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:#004da0;
+  color:#fff;
+  padding:12px 20px;
+  border-radius:30px;
+  cursor:pointer;
+  z-index:1500;
+  font-weight:bold;
+}
+.survey-popup {
+  position:fixed;
+  bottom:80px;
+  right:20px;
+  width:300px;
+  background:#fff;
+  border-radius:10px;
+  box-shadow:0 5px 20px rgba(0,0,0,.2);
+  display:none;
+  flex-direction:column;
+  z-index:1500;
+  border:1px solid #004da0;
+}
+.survey-header {
+  background:#004da0;
+  color:#fff;
+  padding:10px;
+  display:flex;
+  justify-content:space-between;
+}
+.survey-body { padding:15px; }
+
+@media(max-width:600px){
+  #pwa-install { bottom:80px; }
+  .survey-popup { width:calc(100% - 40px); }
 }
 </style>
 </head>
 
 <body>
 
-<div id="net-status">現在オフラインです</div>
-<div id="update-bar" onclick="location.reload()">新しいバージョンがあります。タップして更新</div>
-<div id="cache-bar">オフライン準備が完了しました</div>
-
-<div id="ios-guide">
-  このサイトはアプリとして使えます<br>
-  Safariの共有 →「ホーム画面に追加」
-</div>
-
 <header></header>
 <nav></nav>
 
 <div class="container">
 
-<p id="top-message">
-ようこそ、篠ノ井乗務区の公式ホームページへ。
-</p>
+<section class="omikuji-box">
+<h3>【2周年記念】お正月おみくじ公開のお知らせ</h3>
+<p>2026年1月1日午前0時より、2周年を記念した「鉄道おみくじ」を公開します。</p>
+<a href="https://shinorail.github.io/shinonoi-2026/" class="btn-omikuji">2周年特設サイトはこちら</a>
+</section>
+
+<p>ようこそ、篠ノ井乗務区の公式ホームページへ。</p>
+
+<section class="sns-info">
+<p><strong>◇ 最新情報は X（旧Twitter）で発信中</strong></p>
+<p><a href="https://x.com/Shino_Rail" target="_blank">@Shino_Rail</a></p>
+</section>
 
 <div class="link-grid">
-  <a href="mission.html" class="link-card">活動理念</a>
-  <a href="history.html" class="link-card">沿革</a>
-  <a href="news.html" class="link-card">お知らせ</a>
+<a href="mission.html" class="link-card">▶ 活動理念を見る</a>
+<a href="history.html" class="link-card">▶ 沿革を見る</a>
+<a href="news.html" class="link-card">▶ お知らせを見る</a>
 </div>
 
+</div>
+
+<!-- PWA誘致 -->
+<div id="pwa-install">
+このサイトをアプリとして利用しますか？
+<button id="pwa-install-btn">インストール</button>
+</div>
+
+<!-- アンケート -->
+<div class="survey-toggle" onclick="toggleSurvey()">アンケート協力</div>
+<div class="survey-popup" id="survey">
+<div class="survey-header">
+<span>閲覧者アンケート</span>
+<button onclick="toggleSurvey()">×</button>
+</div>
+<div class="survey-body">
+ありがとうございました。
+</div>
 </div>
 
 <footer></footer>
@@ -99,58 +178,45 @@
 <script src="menu.js"></script>
 
 <script>
-/* ===== Service Worker 登録 + 更新検知 ===== */
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("sw.js").then(reg => {
+/* ===== PWA インストール制御 ===== */
+let deferredPrompt;
 
-    // 初回キャッシュ完了
-    if (!localStorage.getItem("cached")) {
-      navigator.serviceWorker.ready.then(() => {
-        document.getElementById("cache-bar").style.display = "block";
-        setTimeout(() => {
-          document.getElementById("cache-bar").style.display = "none";
-        }, 3000);
-        localStorage.setItem("cached", "true");
-      });
-    }
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
 
-    // 更新検知
-    reg.addEventListener("updatefound", () => {
-      const newWorker = reg.installing;
-      newWorker.addEventListener("statechange", () => {
-        if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
-          document.getElementById("update-bar").style.display = "block";
-        }
-      });
-    });
-  });
-}
-
-/* ===== オンライン／オフライン ===== */
-function updateNetworkUI() {
-  const offline = !navigator.onLine;
-  document.getElementById("net-status").style.display = offline ? "block" : "none";
-  document.getElementById("top-message").innerText = offline
-    ? "現在オフラインです。通信が回復すると通常表示に戻ります。"
-    : "ようこそ、篠ノ井乗務区の公式ホームページへ。";
-}
-window.addEventListener("online", updateNetworkUI);
-window.addEventListener("offline", updateNetworkUI);
-updateNetworkUI();
-
-/* ===== iOSのみ ホーム画面案内 ===== */
-(function () {
-  const ua = navigator.userAgent;
-  const isIOS = /iPhone|iPad/.test(ua);
-  const isStandalone = window.navigator.standalone === true;
-
-  if (isIOS && !isStandalone && !localStorage.getItem("ios_guide")) {
-    const g = document.getElementById("ios-guide");
-    g.style.display = "block";
-    setTimeout(() => g.style.display = "none", 8000);
-    localStorage.setItem("ios_guide", "shown");
+  if (!localStorage.getItem('pwa-dismissed')) {
+    document.getElementById('pwa-install').style.display = 'block';
   }
-})();
+});
+
+document.getElementById('pwa-install-btn').onclick = async () => {
+  document.getElementById('pwa-install').style.display = 'none';
+  if (!deferredPrompt) return;
+
+  deferredPrompt.prompt();
+  const result = await deferredPrompt.userChoice;
+
+  if (result.outcome === 'dismissed') {
+    localStorage.setItem('pwa-dismissed', 'true');
+  }
+  deferredPrompt = null;
+};
+
+/* ===== iOS用案内 ===== */
+const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+const isStandalone = window.navigator.standalone;
+
+if (isIOS && !isStandalone && !localStorage.getItem('ios-guide')) {
+  alert('Safariの共有ボタンから「ホーム画面に追加」でアプリ化できます。');
+  localStorage.setItem('ios-guide','true');
+}
+
+/* ===== アンケート ===== */
+function toggleSurvey(){
+  const s = document.getElementById('survey');
+  s.style.display = (s.style.display === 'flex') ? 'none' : 'flex';
+}
 </script>
 
 </body>
