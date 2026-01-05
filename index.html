@@ -6,43 +6,41 @@
 <title>ホーム - 篠ノ井乗務区</title>
 
 <link rel="stylesheet" href="style.css">
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#004da0">
 
 <style>
-/* ===== 既存デザイン基準 ===== */
-.omikuji-box {
-  background: linear-gradient(135deg, #fff5f5 0%, #fff0f0 100%);
-  border: 2px solid #d32f2f;
-  padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 30px;
-  text-align: center;
+/* ===== index専用デザイン（元UI基準） ===== */
+.omikuji-box{
+  background:linear-gradient(135deg,#fff5f5,#fff0f0);
+  border:2px solid #d32f2f;
+  padding:20px;
+  border-radius:10px;
+  margin-bottom:30px;
+  text-align:center;
 }
-.omikuji-box h3 { color:#d32f2f; margin-top:0; }
-.btn-omikuji {
-  background:#d32f2f; color:#fff;
+.omikuji-box h3{color:#d32f2f;margin-top:0}
+.btn-omikuji{
+  background:#d32f2f;
+  color:#fff;
   padding:10px 20px;
   border-radius:5px;
   text-decoration:none;
   font-weight:bold;
 }
 
-.sns-info {
+.sns-info{
   background:#e3f2fd;
   padding:15px;
   border-radius:5px;
   border-left:5px solid #2196f3;
 }
 
-.link-grid {
+.link-grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
   gap:15px;
   margin-top:30px;
 }
-
-.link-card {
+.link-card{
   background:#f0f0f0;
   padding:15px;
   text-align:center;
@@ -50,21 +48,78 @@
   color:#004da0;
   font-weight:bold;
   border-radius:5px;
-  border:1px solid #ddd;
-  transition:.2s;
 }
-.link-card:hover { background:#e0e0e0; }
 
-/* ===== アプリ追加カード（溶け込み） ===== */
-.install-card {
+/* ===== アンケート ===== */
+.survey-toggle{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:#004da0;
+  color:#fff;
+  padding:12px 20px;
+  border-radius:30px;
+  font-weight:bold;
+  cursor:pointer;
+  z-index:1000;
+}
+.survey-popup{
+  position:fixed;
+  bottom:80px;
+  right:20px;
+  width:300px;
+  background:#fff;
+  border-radius:10px;
+  box-shadow:0 5px 20px rgba(0,0,0,.2);
+  display:none;
+  flex-direction:column;
+  z-index:1000;
+}
+.survey-header{
+  background:#004da0;
+  color:#fff;
+  padding:10px;
+  display:flex;
+  justify-content:space-between;
+}
+.survey-body{padding:15px}
+.s-rating{display:flex;gap:5px}
+.s-rating input{display:none}
+.s-rating label{
+  flex:1;
+  text-align:center;
+  background:#eee;
+  padding:8px 0;
+  border-radius:4px;
+  cursor:pointer;
+}
+.s-rating input:checked+label{
   background:#004da0;
   color:#fff;
 }
-.install-card span {
-  display:block;
-  font-size:13px;
-  font-weight:normal;
-  margin-top:6px;
+.s-submit{
+  width:100%;
+  background:#004da0;
+  color:#fff;
+  border:none;
+  padding:12px;
+  border-radius:4px;
+  font-weight:bold;
+}
+
+/* ===== 更新通知 ===== */
+.update-toast{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#323232;
+  color:#fff;
+  padding:14px 20px;
+  border-radius:30px;
+  font-size:14px;
+  display:none;
+  z-index:2000;
 }
 </style>
 </head>
@@ -76,95 +131,132 @@
 
 <div class="container">
 
-  <section class="omikuji-box">
-    <h3>【2周年記念】お正月おみくじ</h3>
-    <p>現在公開中（1月31日まで）</p>
-    <a href="https://shinorail.github.io/shinonoi-2026/" class="btn-omikuji">
-      特設サイトはこちら
-    </a>
-  </section>
+<section class="omikuji-box">
+  <h3 id="txt-omikuji-title">【2周年記念】鉄道おみくじ 公開中</h3>
+  <p id="txt-omikuji-note">2026年1月31日まで公開しています。</p>
+  <a class="btn-omikuji" href="https://shinorail.github.io/shinonoi-2026/">特設サイトはこちら</a>
+</section>
 
-  <p>ようこそ、篠ノ井乗務区の公式ホームページへ。</p>
+<p id="txt-welcome">
+  ようこそ、篠ノ井乗務区の公式ホームページへ。
+</p>
 
-  <section class="sns-info">
-    <strong>X（旧Twitter）</strong><br>
-    <a href="https://x.com/Shino_Rail">@Shino_Rail</a>
-  </section>
+<section class="sns-info">
+  <strong>◇ 最新情報は X（旧Twitter）で発信中</strong><br>
+  <a href="https://x.com/Shino_Rail" target="_blank">@Shino_Rail</a>
+</section>
 
-  <div class="link-grid">
+<!-- 最新お知らせ -->
+<section style="margin-top:40px">
+  <h3>最新のお知らせ</h3>
+  <p id="news-loading">読み込み中...</p>
+  <ul id="top-news-list"></ul>
+  <div style="text-align:right;font-size:13px">
+    <a href="news.html">お知らせ一覧へ</a>
+  </div>
+</section>
 
-    <!-- ★ アプリ追加ボタン（インストール済みなら非表示） -->
-    <a href="#" id="install-btn" class="link-card install-card">
-      📱 アプリをホーム画面に追加
-      <span>端末に応じた方法をご案内します</span>
-    </a>
+<div class="link-grid">
+  <a class="link-card" href="mission.html">▶ 活動理念を見る</a>
+  <a class="link-card" href="history.html">▶ 沿革を見る</a>
+  <a class="link-card" href="news.html">▶ お知らせを見る</a>
+</div>
 
-    <a href="mission.html" class="link-card">活動理念</a>
-    <a href="history.html" class="link-card">沿革</a>
-    <a href="news.html" class="link-card">お知らせ</a>
+</div>
+
+<!-- ===== アンケート ===== -->
+<div id="survey-toggle" class="survey-toggle" onclick="toggleSurvey()">📩 アンケート協力</div>
+
+<div id="survey-container" class="survey-popup">
+  <div class="survey-header">
+    <span>閲覧者アンケート</span>
+    <button onclick="toggleSurvey()">×</button>
   </div>
 
+  <form id="survey-form" class="survey-body">
+    <div class="s-rating">
+      <input id="r1" type="radio" name="rate" value="1"><label for="r1">1</label>
+      <input id="r2" type="radio" name="rate" value="2"><label for="r2">2</label>
+      <input id="r3" type="radio" name="rate" value="3" checked><label for="r3">3</label>
+      <input id="r4" type="radio" name="rate" value="4"><label for="r4">4</label>
+      <input id="r5" type="radio" name="rate" value="5"><label for="r5">5</label>
+    </div>
+    <textarea id="msg" rows="3" placeholder="ご自由にお書きください"></textarea>
+    <button class="s-submit">送信する</button>
+  </form>
+
+  <div id="survey-thanks" style="display:none;padding:20px;text-align:center">
+    <strong>ありがとうございました。</strong><br>
+    <small>アンケート送信後、アプリ利用もぜひご検討ください。</small>
+  </div>
+</div>
+
+<!-- 更新通知 -->
+<div id="update-toast" class="update-toast">
+  新しい更新があります。まもなく反映されます。
 </div>
 
 <footer></footer>
 
+<!-- 共通 -->
 <script src="menu.js"></script>
 
+<!-- Google 翻訳（自動翻訳補助） -->
+<div id="google_translate_element" style="display:none"></div>
 <script>
-/* ===== PWA 基本 ===== */
-let deferredPrompt = null;
-
-// Service Worker 登録
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js');
-}
-
-// beforeinstallprompt 捕捉
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault();
-  deferredPrompt = e;
-});
-
-/* インストール済み判定 */
-function isInstalled() {
-  return window.matchMedia('(display-mode: standalone)').matches
-    || window.navigator.standalone === true;
-}
-
-const installBtn = document.getElementById('install-btn');
-if (isInstalled()) {
-  installBtn.style.display = 'none';
-}
-
-/* ===== インストール案内（最終版） ===== */
-installBtn.addEventListener('click', async e => {
-  e.preventDefault();
-
-  /* 正規インストール可能（Android / 一部PC） */
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    await deferredPrompt.userChoice;
-    deferredPrompt = null;
-    return;
-  }
-
-  /* iOS Safari */
-  if (/iphone|ipad|ipod/i.test(navigator.userAgent)) {
-    location.href = 'install方法.html';
-    return;
-  }
-
-  /* ★ 正解ルート案内（必ず出す） */
-  alert(
-    'この端末では自動インストール画面は表示されません。\n\n' +
-    '【Android】\n' +
-    'Chrome右上「︙」→「アプリをインストール」\n\n' +
-    '【パソコン】\n' +
-    'アドレスバー右側の「インストール」アイコン\n\n' +
-    '【iPhone / iPad】\n' +
-    'Safariの共有ボタン →「ホーム画面に追加」'
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement(
+    { pageLanguage:'ja', includedLanguages:'ja,en', autoDisplay:false },
+    'google_translate_element'
   );
-});
+}
+</script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<script>
+/* ===== アンケート ===== */
+function toggleSurvey(){
+  const s=document.getElementById('survey-container');
+  s.style.display=s.style.display==='flex'?'none':'flex';
+}
+
+/* オフライン時はアンケート非表示 */
+function surveyVisibility(){
+  document.getElementById('survey-toggle').style.display =
+    navigator.onLine ? 'block' : 'none';
+}
+window.addEventListener('online',surveyVisibility);
+window.addEventListener('offline',surveyVisibility);
+surveyVisibility();
+
+/* ===== Service Worker & 更新自動反映 ===== */
+let waitingSW=null;
+
+if('serviceWorker'in navigator){
+  navigator.serviceWorker.register('sw.js').then(reg=>{
+    if(reg.waiting) waitingSW=reg.waiting;
+
+    reg.addEventListener('updatefound',()=>{
+      const nw=reg.installing;
+      nw.addEventListener('statechange',()=>{
+        if(nw.state==='installed'&&navigator.serviceWorker.controller){
+          waitingSW=nw;
+          showUpdate();
+        }
+      });
+    });
+  });
+}
+
+function showUpdate(){
+  if(window.innerWidth>=768) return;
+  const t=document.getElementById('update-toast');
+  t.style.display='block';
+  setTimeout(()=>{
+    if(waitingSW) waitingSW.postMessage({action:'skipWaiting'});
+    location.reload();
+  },2000);
+}
 </script>
 
 </body>
