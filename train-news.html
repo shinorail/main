@@ -93,18 +93,6 @@
 <script src="menu.js"></script>
 <script>
     const scriptUrl = "https://script.google.com/macros/s/AKfycbwbUTBxVeTkRlAJ1dnBlgcmpGaWI9B0SeMwkwKSwAJYjRDAtVcX67QwA5FcNGaJE9Cq/exec";
-    
-    // パスワードをハッシュ化したもの（shinorail2026 の変換後）
-    // これを見ても元のパスワードはわかりません
-    const HASHED_PASS = "69c65609650212953297a7962f9f10927e8705a68e82a392769068565a7e934d";
-
-    // 文字列をハッシュ化(SHA-256)する関数
-    async function digestMessage(message) {
-        const msgUint8 = new TextEncoder().encode(message);
-        const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    }
 
     async function loadNews() {
         try {
@@ -177,11 +165,11 @@
         const nameInput = document.getElementById('u-name').value;
         
         if (nameInput === "篠ノ井乗務区") {
-            const pass = prompt("公式パスワードを入力：");
-            const hashedInput = await digestMessage(pass); // 入力をその場でハッシュ化
+            const pass = prompt("公式認証コードを入力してください：");
+            const val = (parseInt(pass) * 5) + 10;
             
-            if (hashedInput !== HASHED_PASS) {
-                alert("パスワードが違います。");
+            if (val !== 10140) {
+                alert("認証コードが正しくありません。");
                 return;
             }
         }
