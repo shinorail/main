@@ -1,19 +1,50 @@
-<script>
-async function registerProcess(event) {
-    event.preventDefault();
-    const url = "https://script.google.com/macros/s/AKfycbzuta6xRTHYX7wHtYJ54O_QhJzXRwxGOBC8j7zjIwbE-mK23Afi_M5JJAIqYNo6OO79kQ/exec";
-    const formData = new FormData(event.target);
-    formData.append("action", "register");
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>会員登録 | 篠ノ井タイムズ</title>
+    <style>
+        body { background:#f4f4f4; font-family:serif; display:flex; justify-content:center; align-items:center; min-height:100vh; margin:0; }
+        .container { background:#fff; width:90%; max-width:400px; padding:30px; border:1px solid #000; box-shadow:5px 5px 0px #ccc; }
+        input { width:100%; padding:10px; margin:10px 0; border:1px solid #ccc; box-sizing:border-box; }
+        button { width:100%; padding:15px; background:#004da0; color:#fff; border:none; font-weight:bold; cursor:pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 style="border-bottom:2px solid #000; text-align:center;">新規会員登録</h2>
+        <form onsubmit="registerProcess(event)">
+            <label>ユーザー名</label>
+            <input type="text" name="username" required placeholder="例：篠ノ井太郎">
+            <label>メールアドレス</label>
+            <input type="email" name="email" required placeholder="example@mail.com">
+            <label>パスワード</label>
+            <input type="password" name="password" minlength="8" required>
+            <label>生年月日</label>
+            <input type="date" name="birthday" required>
+            <button type="submit">この内容で登録する</button>
+        </form>
+        <p style="text-align:center;"><a href="login.html">ログインはこちら</a></p>
+    </div>
 
-    try {
-        const response = await fetch(url, { method: "POST", body: formData });
-        const result = await response.text();
-        if (result === "登録完了") {
-            alert("会員登録ありがとうございます！");
-            window.location.href = "login.html";
-        } else {
-            alert("登録に失敗しました。");
-        }
-    } catch (e) { alert("通信エラーが発生しました。"); }
-}
-</script>
+    <script>
+    async function registerProcess(event) {
+        event.preventDefault();
+        // ★ここをあなたのGASのURLに書き換え
+        const url = "https://script.google.com/macros/s/AKfycbzuta6xRTHYX7wHtYJ54O_QhJzXRwxGOBC8j7zjIwbE-mK23Afi_M5JJAIqYNo6OO79kQ/exec";
+        const formData = new FormData(event.target);
+        formData.append("action", "register");
+
+        try {
+            const response = await fetch(url, { method: "POST", body: formData });
+            const result = await response.text();
+            if (result === "登録完了") {
+                alert("登録しました！ログインしてください。");
+                window.location.href = "login.html";
+            } else { alert("登録失敗: " + result); }
+        } catch (e) { alert("エラーが発生しました。GASの設定（全員に公開）を確認してください。"); }
+    }
+    </script>
+</body>
+</html>
