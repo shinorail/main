@@ -5,86 +5,81 @@
     <title>手作り広告 - 篠ノ井乗務区</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        .poster-frame {
-            max-width: 700px;
+        body { background: #e0e0e0; margin: 0; padding: 0; }
+        .ad-board {
+            max-width: 800px;
             margin: 40px auto;
-            border: 15px solid #004da0; /* 鉄道ブルーの枠 */
+            background: #fff;
+            border: 4px solid #333;
+            box-shadow: 10px 10px 0px #888;
+            padding: 30px;
+        }
+        /* ポスター風デザイン */
+        .poster-frame {
+            border: 10px solid #004da0;
             background: #fff;
             padding: 0;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            font-family: "Helvetica Neue", Arial, "Hiragino Sans", sans-serif;
+            margin-bottom: 30px;
         }
         .poster-header {
-            background: #e63946; /* 注意喚起の赤 */
+            background: #e63946;
             color: white;
             text-align: center;
-            padding: 20px;
+            padding: 15px;
         }
-        .poster-header h1 {
-            margin: 0;
-            font-size: 2.5em;
-            letter-spacing: 0.2em;
-        }
-        .poster-content {
-            padding: 40px;
+        .poster-header h1 { margin: 0; font-size: 2em; letter-spacing: 0.1em; }
+        .poster-content { padding: 30px; text-align: center; }
+        .main-visual { font-size: 5em; margin-bottom: 10px; }
+        .catchphrase { font-size: 1.8em; font-weight: bold; color: #333; border-bottom: 4px solid #004da0; display: inline-block; margin-bottom: 15px; }
+        .description { font-size: 1.1em; line-height: 1.6; color: #444; text-align: left; background: #f9f9f9; padding: 15px; border-radius: 8px; }
+
+        /* おまとめボタンエリア */
+        .share-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px dashed #ccc;
             text-align: center;
         }
-        .main-visual {
-            font-size: 8em;
-            margin: 20px 0;
-        }
-        .catchphrase {
-            font-size: 2em;
-            font-weight: bold;
-            color: #333;
-            border-bottom: 5px solid #004da0;
-            display: inline-block;
-            margin-bottom: 20px;
-        }
-        .description {
-            font-size: 1.2em;
-            line-height: 1.8;
-            color: #444;
-            text-align: left;
-            background: #f9f9f9;
-            padding: 20px;
-            border-radius: 10px;
-        }
-        .poster-footer {
-            background: #004da0;
-            color: white;
-            padding: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: bold;
-        }
+        .share-section p { font-size: 0.8em; color: #666; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 <header></header><nav></nav>
 
 <main>
-    <div class="poster-frame">
-        <div class="poster-header">
-            <h1>マナー啓発</h1>
-        </div>
-        
-        <div class="poster-content">
-            <div class="main-visual">📸</div>
-            <div class="catchphrase">その一枚に、思いやりを。</div>
-            
-            <div class="description">
-                鉄道ファンの皆さまへ。ホームでの撮影や乗車時には、周りのお客様への配慮をお願いします。<br><br>
-                ● 黄色い点字ブロックの内側で撮影しましょう<br>
-                ● 三脚・脚立の使用は控え、安全を優先しましょう<br>
-                ● 運行の妨げになるフラッシュ撮影は厳禁です
+    <div class="ad-board">
+        <div class="poster-frame">
+            <div class="poster-header">
+                <h1>啓発ポスター</h1>
+            </div>
+            <div class="poster-content">
+                <div class="main-visual">📸</div>
+                <div class="catchphrase">その一枚に、思いやりを。</div>
+                <div class="description">
+                    鉄道ファンの皆さまへ。安全な運行を支えるのは、皆さまお一人お一人のマナーです。<br>
+                    ● 撮影時は黄色い点字ブロックの内側へ<br>
+                    ● フラッシュ撮影は運転士の視界を妨げるため厳禁です<br>
+                    ● 一般のお客様の通行を妨げないよう配慮しましょう
+                </div>
             </div>
         </div>
 
-        <div class="poster-footer">
-            <span>安全第一 / 篠ノ井乗務区</span>
-            <span style="font-size: 0.8em;">No.2026-001</span>
+        <div class="share-section">
+            <p>この啓発活動を広める（SNS共有）</p>
+            <div class="ninja_onebutton">
+                <script type="text/javascript">
+                //<![CDATA[
+                (function(d){
+                if(typeof(window.NINJA_CO_JP_ONETAG_BUTTON_a0b8a0081843ebcdaad4109ef1c3f9b8)=='undefined'){
+                    document.write("<sc"+"ript type='text\/javascript' src='\/\/omt.shinobi.jp\/b\/a0b8a0081843ebcdaad4109ef1c3f9b8'><\/sc"+"ript>");
+                }else{
+                    window.NINJA_CO_JP_ONETAG_BUTTON_a0b8a0081843ebcdaad4109ef1c3f9b8.ONETAGButton_Load();}
+                })(document);
+                //]]>
+                </script>
+                <span class="ninja_onebutton_hidden" style="display:none;"></span>
+                <span style="display:none;" class="ninja_onebutton_hidden"></span>
+            </div>
         </div>
     </div>
 </main>
