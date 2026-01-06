@@ -12,7 +12,7 @@
         .news-card h3 { margin: 0 0 10px; color: #004da0; font-size: 1.1em; }
         .news-card p { margin: 5px 0; font-size: 0.9em; color: #444; }
 
-        /* ビューワー（全画面ポップアップ） */
+        /* ビューワー（全画面） */
         .viewer-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #fff; display: none; flex-direction: column; z-index: 10000;
@@ -23,45 +23,38 @@
             flex-shrink: 0;
         }
         .viewer-header h2 { margin: 0; font-size: 0.9em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .close-btn {
-            background: #ff4444; color: white; border: none; padding: 8px 15px;
-            border-radius: 4px; cursor: pointer; font-weight: bold;
-        }
+        .close-btn { background: #ff4444; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
 
-        /* 記事とコメントのメインエリア */
-        .viewer-body { display: flex; flex: 1; overflow: hidden; background: #f0f0f0; }
-        
-        /* PDFエリア */
-        .pdf-container { flex: 1; display: flex; flex-direction: column; background: #525659; position: relative; }
+        /* 記事エリア */
+        .viewer-body { display: flex; flex: 1; overflow: hidden; background: #525659; position: relative; }
         #pdf-frame { width: 100%; height: 100%; border: none; }
 
-        /* コメントエリア（PC） */
+        /* コメントエリア（デフォルトは隠す） */
         .comment-sidebar {
-            width: 350px; background: #f4f4f4; display: flex; flex-direction: column;
-            border-left: 1px solid #ccc; flex-shrink: 0;
+            position: absolute; bottom: -100%; left: 0; width: 100%; height: 80%;
+            background: #f4f4f4; display: flex; flex-direction: column;
+            transition: bottom 0.3s ease-in-out; border-top: 3px solid #004da0;
+            z-index: 10001; box-shadow: 0 -5px 15px rgba(0,0,0,0.3);
         }
+        .comment-sidebar.open { bottom: 0; }
+
         .comment-list { flex: 1; overflow-y: auto; padding: 15px; }
         .comment-item { background: #fff; padding: 10px; border-radius: 4px; margin-bottom: 10px; border: 1px solid #ddd; font-size: 0.85em; }
         .comment-form { padding: 10px; background: #eee; border-top: 1px solid #ccc; }
         .comment-form input, .comment-form textarea {
-            width: 100%; padding: 8px; margin-bottom: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 16px; /* スマホズーム防止 */
-        }
-        .submit-btn {
-            width: 100%; background: #004da0; color: white; border: none; padding: 10px; cursor: pointer; font-weight: bold; border-radius: 4px;
+            width: 100%; padding: 8px; margin-bottom: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 16px;
         }
 
-        /* --- スマホ・タブレット用 (完結型レイアウト) --- */
-        @media (max-width: 800px) {
-            .viewer-body { flex-direction: column; overflow-y: auto; }
-            .pdf-container { flex: none; height: 65vh; } /* 記事をメインに見せる */
-            .comment-sidebar { width: 100%; flex: none; border-left: none; border-top: 3px solid #004da0; }
-            .comment-list { max-height: 300px; overflow-y: auto; }
+        /* コメント操作ボタン */
+        .comment-toggle-btn {
+            position: absolute; bottom: 20px; right: 20px;
+            background: #004da0; color: white; border: none; padding: 12px 20px;
+            border-radius: 50px; cursor: pointer; font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 10002;
         }
-
-        /* パラメータ制御用クラス */
-        .mode-sp .viewer-body { flex-direction: column; overflow-y: auto; }
-        .mode-sp .pdf-container { flex: none; height: 65vh; }
-        .mode-sp .comment-sidebar { width: 100%; border-left: none; border-top: 3px solid #004da0; }
+        .comment-close-bar {
+            background: #ddd; padding: 10px; text-align: center; cursor: pointer; font-weight: bold; font-size: 0.8em;
+        }
     </style>
 </head>
 <body>
@@ -81,17 +74,19 @@
         <button class="close-btn" onclick="closeViewer()">閉じる</button>
     </div>
     <div class="viewer-body">
-        <div class="pdf-container">
-            <iframe id="pdf-frame" src=""></iframe>
-        </div>
-        <div class="comment-sidebar">
+        <iframe id="pdf-frame" src=""></iframe>
+        
+        <button class="comment-toggle-btn" onclick="toggleComments(true)">💬 コメントを見る・書く</button>
+
+        <div id="comment-area" class="comment-sidebar">
+            <div class="comment-close-bar" onclick="toggleComments(false)">▼ 閉じる</div>
             <div style="background:#004da0; color:white; padding:5px 15px; font-weight:bold; font-size:0.8em;">読者のコメント</div>
             <div id="comment-list" class="comment-list"></div>
             <form id="comment-form" class="comment-form">
                 <input type="hidden" id="target-id">
                 <input type="text" id="u-name" placeholder="お名前" required>
                 <textarea id="u-msg" placeholder="感想をどうぞ！" required></textarea>
-                <button type="submit" id="submit-btn" class="submit-btn">コメントを投稿する</button>
+                <button type="submit" id="submit-btn" style="width:100%; background:#004da0; color:white; border:none; padding:10px; cursor:pointer; font-weight:bold; border-radius:4px;">投稿する</button>
             </form>
         </div>
     </div>
@@ -102,11 +97,6 @@
 <script src="menu.js"></script>
 <script>
     const scriptUrl = "https://script.google.com/macros/s/AKfycbwbUTBxVeTkRlAJ1dnBlgcmpGaWI9B0SeMwkwKSwAJYjRDAtVcX67QwA5FcNGaJE9Cq/exec";
-
-    function initLayoutMode() {
-        const params = new URLSearchParams(window.location.search);
-        if (params.get('mode') === 'SP') document.getElementById('viewer').classList.add('mode-sp');
-    }
 
     async function loadNews() {
         try {
@@ -127,12 +117,11 @@
     function openViewer(url, id, title) {
         document.getElementById('target-id').value = id;
         document.getElementById('v-title').innerText = "第" + id + "号 " + title;
-        // GoogleドライブのPDFを「完結型」で表示するための加工
         const previewUrl = url.replace('/view?usp=sharing', '/preview').replace('uc?id=', 'file/d/') + (url.includes('file/d/') ? '/preview' : '');
         document.getElementById('pdf-frame').src = previewUrl;
-        
         document.getElementById('viewer').style.display = 'flex';
         document.body.style.overflow = 'hidden';
+        toggleComments(false); // 最初はコメントを閉じておく
         loadComments(id);
     }
 
@@ -140,6 +129,12 @@
         document.getElementById('viewer').style.display = 'none';
         document.body.style.overflow = 'auto';
         document.getElementById('pdf-frame').src = "";
+    }
+
+    function toggleComments(show) {
+        const area = document.getElementById('comment-area');
+        if (show) area.classList.add('open');
+        else area.classList.remove('open');
     }
 
     async function loadComments(id) {
@@ -173,10 +168,9 @@
             document.getElementById('u-msg').value = "";
             await loadComments(id);
         } catch(error) { alert("送信失敗"); }
-        finally { btn.disabled = false; btn.innerText = "コメントを投稿する"; }
+        finally { btn.disabled = false; btn.innerText = "投稿する"; }
     };
 
-    initLayoutMode();
     loadNews();
 </script>
 </body>
