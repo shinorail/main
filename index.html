@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ホーム - 篠ノ井乗務区</title>
 
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1a1a1a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="icon-192.png">
+
 <link rel="stylesheet" href="style.css">
 
 <style>
@@ -146,7 +152,6 @@
   <a href="https://x.com/Shino_Rail" target="_blank">@Shino_Rail</a>
 </section>
 
-<!-- 最新お知らせ -->
 <section style="margin-top:40px">
   <h3>最新のお知らせ</h3>
   <p id="news-loading">読み込み中...</p>
@@ -164,7 +169,6 @@
 
 </div>
 
-<!-- ===== アンケート ===== -->
 <div id="survey-toggle" class="survey-toggle" onclick="toggleSurvey()">📩 アンケート協力</div>
 
 <div id="survey-container" class="survey-popup">
@@ -191,17 +195,14 @@
   </div>
 </div>
 
-<!-- 更新通知 -->
 <div id="update-toast" class="update-toast">
   新しい更新があります。まもなく反映されます。
 </div>
 
 <footer></footer>
 
-<!-- 共通 -->
 <script src="menu.js"></script>
 
-<!-- Google 翻訳（自動翻訳補助） -->
 <div id="google_translate_element" style="display:none"></div>
 <script>
 function googleTranslateElementInit() {
@@ -229,33 +230,32 @@ window.addEventListener('online',surveyVisibility);
 window.addEventListener('offline',surveyVisibility);
 surveyVisibility();
 
-/* ===== Service Worker & 更新自動反映 ===== */
-let waitingSW=null;
-
-if('serviceWorker'in navigator){
-  navigator.serviceWorker.register('sw.js').then(reg=>{
-    if(reg.waiting) waitingSW=reg.waiting;
-
-    reg.addEventListener('updatefound',()=>{
-      const nw=reg.installing;
-      nw.addEventListener('statechange',()=>{
-        if(nw.state==='installed'&&navigator.serviceWorker.controller){
-          waitingSW=nw;
-          showUpdate();
-        }
+/* ===== Service Worker 登録 & PWA制御 ===== */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js').then(reg => {
+      console.log('PWA Ready');
+      
+      reg.addEventListener('updatefound', () => {
+        const nw = reg.installing;
+        nw.addEventListener('statechange', () => {
+          if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+            showUpdate(nw);
+          }
+        });
       });
-    });
+    }).catch(err => console.log('PWA Error', err));
   });
 }
 
-function showUpdate(){
-  if(window.innerWidth>=768) return;
-  const t=document.getElementById('update-toast');
-  t.style.display='block';
-  setTimeout(()=>{
-    if(waitingSW) waitingSW.postMessage({action:'skipWaiting'});
+function showUpdate(waitingSW){
+  if(window.innerWidth >= 768) return;
+  const t = document.getElementById('update-toast');
+  t.style.display = 'block';
+  setTimeout(() => {
+    if(waitingSW) waitingSW.postMessage({action: 'skipWaiting'});
     location.reload();
-  },2000);
+  }, 2000);
 }
 </script>
 
