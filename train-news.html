@@ -15,7 +15,7 @@
         /* ビューワー（ポップアップ） */
         .viewer-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #fff; display: none; flex-direction: column; z-index: 9999;
+            background: #fff; display: none; flex-direction: column; z-index: 10000;
         }
         .viewer-header {
             background: #004da0; color: white; padding: 12px 20px;
@@ -47,14 +47,13 @@
         }
         .submit-btn:disabled { background: #888 !important; }
 
-        /* スマホ用レイアウト：記事7割、コメント3割 */
+        /* スマホ用レイアウト修正 */
         @media (max-width: 800px) {
-            .viewer-body { flex-direction: column; }
-            #pdf-frame { flex: 7; } /* 記事を大きく */
-            .comment-sidebar { flex: 3; width: 100%; border-left: none; border-top: 1px solid #ccc; }
-            .comment-list { padding: 10px; }
+            .viewer-body { flex-direction: column; overflow-y: auto; }
+            #pdf-frame { flex: none; height: 50vh; width: 100%; } /* PDFを画面の半分に固定 */
+            .comment-sidebar { flex: none; width: 100%; border-left: none; border-top: 2px solid #004da0; }
+            .comment-list { max-height: 250px; overflow-y: auto; } /* コメント欄単体でスクロール */
             .comment-form { padding: 10px; }
-            .comment-form textarea { height: 40px; }
         }
     </style>
 </head>
@@ -97,7 +96,6 @@
 
     async function loadNews() {
         try {
-            // エラー対策：パラメータを正確に付与
             const res = await fetch(scriptUrl + "?sheet=" + encodeURIComponent("新聞"));
             const data = await res.json();
             
@@ -119,7 +117,7 @@
                 list.appendChild(card);
             });
         } catch(e) { 
-            document.getElementById('loading').innerText = "データの取得に失敗しました。GASのデプロイとシート名を確認してください。"; 
+            document.getElementById('loading').innerText = "データの取得に失敗しました。"; 
         }
     }
 
