@@ -1,0 +1,22 @@
+<script>
+async function loginProcess(event) {
+    event.preventDefault();
+    const url = "https://script.google.com/macros/s/AKfycbzuta6xRTHYX7wHtYJ54O_QhJzXRwxGOBC8j7zjIwbE-mK23Afi_M5JJAIqYNo6OO79kQ/exec";
+    const formData = new FormData(event.target);
+    formData.append("action", "login");
+
+    try {
+        const response = await fetch(url, { method: "POST", body: formData });
+        const result = await response.text();
+
+        if (result === "success") {
+            // ログイン状態を保持（簡易セッション）
+            localStorage.setItem("userEmail", formData.get("email"));
+            alert("ログインに成功しました。");
+            window.location.href = "train-news.html";
+        } else {
+            alert("メールアドレスまたはパスワードが正しくありません。");
+        }
+    } catch (e) { alert("通信エラーが発生しました。"); }
+}
+</script>
