@@ -17,16 +17,16 @@ document.addEventListener("DOMContentLoaded", function() {
             localStorage.setItem('stampHistory', JSON.stringify(history));
         }
     } catch (e) {
-        console.log("Stamp recording skipped");
+        console.log("Stamp recording error");
     }
 
-    // 3. 共通パーツの生成（ヘッダー・ナビ・フッター）
+    // 3. 共通パーツの生成
     renderParts();
 
     // 4. エフェクトの開始
     startEffect(effectChar, isComplete);
 
-    // 5. お知らせの取得（エラーが出ても他を止めない）
+    // 5. お知らせの取得
     const newsBox = document.getElementById('top-news-list');
     if (newsBox) {
         loadNews(newsBox);
@@ -34,11 +34,13 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function renderParts() {
+    // ヘッダー生成
     const header = document.querySelector('header');
     if (header) {
         header.innerHTML = '<div class="header-inner"><h1>篠ノ井乗務区 公式サイト</h1></div>';
     }
 
+    // ナビゲーション生成
     const nav = document.querySelector('nav');
     if (nav) {
         nav.innerHTML = `
@@ -56,13 +58,20 @@ function renderParts() {
             </ul>`;
     }
 
+    // フッター生成（ポリシーリンクを復活）
     const footer = document.querySelector('footer');
     if (footer) {
         footer.innerHTML = `
             <div class="footer-inner" style="text-align: center; padding: 20px; font-size: 0.9em; line-height: 1.8; color: #555; border-top: 1px solid #ddd;">
                 <p>当サイトでは、Google Geminiなどの生成AI技術を活用し、サービスの品質向上に努めております。</p>
-                <p>運営：篠ノ井乗務区</p>
-                <p>&copy; 2026 篠ノ井乗務区 All Rights Reserved.</p>
+                <p>お問い合わせ：<a href="contact.html" style="color: #004da0; font-weight: bold; text-decoration: underline;">お問い合わせフォーム</a></p>
+                <div style="margin: 20px 0;">
+                    <a href="policy.html" style="color:#666; text-decoration:none; margin: 0 10px; border-bottom: 1px solid #ccc;">規約・ポリシー</a>
+                    <a href="renkei.html" style="color:#004da0; text-decoration:none; margin: 0 10px; font-weight:bold;">公式連携パーツ配布中</a>
+                </div>
+                <p style="font-weight: bold; margin-bottom: 5px;">運営：篠ノ井乗務区</p>
+                <p style="margin: 0;">&copy; 2026 篠ノ井乗務区 All Rights Reserved.</p>
+                <p style="font-size: 0.8em; color: #888;">本サイトに掲載の文章・画像・データの無断転載を禁じます。</p>
             </div>`;
     }
 }
@@ -84,7 +93,7 @@ function startEffect(char, isComplete) {
                 f.style.transform = `rotate(${Math.random()*360}deg)`; 
             }
         }, 100);
-        setTimeout(() => { if(f.parentNode) f.remove(); }, duration * 1000);
+        setTimeout(() => { if(f && f.parentNode) f.remove(); }, duration * 1000);
     }, isComplete ? 400 : 800);
 }
 
@@ -103,6 +112,6 @@ async function loadNews(container) {
             container.appendChild(li);
         });
     } catch (e) {
-        if (container) container.innerHTML = "<li>お知らせを読み込めませんでした。</li>";
+        if (container) container.innerHTML = "<li>お知らせの取得に失敗しました。</li>";
     }
 }
