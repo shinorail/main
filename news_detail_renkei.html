@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>広報室発表 - 篠ノ井新聞</title>
+    <title>広報第2号 発表 - 篠ノ井新聞</title>
     <link rel="stylesheet" href="style.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;700&display=swap');
@@ -32,7 +32,7 @@
             padding-bottom: 10px;
         }
 
-        .masthead { font-size: 2em; font-weight: bold; letter-spacing: 0.2em; }
+        .masthead { font-size: 2.2em; font-weight: bold; letter-spacing: 0.2em; }
         .newspaper-info { text-align: right; font-size: 0.9em; }
 
         .article-title-area {
@@ -44,24 +44,24 @@
 
         .main-title {
             writing-mode: vertical-rl;
-            font-size: 2.8em;
+            font-size: 2.5em;
             font-weight: bold;
-            line-height: 1.1;
+            line-height: 1.2;
             padding: 10px;
             border-left: 2px solid #333;
             margin-left: 20px;
         }
 
-        .sub-title { writing-mode: vertical-rl; font-size: 1.2em; color: #555; padding-top: 10px; }
+        .sub-title { writing-mode: vertical-rl; font-size: 1.1em; color: #444; padding-top: 10px; }
 
         .newspaper-content {
             writing-mode: vertical-rl;
             text-align: justify;
             font-size: 1.1em;
             line-height: 2.2;
-            height: 550px;
+            height: 580px;
             column-count: 2;
-            column-gap: 50px;
+            column-gap: 40px;
             column-rule: 1px dotted #ccc;
         }
 
@@ -70,70 +70,72 @@
         .image-box {
             writing-mode: horizontal-tb;
             border: 1px solid #333;
-            padding: 5px;
+            padding: 8px;
             margin-left: 20px;
-            background: #eee;
+            background: #fff;
             text-align: center;
+            display: inline-block;
         }
-        .image-box img { width: 150px; height: auto; display: block; margin: 0 auto 5px; }
-        .image-caption { font-size: 0.7em; color: #333; }
+        .image-box img { width: 180px; height: auto; display: block; margin: 0 auto 8px; border-radius: 5px; }
+        .image-caption { font-size: 0.75em; color: #333; font-family: sans-serif; }
 
-        .btn-back {
+        .btn-action {
             display: inline-block;
             margin-top: 20px;
-            padding: 8px 15px;
-            background: #333;
+            padding: 10px 20px;
+            background: #004da0;
             color: #fff;
             text-decoration: none;
             font-family: sans-serif;
-            font-size: 0.8em;
+            font-size: 0.9em;
+            font-weight: bold;
+            border-radius: 3px;
         }
 
         @media (max-width: 768px) {
             .newspaper-content { writing-mode: horizontal-tb; height: auto; column-count: 1; }
             .article-title-area { display: block; }
             .main-title, .sub-title { writing-mode: horizontal-tb; border: none; margin: 0; padding: 0; }
-            .main-title { font-size: 1.8em; }
-            .image-box { margin: 20px 0; }
+            .main-title { font-size: 1.8em; margin-bottom: 10px; }
+            .image-box { margin: 20px 0; width: 100%; box-sizing: border-box; }
+            .image-box img { width: 120px; }
         }
     </style>
 </head>
 <body class="newspaper-body">
-
-<header></header>
-<nav></nav>
 
 <div class="newspaper-container">
     <div class="newspaper-header">
         <div class="masthead">篠ノ井新聞</div>
         <div class="newspaper-info">
             2026年（令和8年）1月6日<br>
-            広報 第 2 号
+            広報 第 2 号（通巻17号）
         </div>
     </div>
 
     <div class="article-title-area">
-        <div class="sub-title">外部サイトとの連携を強化</div>
-        <h1 class="main-title">公式紹介パーツ<br>配布を開始</h1>
+        <div class="sub-title">新意匠「icon-512」採用</div>
+        <h1 class="main-title">連携パーツ大幅刷新<br>体験型配布所を開設</h1>
     </div>
 
     <div class="newspaper-content">
         <div class="image-box">
-            <img src="icon-192.jpg" alt="サイトアイコン">
-            <div class="image-caption">配布パーツに採用された<br>公式ロゴマーク</div>
+            <img src="icon-512.png" alt="新アイコン">
+            <div class="image-caption">刷新された公式シンボル<br>「icon-512.png」</div>
         </div>
         
-        <p>【篠ノ井】篠ノ井乗務区・広報部は六日、外部サイトや協力関係にある個人サイト向けに、自サイトの最新情報を表示する「公式連携パーツ（ウィジェット）」の無償配布を開始した。サイトの認知度向上とともに、ファン同士のネットワーク構築を加速させる狙いがある。</p>
+        <p>【篠ノ井】篠ノ井乗務区広報部は六日、外部サイト向け「公式連携パーツ」のデザインを大幅に刷新し、新たな配布ページを公開した。今回の刷新では、新アイコン「icon-512.png」を全面的に採用。高精細な画像により、視認性とブランドイメージの向上を図っている。</p>
         
-        <p>配布が開始されたのは、本紙「篠ノ井新聞」の号外をモチーフにした縦型デザイン。アイコンにはお馴染みの「icon-192.jpg」を配し、ひと目で公式情報と識別できるよう配慮されている。貼り付けは専用のＨＴＭＬコードを一行追加するのみで完了し、高度な知識を必要としないのが特徴だ。</p>
+        <p>最大の特徴は、配布ページに導入された「リアルタイム・プレビュー機能」だ。利用者は、提供されるコードをその場で書き換えることで、自サイトに合わせた表示を即座に確認できる。鉄道看板を模した「駅名標型」や、電光掲示板をイメージした「ＬＥＤスリム型」など、計四種のバリエーションが用意された。</p>
 
-        <p>広報担当者は「個人の枠を超え、多くの鉄道ファンと繋がるための架け橋にしたい」と期待を寄せる。今後は、バナー型やミニ看板型など、設置先の環境に合わせたバリエーションの拡充も検討中だという。配布ページは本日より公式サイト内に常設されている。</p>
+        <p>同部は「他サイトとの繋がりは、鉄道情報の魅力を広げる線路のようなもの。より手軽に、より楽しく連携してほしい」としている。配布ページは公式サイト内の専用窓口よりアクセスが可能。今後も季節に合わせた限定デザインの追加などを検討していく方針だという。</p>
     </div>
 
-    <a href="renkei.html" class="btn-back" style="background:#004da0;">配布ページを見に行く</a>
-    <a href="news.html" class="btn-back">お知らせ一覧に戻る</a>
+    <div style="writing-mode: horizontal-tb; border-top: 1px solid #333; padding-top: 20px;">
+        <a href="renkei.html" class="btn-action">連携パーツ配布所へ行く ≫</a>
+        <a href="news.html" style="margin-left:15px; font-size:0.85em; color:#333; text-decoration:none; font-family:sans-serif;">お知らせ一覧に戻る</a>
+    </div>
 </div>
 
-<script src="menu.js"></script>
 </body>
 </html>
