@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function() {
         `;
     }
 
-    // 2. ナビゲーション
+    // 2. ナビゲーション（連携パーツ配布を追加）
     const nav = document.querySelector('nav');
     if (nav) {
         nav.innerHTML = `
@@ -22,23 +22,25 @@ document.addEventListener("DOMContentLoaded", function() {
                 <li><a href="contact.html">お問い合わせ</a></li>
                 <li><a href="faq.html">よくある質問</a></li>
                 <li><a href="links.html">SNS/外部リンク</a></li>
+                <li><a href="renkei.html" style="color: #ffcc00; font-weight: bold;">連携パーツ配布</a></li>
             </ul>
         `;
     }
 
-    // 3. フッター
+    // 3. フッター（メンテナンス表記を削除し、2026年版に更新）
     const footer = document.querySelector('footer');
     if (footer) {
         footer.innerHTML = `
             <div class="footer-inner" style="text-align: center; padding: 20px; font-size: 0.9em; line-height: 1.8; color: #555; border-top: 1px solid #ddd;">
                 <p>当サイトでは、Google Geminiなどの生成AI技術を活用し、サービスの品質向上に努めております。</p>
                 <p>お問い合わせは以下のフォームよりお願いいたします。<br>
-                <a href="contact.html" style="color: #004da0; font-weight: bold; text-decoration: underline;">お問い合わせフォーム</a> ＜システムメンテナンス中＞</p>
+                <a href="contact.html" style="color: #004da0; font-weight: bold; text-decoration: underline;">お問い合わせフォーム</a></p>
                 <div style="margin: 20px 0;">
                     <a href="policy.html" style="color:#666; text-decoration:none; margin: 0 10px;">規約・ポリシー</a>
+                    <a href="renkei.html" style="color:#004da0; text-decoration:none; margin: 0 10px; font-weight:bold;">公式連携パーツ配布中</a>
                 </div>
                 <p style="font-weight: bold; margin-bottom: 5px;">運営：篠ノ井乗務区</p>
-                <p style="margin: 0;">&copy; 2025 篠ノ井乗務区 All Rights Reserved.</p>
+                <p style="margin: 0;">&copy; 2026 篠ノ井乗務区 All Rights Reserved.</p>
                 <p style="font-size: 0.8em; color: #888;">本サイトに掲載の文章・画像・データの無断転載を禁じます。</p>
             </div>
         `;
@@ -56,7 +58,6 @@ async function loadTopNews(container) {
     const loadingMsg = document.getElementById('news-loading');
 
     try {
-        // 明示的に「お知らせ」シートを指定
         const response = await fetch(scriptUrl + "?sheet=お知らせ");
         const data = await response.json();
         
