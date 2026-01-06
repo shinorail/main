@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>マイページ | 篠ノ井タイムズ</title>
+    <style>
+        body { background-color: #f4f4f4; font-family: "serif"; margin: 0; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; background: #fff; padding: 30px; border: 1px solid #000; box-shadow: 5px 5px 0px #ccc; }
+        .info-box { border: 1px dashed #999; padding: 15px; margin: 20px 0; }
+        .birthday-msg { display: none; background: #fff0f0; border: 2px solid #ff0000; padding: 15px; color: #d32f2f; font-weight: bold; text-align: center; margin-bottom: 20px; }
+        .btn { display: inline-block; padding: 10px 20px; background: #004da0; color: #fff; text-decoration: none; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="border-bottom: 2px solid #000;">マイページ</h1>
+        
+        <div id="birthdayMessage" class="birthday-msg">
+            🎂 お誕生日おめでとうございます！<br>今月は篠ノ井タイムズからささやかなニュースレターをお送りします。
+        </div>
+
+        <div class="info-box">
+            <p><strong>メールアドレス:</strong> <span id="userEmail">取得中...</span></p>
+            <p><strong>生年月日:</strong> <span id="userBirthday">取得中...</span></p>
+        </div>
+
+        <button onclick="logout()" class="btn" style="background:#666;">ログアウト</button>
+        <a href="train-news.html" class="btn">新聞トップへ戻る</a>
+    </div>
+
+    <script>
+    window.onload = async function() {
+        const email = localStorage.getItem("userEmail");
+        if (!email) {
+            alert("ログインが必要です");
+            window.location.href = "login.html";
+            return;
+        }
+        document.getElementById("userEmail").innerText = email;
+
+        const url = "https://script.google.com/macros/s/AKfycbzuta6xRTHYX7wHtYJ54O_QhJzXRwxGOBC8j7zjIwbE-mK23Afi_M5JJAIqYNo6OO79kQ/exec";
+        
+        // GASからユーザー情報を取得
+        try {
+            const response = await fetch(`${url}?action=getUserInfo&email=${email}`);
+            const data = await response.json();
+
+            if (data.status === "success") {
+                const birthday = new Date(data.birthday);
+                document.getElementById("userBirthday").innerText = data.birthday;
+
+                // 誕生月の判定
+                const today = new Date();
+                if (birthday.getMonth() === today.getMonth()) {
+                    document.getElementById("birthdayMessage").style.display = "block";
+                }
+            }
+        } catch (e) {
+            console.error("データ取得エラー", e);
+        }
+    };
+
+    function logout() {
+        localStorage.removeItem("userEmail");
+        window.location.href = "login.html";
+    }
+    </script>
+</body>
+</html>
