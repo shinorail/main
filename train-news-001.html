@@ -5,102 +5,93 @@
     <title>Train-News 第1号 - 篠ノ井線新聞</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        .newspaper-article {
-            max-width: 850px;
-            margin: 30px auto;
+        .newspaper-container {
+            max-width: 1000px;
+            margin: 20px auto;
             background: #fff;
-            padding: 40px;
-            border: 1px solid #333;
-            font-family: "serif";
+            padding: 30px;
+            border: 1px solid #000;
+            font-family: "Sawarabi Mincho", "Hiragino Mincho ProN", "serif";
+            line-height: 1.6;
         }
+
+        /* 新聞見出し */
         .paper-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-end;
-            border-bottom: 5px double #333;
+            align-items: center;
+            border-bottom: 4px double #000;
             padding-bottom: 10px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
-        .paper-name { font-size: 3.2em; font-weight: bold; margin: 0; }
-        .paper-meta { text-align: right; font-size: 0.9em; line-height: 1.5; }
+        .paper-title { font-size: 3.5em; font-weight: bold; margin: 0; }
+        .paper-meta { text-align: right; font-size: 0.9em; }
 
+        /* 三段組のレイアウト */
+        .newspaper-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 240px; /* 左段・中段・広告欄 */
+            gap: 25px;
+        }
+
+        /* 各段のスタイル */
+        .column {
+            padding-right: 5px;
+        }
         .headline {
-            font-size: 1.8em;
-            background: #f0f0f0;
-            padding: 15px;
-            border-left: 12px solid #004da0;
-            margin-bottom: 25px;
-        }
-
-        /* グラフとリンク */
-        .chart-box {
-            float: right;
-            width: 320px;
-            margin: 0 0 20px 20px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            background: #fff;
-        }
-        .chart-box img { width: 100%; height: auto; margin-bottom: 10px; }
-        .source-url {
-            font-size: 0.75em;
-            word-break: break-all;
-            color: #004da0;
-        }
-
-        /* 運営ピン留め */
-        .admin-pin {
-            clear: both;
-            background: #e8f5e9;
-            border: 2px solid #2e7d32;
-            padding: 15px;
-            margin: 40px 0 20px 0;
-            font-family: sans-serif;
-        }
-        .pin-tag {
-            background: #2e7d32;
-            color: #fff;
-            padding: 2px 10px;
+            font-size: 1.6em;
             font-weight: bold;
-            font-size: 0.8em;
+            border-top: 2px solid #000;
+            border-bottom: 2px solid #000;
+            padding: 10px 0;
+            margin-bottom: 15px;
+            line-height: 1.3;
         }
 
-        /* コメント表示エリア */
-        .comment-display {
-            margin-top: 20px;
-            border-top: 1px solid #ccc;
-            padding-top: 20px;
-            font-family: sans-serif;
-        }
-        .comment-item {
-            background: #f9f9f9;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-bottom: 1px dashed #ccc;
-        }
-        .comment-user { font-weight: bold; color: #004da0; font-size: 0.9em; }
-        .comment-text { margin-top: 5px; font-size: 1em; }
-
-        /* 入力フォーム */
-        .comment-form {
-            background: #eee;
-            padding: 20px;
-            margin-top: 20px;
-            font-family: sans-serif;
-        }
-        .input-text {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
+        /* グラフエリア */
+        .chart-box {
             border: 1px solid #ccc;
-            box-sizing: border-box;
+            padding: 10px;
+            margin: 15px 0;
+            background: #fdfdfd;
+            text-align: center;
         }
-        .submit-button {
-            background: #004da0;
-            color: white;
-            border: none;
-            padding: 10px 30px;
-            cursor: pointer;
+        .chart-box img { width: 100%; height: auto; }
+        .source-url { font-size: 0.7em; word-break: break-all; color: #004da0; }
+
+        /* 歴史年表ボックス */
+        .history-box {
+            background: #f4f4f4;
+            padding: 15px;
+            border: 1px solid #999;
+            font-size: 0.9em;
+        }
+        .history-box h3 { margin-top: 0; border-bottom: 1px solid #000; }
+
+        /* 広告欄（三段目） */
+        .ad-column {
+            border-left: 1px solid #ddd;
+            padding-left: 15px;
+        }
+        .ad-box {
+            border: 2px dashed #666;
+            padding: 15px;
+            margin-bottom: 20px;
+            background: #fff9e6;
+            text-align: center;
+        }
+        .ad-title { font-weight: bold; font-size: 1.1em; color: #d32f2f; }
+
+        /* 運営ピン留め（コメント廃止案内） */
+        .admin-pin {
+            grid-column: span 3; /* 全幅表示 */
+            background: #fff5f5;
+            border: 1px solid #ff0000;
+            padding: 10px;
+            margin-top: 20px;
+            font-family: sans-serif;
+            font-size: 0.85em;
+            color: #d32f2f;
         }
     </style>
 </head>
@@ -108,80 +99,68 @@
 <header></header><nav></nav>
 
 <main>
-    <div class="newspaper-article">
+    <div class="newspaper-container">
         <div class="paper-header">
-            <h1 class="paper-name">篠ノ井線新聞</h1>
+            <h1 class="paper-title">篠ノ井線新聞</h1>
             <div class="paper-meta">
-                創刊号 No.1 [cite: 39] <br>
-                発行日: 2025年9月19日 [cite: 40] <br>
-                発行: 篠ノ井線新聞編集部 [cite: 37] 
+                創刊号 No.1<br>
+                発行日: 2025年9月19日<br>
+                発行: 篠ノ井線新聞編集部
             </div>
         </div>
 
-        <div class="headline">
-            <h2>篠ノ井線沿線で乗客数が減少 地域活性化の取り組みが急務 [cite: 14]</h2>
-        </div>
-
-        <div class="chart-box">
-            <img src="Graph-001.png" alt="平均通過人員の推移">
-            <p style="font-size:0.8em; font-weight:bold; margin-bottom:5px;">図1: 塩尻〜篠ノ井間 平均通過人員の推移 [cite: 36]</p>
-            <p class="source-url">
-                出典: JR東日本［路線別ご利用状況］<br>
-                <a href="https://www.jreast.co.jp/rosen_avr/pdf/rosen02.pdf" target="_blank">https://www.jreast.co.jp/rosen_avr/pdf/rosen02.pdf</a> 
-            </p>
-        </div>
-
-        <p>近年、篠ノ井線沿線では通勤・通学での鉄道利用者数が徐々に減少しています [cite: 15]。人口減少や自家用車の利用増加が背景にあるとみられ、沿線自治体や事業者は活性化策を急いでいます [cite: 15]。</p>
-        <p>1987年には15,000人以上だった平均通過人員は減少傾向にありますが、地域の特色を活かした持続可能な鉄道利用の推進が求められています [cite: 31, 34]。</p>
-
-        <div class="admin-pin">
-            <span class="pin-tag">運営ピン留め</span>
-            <p style="margin: 10px 0 0 0; font-weight: bold; color: #2e7d32;">
-                この記事はコメント可能です。投稿された内容は以下に公開されます。
-            </p>
-        </div>
-
-        <div class="comment-display" id="comment-list">
-            <div class="comment-item">
-                <span class="comment-user">篠ノ井乗務区（運営）</span>
-                <p class="comment-text">創刊号へのご意見をお待ちしております！</p>
+        <div class="newspaper-grid">
+            <div class="column">
+                <div class="headline">篠ノ井線沿線で乗客数が減少 地域活性化の取り組みが急務</div>
+                <p>近年、長野市と塩尻市を結ぶ篠ノ井線沿線では、通勤・通学での鉄道利用者数が徐々に減少しています。地域の人口減少や、自家用車の利用増加がその背景にあるとみられています。</p>
+                <p>篠ノ井線は地域の重要な交通手段であり、観光や買い物などの日常生活にも欠かせません。沿線の高齢化や若年層の流出に伴い、今後の採算面での課題も指摘されています。</p>
+                
+                <div class="chart-box">
+                    <img src="Graph-001.png" alt="平均通過人員の推移">
+                    <p style="font-size:0.8em; margin:5px 0;">図1: 塩尻〜篠ノ井間 平均通過人員の推移</p>
+                    <p class="source-url">
+                        出典: JR東日本<br>
+                        <a href="https://www.jreast.co.jp/rosen_avr/pdf/rosen02.pdf" target="_blank">https://www.jreast.co.jp/rosen_avr/pdf/rosen02.pdf</a>
+                    </p>
+                </div>
             </div>
-        </div>
 
-        <div class="comment-form">
-            <p style="font-size: 0.9em; margin-bottom: 10px; font-weight: bold;">💬 コメントを投稿する</p>
-            <input type="text" id="user-name" class="input-text" placeholder="名前">
-            <textarea id="user-content" class="input-text" rows="3" placeholder="コメント内容"></textarea>
-            <button type="button" class="submit-button" onclick="postComment()">投稿する</button>
+            <div class="column">
+                <div class="history-box">
+                    <h3>特集：篠ノ井線の歴史年表</h3>
+                    <p><strong>篠ノ井線 拡張・整備期 (1927~1945)</strong></p>
+                    <ul style="padding-left: 20px;">
+                        <li>1927年11月3日：坂北駅新設</li>
+                        <li>1933年7月10日：広丘駅新設</li>
+                        <li>1937年1月31日：冠着信号場新設</li>
+                        <li>1944年9月1日：南松本駅新設</li>
+                        <li>1945年4月1日：冠着駅へ格上げ</li>
+                    </ul>
+                    <p style="font-size:0.8em; border-top:1px solid #ccc; padding-top:5px;">
+                        ※詳細は公式サイトの歴史ページをご覧ください。
+                    </p>
+                </div>
+                <p>持続可能な鉄道利用の推進が求められており、地元の特産品を活かした観光列車の運行やイベント開催など、新たな魅力づくりが急がれます。</p>
+            </div>
+
+            <div class="ad-column">
+                <div class="ad-box">
+                    <div class="ad-title">広告募集中</div>
+                    <p style="font-size:0.8em;">当新聞では、沿線地域のイベントや店舗の広告を募集しています。</p>
+                    <div style="background:#004da0; color:#fff; padding:5px; font-size:0.9em;">無料掲載中</div>
+                    <p style="font-size:0.7em; margin-top:10px;">お問い合わせは<br>トイアワセまで</p>
+                </div>
+                <div class="ad-box" style="background:#eee; border:1px solid #ccc;">
+                    <p style="font-size:0.8em;">空き枠</p>
+                </div>
+            </div>
+
+            <div class="admin-pin">
+                📌 運営からのお知らせ：現在、この記事ではコメントの投稿を受け付けておりません。
+            </div>
         </div>
     </div>
 </main>
-
-<script>
-    function postComment() {
-        const name = document.getElementById('user-name').value;
-        const content = document.getElementById('user-content').value;
-        
-        if (!name || !content) {
-            alert("名前と内容を入力してください");
-            return;
-        }
-
-        // 画面に新しいコメントを追加する処理
-        const list = document.getElementById('comment-list');
-        const newItem = document.createElement('div');
-        newItem.className = 'comment-item';
-        newItem.innerHTML = `<span class="comment-user">${name}</span><p class="comment-text">${content}</p>`;
-        
-        list.appendChild(newItem);
-
-        // 入力欄をクリア
-        document.getElementById('user-name').value = '';
-        document.getElementById('user-content').value = '';
-        
-        alert("コメントが公開されました！");
-    }
-</script>
 
 <footer></footer>
 <script src="menu.js"></script>
