@@ -2,8 +2,8 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Train-News (Beta Layout Control) - 篠ノ井乗務区</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Train-News - 篠ノ井乗務区</title>
     <link rel="stylesheet" href="style.css">
     <style>
         .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px 0; }
@@ -12,59 +12,56 @@
         .news-card h3 { margin: 0 0 10px; color: #004da0; font-size: 1.1em; }
         .news-card p { margin: 5px 0; font-size: 0.9em; color: #444; }
 
-        /* ビューワー（ポップアップ） */
+        /* ビューワー（全画面ポップアップ） */
         .viewer-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #fff; display: none; flex-direction: column; z-index: 10000;
         }
         .viewer-header {
-            background: #004da0; color: white; padding: 12px 20px;
+            background: #004da0; color: white; padding: 10px 15px;
             display: flex; justify-content: space-between; align-items: center;
+            flex-shrink: 0;
         }
-        .viewer-header h2 { margin: 0; font-size: 1em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .viewer-header h2 { margin: 0; font-size: 0.9em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .close-btn {
-            background: #ff4444; color: white; border: none; padding: 6px 12px;
-            border-radius: 4px; cursor: pointer; font-weight: bold; flex-shrink: 0;
+            background: #ff4444; color: white; border: none; padding: 8px 15px;
+            border-radius: 4px; cursor: pointer; font-weight: bold;
         }
 
-        .viewer-body { display: flex; flex: 1; overflow: hidden; background: #525659; }
-        #pdf-frame { flex: 1; border: none; background: #fff; width: 100%; height: 100%; }
+        /* 記事とコメントのメインエリア */
+        .viewer-body { display: flex; flex: 1; overflow: hidden; background: #f0f0f0; }
+        
+        /* PDFエリア */
+        .pdf-container { flex: 1; display: flex; flex-direction: column; background: #525659; position: relative; }
+        #pdf-frame { width: 100%; height: 100%; border: none; }
 
-        /* コメントサイドバー */
+        /* コメントエリア（PC） */
         .comment-sidebar {
             width: 350px; background: #f4f4f4; display: flex; flex-direction: column;
-            border-left: 1px solid #ccc;
+            border-left: 1px solid #ccc; flex-shrink: 0;
         }
         .comment-list { flex: 1; overflow-y: auto; padding: 15px; }
         .comment-item { background: #fff; padding: 10px; border-radius: 4px; margin-bottom: 10px; border: 1px solid #ddd; font-size: 0.85em; }
-        .comment-form { padding: 15px; background: #eee; border-top: 1px solid #ccc; }
+        .comment-form { padding: 10px; background: #eee; border-top: 1px solid #ccc; }
         .comment-form input, .comment-form textarea {
-            width: 100%; padding: 8px; margin-bottom: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;
+            width: 100%; padding: 8px; margin-bottom: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 16px; /* スマホズーム防止 */
         }
-        
         .submit-btn {
-            width: 100%; background: #004da0; color: white; border: none; padding: 10px; cursor: pointer; font-weight: bold;
+            width: 100%; background: #004da0; color: white; border: none; padding: 10px; cursor: pointer; font-weight: bold; border-radius: 4px;
         }
-        .submit-btn:disabled { background: #888 !important; }
 
-        /* --- ベータ版：URLパラメータによるレイアウト切り替え --- */
-
-        /* スマホモード (?mode=SP) */
-        .mode-sp .viewer-body { flex-direction: column; overflow-y: auto; }
-        .mode-sp #pdf-frame { flex: none; height: 55vh; width: 100%; }
-        .mode-sp .comment-sidebar { flex: none; width: 100%; border-left: none; border-top: 2px solid #004da0; }
-        .mode-sp .comment-list { max-height: 250px; }
-
-        /* タブレットモード (?mode=TAB) */
-        .mode-tab .comment-sidebar { width: 260px; }
-        .mode-tab .viewer-header h2 { font-size: 0.9em; }
-
-        /* 通常のレスポンシブ（パラメータがない場合も機能） */
+        /* --- スマホ・タブレット用 (完結型レイアウト) --- */
         @media (max-width: 800px) {
-            .viewer-body:not(.mode-pc) { flex-direction: column; overflow-y: auto; }
-            #pdf-frame:not(.mode-pc) { flex: none; height: 50vh; width: 100%; }
-            .comment-sidebar:not(.mode-pc) { flex: none; width: 100%; border-left: none; border-top: 2px solid #004da0; }
+            .viewer-body { flex-direction: column; overflow-y: auto; }
+            .pdf-container { flex: none; height: 65vh; } /* 記事をメインに見せる */
+            .comment-sidebar { width: 100%; flex: none; border-left: none; border-top: 3px solid #004da0; }
+            .comment-list { max-height: 300px; overflow-y: auto; }
         }
+
+        /* パラメータ制御用クラス */
+        .mode-sp .viewer-body { flex-direction: column; overflow-y: auto; }
+        .mode-sp .pdf-container { flex: none; height: 65vh; }
+        .mode-sp .comment-sidebar { width: 100%; border-left: none; border-top: 3px solid #004da0; }
     </style>
 </head>
 <body>
@@ -73,7 +70,7 @@
 <nav></nav>
 
 <div class="container">
-    <h2>Train-News 一覧 <small style="font-size: 0.5em; color: #888;">(Beta: Mode Control Active)</small></h2>
+    <h2>Train-News 一覧</h2>
     <div id="loading" style="text-align:center; padding: 20px;">読み込み中...</div>
     <div id="news-list" class="news-grid"></div>
 </div>
@@ -84,15 +81,17 @@
         <button class="close-btn" onclick="closeViewer()">閉じる</button>
     </div>
     <div class="viewer-body">
-        <iframe id="pdf-frame" src=""></iframe>
+        <div class="pdf-container">
+            <iframe id="pdf-frame" src=""></iframe>
+        </div>
         <div class="comment-sidebar">
-            <div style="background:#ddd; padding:5px 15px; font-weight:bold; font-size:0.8em;">コメント</div>
+            <div style="background:#004da0; color:white; padding:5px 15px; font-weight:bold; font-size:0.8em;">読者のコメント</div>
             <div id="comment-list" class="comment-list"></div>
             <form id="comment-form" class="comment-form">
                 <input type="hidden" id="target-id">
-                <input type="text" id="u-name" placeholder="名前" required>
-                <textarea id="u-msg" placeholder="コメントを入力" required></textarea>
-                <button type="submit" id="submit-btn" class="submit-btn">投稿</button>
+                <input type="text" id="u-name" placeholder="お名前" required>
+                <textarea id="u-msg" placeholder="感想をどうぞ！" required></textarea>
+                <button type="submit" id="submit-btn" class="submit-btn">コメントを投稿する</button>
             </form>
         </div>
     </div>
@@ -104,48 +103,34 @@
 <script>
     const scriptUrl = "https://script.google.com/macros/s/AKfycbwbUTBxVeTkRlAJ1dnBlgcmpGaWI9B0SeMwkwKSwAJYjRDAtVcX67QwA5FcNGaJE9Cq/exec";
 
-    // パラメータに基づいてクラスを付与する関数
     function initLayoutMode() {
         const params = new URLSearchParams(window.location.search);
-        const mode = params.get('mode');
-        const viewer = document.getElementById('viewer');
-        if (mode === 'SP') {
-            viewer.classList.add('mode-sp');
-        } else if (mode === 'TAB') {
-            viewer.classList.add('mode-tab');
-        }
+        if (params.get('mode') === 'SP') document.getElementById('viewer').classList.add('mode-sp');
     }
 
     async function loadNews() {
         try {
             const res = await fetch(scriptUrl + "?sheet=" + encodeURIComponent("新聞"));
             const data = await res.json();
-            if (data.error) throw new Error(data.error);
-
             document.getElementById('loading').style.display = 'none';
             const list = document.getElementById('news-list');
-            
             data.reverse().forEach(item => {
-                const gosu = item.号数 || "号外";
-                const date = item.発行日 || "";
-                const title = item.見出し || "無題";
-                const pdfUrl = item.URL || "";
-
                 const card = document.createElement('div');
                 card.className = 'news-card';
-                card.onclick = () => openViewer(pdfUrl, gosu, title);
-                card.innerHTML = `<h3>第 ${gosu} 号</h3><p><strong>${date}</strong></p><p>${title}</p>`;
+                card.onclick = () => openViewer(item.URL, item.号数, item.見出し);
+                card.innerHTML = `<h3>第 ${item.号数 || "号外"} 号</h3><p><strong>${item.発行日 || ""}</strong></p><p>${item.見出し || "無題"}</p>`;
                 list.appendChild(card);
             });
-        } catch(e) { 
-            document.getElementById('loading').innerText = "データの取得に失敗しました。"; 
-        }
+        } catch(e) { document.getElementById('loading').innerText = "エラーが発生しました。"; }
     }
 
     function openViewer(url, id, title) {
         document.getElementById('target-id').value = id;
         document.getElementById('v-title').innerText = "第" + id + "号 " + title;
-        document.getElementById('pdf-frame').src = url;
+        // GoogleドライブのPDFを「完結型」で表示するための加工
+        const previewUrl = url.replace('/view?usp=sharing', '/preview').replace('uc?id=', 'file/d/') + (url.includes('file/d/') ? '/preview' : '');
+        document.getElementById('pdf-frame').src = previewUrl;
+        
         document.getElementById('viewer').style.display = 'flex';
         document.body.style.overflow = 'hidden';
         loadComments(id);
@@ -159,11 +144,11 @@
 
     async function loadComments(id) {
         const list = document.getElementById('comment-list');
-        list.innerHTML = "<small>読込中...</small>";
+        list.innerHTML = "<small>読み込み中...</small>";
         try {
             const res = await fetch(scriptUrl + "?action=getComments&id=" + encodeURIComponent(id));
             const data = await res.json();
-            list.innerHTML = data.length ? "" : "<small style='color:#999;'>コメントはありません</small>";
+            list.innerHTML = data.length ? "" : "<small style='color:#999;'>まだコメントはありません</small>";
             data.forEach(c => {
                 const div = document.createElement('div');
                 div.className = 'comment-item';
@@ -176,30 +161,21 @@
     document.getElementById('comment-form').onsubmit = async (e) => {
         e.preventDefault();
         const btn = document.getElementById('submit-btn');
-        btn.disabled = true;
-        btn.innerText = "送信中...";
-
+        btn.disabled = true; btn.innerText = "送信中...";
         const id = document.getElementById('target-id').value;
         const data = {
-            action: "postComment",
-            id: id,
+            action: "postComment", id: id,
             name: document.getElementById('u-name').value,
             comment: document.getElementById('u-msg').value
         };
-
         try {
             await fetch(scriptUrl, { method: 'POST', body: JSON.stringify(data) });
             document.getElementById('u-msg').value = "";
             await loadComments(id);
-        } catch(error) {
-            alert("送信失敗");
-        } finally {
-            btn.disabled = false;
-            btn.innerText = "投稿";
-        }
+        } catch(error) { alert("送信失敗"); }
+        finally { btn.disabled = false; btn.innerText = "コメントを投稿する"; }
     };
 
-    // 初期化実行
     initLayoutMode();
     loadNews();
 </script>
