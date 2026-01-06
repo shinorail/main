@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>連携パーツ配布所 - 篠ノ井乗務区</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .renkei-container { max-width: 800px; margin: 40px auto; padding: 20px; background: #fff; border-radius: 8px; border: 1px solid #ddd; }
+        .renkei-header { border-bottom: 3px solid #004da0; margin-bottom: 30px; padding-bottom: 10px; }
+        .renkei-section { margin-bottom: 50px; padding: 20px; background: #f9f9f9; border-radius: 5px; }
+        
+        .preview-area { display: flex; justify-content: center; padding: 20px; background: #eee; border-radius: 5px; margin-bottom: 20px; }
+        
+        .code-box {
+            background: #2d2d2d; color: #ccc; padding: 15px; border-radius: 5px;
+            font-family: monospace; font-size: 0.85em; overflow-x: auto;
+            position: relative; white-space: pre-wrap; word-break: break-all;
+        }
+        .copy-btn {
+            display: inline-block; margin-top: 10px; padding: 10px 20px;
+            background: #004da0; color: #fff; text-decoration: none;
+            border-radius: 4px; font-weight: bold; cursor: pointer; border: none;
+        }
+        .copy-btn:active { transform: translateY(2px); }
+        
+        .guide-text { font-size: 0.9em; color: #555; line-height: 1.6; }
+    </style>
+</head>
+<body>
+
+<header></header>
+<nav></nav>
+
+<div class="container">
+    <div class="renkei-container">
+        <div class="renkei-header">
+            <h1>連携パーツ配布所</h1>
+            <p>篠ノ井乗務区の最新情報をあなたのサイトに掲載しませんか？</p>
+        </div>
+
+        <div class="guide-text">
+            <p>当サイト（篠ノ井乗務区）を紹介していただける方、または相互リンクをしていただける方へ、専用の連携ウィジェットを配布しています。<br>以下のコードをあなたのサイトのHTMLに貼り付けるだけで、最新の号外ニュースが表示されます。</p>
+        </div>
+
+        <div class="renkei-section">
+            <h2>1. 号外新聞風ウィジェット</h2>
+            <p>新聞の号外をモチーフにした、インパクトのある縦長パーツです。</p>
+            
+            <div class="preview-area">
+                <div id="shino-goigai-widget"></div>
+            </div>
+
+            <div class="code-box" id="code1">
+&lt;!-- 篠ノ井乗務区 連携号外パーツ --&gt;
+&lt;div id="shino-goigai-widget"&gt;&lt;/div&gt;
+&lt;script&gt;
+(function(){const w=document.getElementById('shino-goigai-widget');w.innerHTML=`&lt;div style="border:4px double #333;padding:5px;max-width:300px;font-family:serif;background:#fff;box-shadow:5px 5px 0 #ccc"&gt;&lt;div style="border:1px solid #333;padding:10px"&gt;&lt;div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #333;margin-bottom:10px;padding-bottom:5px"&gt;&lt;span style="font-weight:bold;font-size:1.1em"&gt;篠ノ井新聞&lt;/span&gt;&lt;span style="font-size:0.6em;text-align:right"&gt;2026年1月6日&lt;br&gt;第16号(号外)&lt;/span&gt;&lt;/div&gt;&lt;div style="background:#000;color:#fff;text-align:center;padding:3px;font-weight:bold;font-size:1.3em;margin-bottom:10px"&gt;閲 覧 改 革&lt;/div&gt;&lt;h4 style="margin:0 0 10px 0;font-size:0.95em;line-height:1.4"&gt;スマホ対応新システム稼働&lt;br&gt;交流機能も大幅強化&lt;/h4&gt;&lt;a href="https://shinorail.github.io/main/news.html" target="_blank" style="display:block;text-align:center;border:1px solid #333;color:#000;text-decoration:none;padding:8px;font-weight:bold;font-size:0.8em;background:#f9f9f9"&gt;詳細を紙面で読む ≫&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;`;})();
+&lt;/script&gt;
+            </div>
+            <button class="copy-btn" onclick="copyCode('code1')">コードをコピーする</button>
+        </div>
+
+        <p style="text-align: center; color: #888; font-size: 0.8em;">© 2026 篠ノ井乗務区 広報室</p>
+    </div>
+</div>
+
+<footer></footer>
+
+<script src="menu.js"></script>
+<script>
+    // プレビュー用にもスクリプトを実行
+    (function(){const w=document.getElementById('shino-goigai-widget');w.innerHTML=`<div style="border:4px double #333;padding:5px;max-width:300px;font-family:serif;background:#fff;box-shadow:5px 5px 0 #ccc"><div style="border:1px solid #333;padding:10px"><div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #333;margin-bottom:10px;padding-bottom:5px"><span style="font-weight:bold;font-size:1.1em">篠ノ井新聞</span><span style="font-size:0.6em;text-align:right">2026年1月6日<br>第16号(号外)</span></div><div style="background:#000;color:#fff;text-align:center;padding:3px;font-weight:bold;font-size:1.3em;margin-bottom:10px">閲 覧 改 革</div><h4 style="margin:0 0 10px 0;font-size:0.95em;line-height:1.4">スマホ対応新システム稼働<br>交流機能も大幅強化</h4><a href="https://shinorail.github.io/main/news.html" target="_blank" style="display:block;text-align:center;border:1px solid #333;color:#000;text-decoration:none;padding:8px;font-weight:bold;font-size:0.8em;background:#f9f9f9">詳細を紙面で読む ≫</a></div></div>`;})();
+
+    function copyCode(id) {
+        const text = document.getElementById(id).innerText;
+        navigator.clipboard.writeText(text).then(() => {
+            alert("コードをコピーしました。連携先に貼り付けてください！");
+        });
+    }
+</script>
+</body>
+</html>
