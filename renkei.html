@@ -8,61 +8,49 @@
     <link rel="icon" href="icon-512.png">
     <style>
         .renkei-container { max-width: 900px; margin: 40px auto; padding: 20px; background: #fff; border-radius: 12px; border: 1px solid #ddd; font-family: sans-serif; }
-        .renkei-header { border-bottom: 4px solid #004da0; margin-bottom: 30px; padding-bottom: 15px; display: flex; align-items: center; gap: 20px; }
+        .renkei-header { border-bottom: 4px solid #004da0; margin-bottom: 30px; padding-bottom: 15px; display: flex; align-items: center; justify-content: space-between; }
+        .header-left { display: flex; align-items: center; gap: 20px; }
         .site-icon-main { width: 70px; height: 70px; border-radius: 10px; }
         
+        .sample-link-btn {
+            background: #fff; color: #004da0; border: 2px solid #004da0;
+            padding: 10px 20px; border-radius: 5px; text-decoration: none;
+            font-weight: bold; font-size: 0.9em; transition: 0.3s;
+        }
+        .sample-link-btn:hover { background: #004da0; color: #fff; }
+
         .renkei-section { margin-bottom: 40px; padding: 25px; background: #fdfdfd; border-radius: 10px; border: 1px solid #eee; position: relative; }
-        
-        /* 1/15まで表示されるNEWバッジ */
-        .new-badge {
-            position: absolute; top: -10px; right: -10px;
-            background: #ff0000; color: #fff; padding: 5px 12px;
-            border-radius: 20px; font-weight: bold; font-size: 0.8em;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            z-index: 10; display: none;
-        }
+        .new-badge { position: absolute; top: -10px; right: -10px; background: #ff0000; color: #fff; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 0.8em; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 10; display: none; }
 
-        .preview-area { 
-            background: #f0f0f0; padding: 20px; border-radius: 8px; margin-bottom: 15px; 
-            display: flex; justify-content: center; align-items: center;
-            overflow: hidden; min-height: 160px; border: 1px inset #ddd;
-        }
-
-        .code-editor { 
-            background: #1e1e1e; color: #d4d4d4; padding: 12px; border-radius: 5px; 
-            font-family: monospace; font-size: 0.85em; width: 100%; height: 100px;
-            border: 1px solid #333; resize: vertical; box-sizing: border-box;
-        }
+        .preview-area { background: #f0f0f0; padding: 20px; border-radius: 8px; margin-bottom: 15px; display: flex; justify-content: center; align-items: center; overflow: hidden; min-height: 160px; border: 1px inset #ddd; }
+        .code-editor { background: #1e1e1e; color: #d4d4d4; padding: 12px; border-radius: 5px; font-family: monospace; font-size: 0.85em; width: 100%; height: 100px; border: 1px solid #333; resize: vertical; box-sizing: border-box; }
         
         .btn-group { display: flex; gap: 10px; margin-top: 10px; }
         .action-btn { padding: 8px 16px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
         .copy-btn { background: #004da0; color: #fff; }
         .help-btn { background: #666; color: #fff; }
 
-        .modal-overlay { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.7); display: none; z-index: 1000; 
-            justify-content: center; align-items: center; 
-        }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; z-index: 1000; justify-content: center; align-items: center; }
         .modal-body { background: #fff; padding: 30px; border-radius: 10px; max-width: 500px; width: 90%; position: relative; line-height: 1.6; }
-        
-        h2 { font-size: 1.3em; color: #004da0; margin-top: 0; }
     </style>
 </head>
 <body>
 
 <div class="renkei-container">
     <div class="renkei-header">
-        <img src="icon-512.png" alt="icon" class="site-icon-main">
-        <div>
-            <h1 style="margin:0;">連携パーツ配布所</h1>
-            <p style="margin:5px 0 0 0; color: #666;">リアルタイム編集 ＆ 使い方ガイド</p>
+        <div class="header-left">
+            <img src="icon-512.png" alt="icon" class="site-icon-main">
+            <div>
+                <h1 style="margin:0;">連携パーツ配布所</h1>
+                <p style="margin:5px 0 0 0; color: #666;">公式パーツでサイトを彩る</p>
+            </div>
         </div>
+        <a href="sample.html" class="sample-link-btn">実際の設置例を見る</a>
     </div>
 
     <div class="renkei-section">
         <div id="badge-1" class="new-badge">NEW</div>
-        <h2>号外新聞型 <span style="font-size:0.6em; background:#004da0; color:#fff; padding:2px 8px; border-radius:3px;">縦長</span></h2>
+        <h2 style="font-size: 1.3em; color: #004da0; margin-top: 0;">号外新聞型 <span style="font-size:0.6em; background:#004da0; color:#fff; padding:2px 8px; border-radius:3px;">縦長</span></h2>
         <div class="preview-area" id="view1"></div>
         <textarea class="code-editor" id="edit1" oninput="updatePreview(1)"></textarea>
         <div class="btn-group">
@@ -73,7 +61,7 @@
 
     <div class="renkei-section">
         <div id="badge-2" class="new-badge">NEW</div>
-        <h2>駅名標型 <span style="font-size:0.6em; background:#004da0; color:#fff; padding:2px 8px; border-radius:3px;">横長</span></h2>
+        <h2 style="font-size: 1.3em; color: #004da0; margin-top: 0;">駅名標型 <span style="font-size:0.6em; background:#004da0; color:#fff; padding:2px 8px; border-radius:3px;">横長</span></h2>
         <div class="preview-area" id="view2"></div>
         <textarea class="code-editor" id="edit2" oninput="updatePreview(2)"></textarea>
         <div class="btn-group">
@@ -83,8 +71,8 @@
     </div>
 </div>
 
-<div id="helpModal" class="modal-overlay">
-    <div class="modal-body">
+<div id="helpModal" class="modal-overlay" onclick="closeHelp()">
+    <div class="modal-body" onclick="event.stopPropagation()">
         <h3 id="helpTitle" style="color:#004da0; margin-top:0;"></h3>
         <div id="helpContent"></div>
         <button class="action-btn copy-btn" style="width:100%; margin-top:20px;" onclick="closeHelp()">閉じる</button>
@@ -92,14 +80,14 @@
 </div>
 
 <script>
+    // 1/15判定と初期コード、各関数の定義（前回のコードと同様）
     const initialCodes = {
         1: `<div style="border:4px double #333;padding:5px;max-width:240px;font-family:serif;background:#fff;box-shadow:5px 5px 0 #ccc"><div style="border:1px solid #333;padding:10px"><div style="display:flex;align-items:center;gap:8px;border-bottom:2px solid #333;margin-bottom:10px;padding-bottom:5px"><img src="https://shinorail.github.io/main/icon-512.png" style="width:25px;height:25px;border-radius:4px"><span style="font-weight:bold;font-size:1em">篠ノ井新聞</span></div><div style="background:#000;color:#fff;text-align:center;padding:4px;font-weight:bold;font-size:1.3em;margin-bottom:10px">閲 覧 改 革</div><a href="https://shinorail.github.io/main/news.html" target="_blank" style="display:block;text-align:center;border:1px solid #333;color:#000;text-decoration:none;padding:8px;font-weight:bold;font-size:0.8em;background:#f9f9f9">詳細を読む ≫</a></div></div>`,
         2: `<div style="border:2px solid #333;width:100%;max-width:350px;font-family:sans-serif;background:#fff;padding:12px;border-radius:6px"><div style="border-bottom:3px solid #004da0;text-align:center;padding-bottom:5px;margin-bottom:8px"><div style="font-size:1.3em;font-weight:bold;letter-spacing:4px;color:#004da0">篠ノ井乗務区</div></div><div style="display:flex;justify-content:space-between;font-size:0.75em;font-weight:bold"><span>◀ NEWS</span><span>PHOTO ▶</span></div><a href="https://shinorail.github.io/main/" target="_blank" style="display:block;text-align:center;margin-top:12px;font-size:0.85em;color:#fff;background:#004da0;text-decoration:none;padding:6px;border-radius:3px">公式サイトへ乗車</a></div>`
     };
 
-    // 1/15までNEWを表示するロジック
     const today = new Date();
-    const limit = new Date('2026-01-16'); // 1/15いっぱいまで
+    const limit = new Date('2026-01-16');
     if (today < limit) {
         document.getElementById('badge-1').style.display = 'block';
         document.getElementById('badge-2').style.display = 'block';
@@ -119,8 +107,8 @@
     }
 
     function showHelp(id) {
-        document.getElementById('helpTitle').innerText = "使い方ガイド";
-        document.getElementById('helpContent').innerHTML = "コード内のURLやテキストを編集してプレビューを確認し、コピーして自分のサイトのHTML欄に貼り付けてください。";
+        document.getElementById('helpTitle').innerText = "設置ガイド";
+        document.getElementById('helpContent').innerHTML = "<p>1. 下のコードエリアで、サイト名やリンク先を自由に書き換えます（上のプレビューが動きます）。</p><p>2. 「コードをコピー」ボタンを押します。</p><p>3. 自分のブログやサイトのHTML編集画面に貼り付ければ完了です！</p>";
         document.getElementById('helpModal').style.display = 'flex';
     }
 
