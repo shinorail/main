@@ -16,9 +16,7 @@ document.addEventListener("DOMContentLoaded", function() {
             history[pagesMap[currentPath]] = true;
             localStorage.setItem('stampHistory', JSON.stringify(history));
         }
-    } catch (e) {
-        console.log("Stamp recording error");
-    }
+    } catch (e) { console.log("Stamp recording error"); }
 
     // 3. 共通パーツの生成
     renderParts();
@@ -48,6 +46,7 @@ function renderParts() {
                 <li><a href="index.html">ホーム</a></li>
                 <li><a href="news.html">お知らせ</a></li>
                 <li><a href="train-news.html">Train-News</a></li>
+                <li><a href="ad.html" style="color: #2e7d32; font-weight: bold;">手作り広告</a></li>
                 <li><a href="mission.html">活動理念</a></li>
                 <li><a href="photo.html">写真記録</a></li>
                 <li><a href="stamp.html" style="color: #e63946; font-weight: bold;">乗車印帳</a></li>
@@ -58,9 +57,26 @@ function renderParts() {
             </ul>`;
     }
 
-    // フッター生成（ポリシーリンクを復活）
+    // フッター
     const footer = document.querySelector('footer');
     if (footer) {
+        // --- 忍者AdMax 手作り広告枠の挿入 ---
+        const adContainer = document.createElement('div');
+        adContainer.style.cssText = "max-width: 800px; margin: 30px auto; padding: 20px; border: 2px dashed #8b4513; background: #fff9e6; text-align: center; position: relative; border-radius: 8px;";
+        adContainer.innerHTML = `
+            <span style="position: absolute; top: -12px; left: 15px; background: #8b4513; color: #fff; padding: 2px 12px; font-size: 0.75em; border-radius: 4px; font-weight: bold;">沿線掲示板（広告）</span>
+            <div id="admax-area" style="min-height: 100px; display: flex; justify-content: center; align-items: center; margin: 10px 0;">
+                </div>
+            <p style="margin: 10px 0 0 0; font-size: 0.7em; color: #9a7d5d;">※この広告収入は鉄道活動の運営費に充てられます</p>
+        `;
+        footer.parentNode.insertBefore(adContainer, footer);
+
+        // 忍者AdMaxスクリプトの実行
+        const adScript = document.createElement('script');
+        adScript.src = "https://adm.shinobi.jp/o/2791c03bc086135607731d2a0eb484fd";
+        document.getElementById('admax-area').appendChild(adScript);
+
+        // フッター本体（ポリシーリンクあり）
         footer.innerHTML = `
             <div class="footer-inner" style="text-align: center; padding: 20px; font-size: 0.9em; line-height: 1.8; color: #555; border-top: 1px solid #ddd;">
                 <p>当サイトでは、Google Geminiなどの生成AI技術を活用し、サービスの品質向上に努めております。</p>
@@ -71,7 +87,6 @@ function renderParts() {
                 </div>
                 <p style="font-weight: bold; margin-bottom: 5px;">運営：篠ノ井乗務区</p>
                 <p style="margin: 0;">&copy; 2026 篠ノ井乗務区 All Rights Reserved.</p>
-                <p style="font-size: 0.8em; color: #888;">本サイトに掲載の文章・画像・データの無断転載を禁じます。</p>
             </div>`;
     }
 }
@@ -87,12 +102,7 @@ function startEffect(char, isComplete) {
         const duration = isComplete ? 4 : 6;
         f.style.cssText = `position:absolute;top:-30px;left:${Math.random()*100}%;font-size:${Math.random()*20+15}px;opacity:${Math.random()};user-select:none;transition:transform ${duration}s linear, top ${duration}s linear; color:${isComplete ? '#ffd700' : 'inherit'};`;
         container.appendChild(f);
-        setTimeout(() => { 
-            if(f) {
-                f.style.top = '110%'; 
-                f.style.transform = `rotate(${Math.random()*360}deg)`; 
-            }
-        }, 100);
+        setTimeout(() => { if(f) { f.style.top = '110%'; f.style.transform = `rotate(${Math.random()*360}deg)`; } }, 100);
         setTimeout(() => { if(f && f.parentNode) f.remove(); }, duration * 1000);
     }, isComplete ? 400 : 800);
 }
