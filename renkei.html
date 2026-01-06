@@ -9,21 +9,44 @@
     <style>
         .renkei-container { max-width: 950px; margin: 40px auto; padding: 20px; background: #fff; border-radius: 8px; border: 1px solid #ddd; font-family: sans-serif; }
         .renkei-header { border-bottom: 4px solid #004da0; margin-bottom: 30px; padding-bottom: 15px; display: flex; align-items: center; gap: 20px; }
-        .site-icon-main { width: 80px; height: 80px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .site-icon-main { width: 80px; height: 80px; border-radius: 12px; }
         
-        .renkei-section { margin-bottom: 60px; padding: 25px; background: #fdfdfd; border-radius: 10px; border: 1px solid #eee; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
-        .preview-flex { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 40px; }
-        .preview-box { background: #f0f0f0; padding: 30px; border-radius: 8px; min-width: 320px; display: flex; justify-content: center; align-items: center; border: 1px inset #ddd; }
+        .renkei-section { margin-bottom: 40px; padding: 20px; background: #fdfdfd; border-radius: 10px; border: 1px solid #eee; }
         
-        .code-container { flex: 1; min-width: 300px; }
-        .code-box { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 5px; font-family: 'Consolas', monospace; font-size: 0.8em; overflow-x: auto; white-space: pre-wrap; word-break: break-all; max-height: 200px; border: 1px solid #333; }
+        /* プレビューエリア：はみ出し防止 */
+        .preview-area { 
+            background: #eee; 
+            padding: 20px; 
+            border-radius: 8px; 
+            margin-bottom: 15px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            overflow: hidden; /* はみ出し防止 */
+            min-height: 150px;
+        }
+
+        .edit-area { display: flex; flex-direction: column; gap: 10px; }
+        .code-editor { 
+            background: #1e1e1e; 
+            color: #d4d4d4; 
+            padding: 15px; 
+            border-radius: 5px; 
+            font-family: 'Consolas', monospace; 
+            font-size: 0.85em; 
+            width: 100%;
+            height: 120px;
+            border: 1px solid #333;
+            resize: vertical;
+        }
         
-        .btn-group { margin-top: 15px; display: flex; gap: 10px; }
-        .copy-btn { padding: 10px 18px; background: #004da0; color: #fff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .copy-btn:hover { background: #003570; }
+        .btn-group { display: flex; gap: 10px; margin-top: 5px; }
+        .action-btn { padding: 8px 15px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.9em; }
+        .copy-btn { background: #004da0; color: #fff; }
+        .update-btn { background: #28a745; color: #fff; }
         
-        h2 { font-size: 1.4em; color: #004da0; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-        .tag { font-size: 0.6em; background: #004da0; color: #fff; padding: 2px 8px; border-radius: 3px; vertical-align: middle; }
+        h2 { font-size: 1.2em; color: #004da0; border-left: 5px solid #004da0; padding-left: 10px; }
+        .tag { font-size: 0.7em; background: #666; color: #fff; padding: 2px 6px; border-radius: 3px; margin-left: 10px; }
     </style>
 </head>
 <body>
@@ -36,79 +59,87 @@
         <div class="renkei-header">
             <img src="icon-512.png" alt="icon" class="site-icon-main">
             <div>
-                <h1 style="margin:0; font-size: 1.8em;">連携パーツ配布所</h1>
-                <p style="margin:5px 0 0 0; color: #666;">篠ノ井乗務区の最新情報をあなたのサイトに連携します</p>
+                <h1 style="margin:0;">連携パーツ配布所</h1>
+                <p style="margin:5px 0 0 0; color: #666;">コードを編集してその場でプレビューを確認できます</p>
             </div>
         </div>
 
         <div class="renkei-section">
-            <h2>1. 号外新聞型 <span class="tag">縦長</span></h2>
-            <div class="preview-flex">
-                <div class="preview-box" id="pv1"></div>
-                <div class="code-container">
-                    <p>サイドバーに最適な新聞風パーツ。最新のニュース見出しが自動で反映されます。</p>
-                    <div class="code-box" id="c1">&lt;div id="shino-v"&gt;&lt;/div&gt;&lt;script&gt;(function(){const w=document.getElementById('shino-v');w.innerHTML=`&lt;div style="border:4px double #333;padding:5px;max-width:260px;font-family:serif;background:#fff;box-shadow:5px 5px 0 #ccc"&gt;&lt;div style="border:1px solid #333;padding:10px"&gt;&lt;div style="display:flex;align-items:center;gap:8px;border-bottom:2px solid #333;margin-bottom:10px;padding-bottom:5px"&gt;&lt;img src="https://shinorail.github.io/main/icon-512.png" style="width:25px;height:25px;border-radius:4px"&gt;&lt;span style="font-weight:bold;font-size:1em"&gt;篠ノ井新聞&lt;/span&gt;&lt;/div&gt;&lt;div style="background:#000;color:#fff;text-align:center;padding:4px;font-weight:bold;font-size:1.3em;margin-bottom:10px"&gt;閲 覧 改 革&lt;/div&gt;&lt;a href="https://shinorail.github.io/main/news.html" target="_blank" style="display:block;text-align:center;border:1px solid #333;color:#000;text-decoration:none;padding:8px;font-weight:bold;font-size:0.8em;background:#f9f9f9"&gt;詳細を読む ≫&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;`;})();&lt;/script&gt;</div>
-                    <button class="copy-btn" onclick="copyCode('c1')">HTMLコードをコピー</button>
+            <h2>号外新聞型<span class="tag">縦長</span></h2>
+            <div class="preview-area" id="view1"></div>
+            <div class="edit-area">
+                <textarea class="code-editor" id="edit1" oninput="updatePreview(1)"></textarea>
+                <div class="btn-group">
+                    <button class="action-btn copy-btn" onclick="copyText(1)">コードをコピー</button>
+                    <span style="font-size: 0.8em; color: #888; align-self: center;">※枠内を書き換えると上の表示が変わります</span>
                 </div>
             </div>
         </div>
 
         <div class="renkei-section">
-            <h2>2. 駅名標型 <span class="tag">横長</span></h2>
-            <div class="preview-flex">
-                <div class="preview-box" id="pv2"></div>
-                <div class="code-container">
-                    <p>フッターやリンク集に。シンプルで鉄道サイトらしさが伝わるデザインです。</p>
-                    <div class="code-box" id="c2">&lt;div id="shino-h"&gt;&lt;/div&gt;&lt;script&gt;(function(){const w=document.getElementById('shino-h');w.innerHTML=`&lt;div style="border:2px solid #333;max-width:380px;font-family:sans-serif;background:#fff;padding:12px;border-radius:6px"&gt;&lt;div style="border-bottom:3px solid #004da0;text-align:center;padding-bottom:5px;margin-bottom:8px"&gt;&lt;div style="font-size:1.4em;font-weight:bold;letter-spacing:4px;color:#004da0"&gt;篠ノ井乗務区&lt;/div&gt;&lt;/div&gt;&lt;div style="display:flex;justify-content:space-between;font-size:0.75em;font-weight:bold"&gt;&lt;span&gt;◀ NEWS&lt;/span&gt;&lt;span&gt;PHOTO ▶&lt;/span&gt;&lt;/div&gt;&lt;a href="https://shinorail.github.io/main/" target="_blank" style="display:block;text-align:center;margin-top:12px;font-size:0.85em;color:#fff;background:#004da0;text-decoration:none;padding:6px;border-radius:3px"&gt;公式サイトへ乗車&lt;/a&gt;&lt;/div&gt;`;})();&lt;/script&gt;</div>
-                    <button class="copy-btn" onclick="copyCode('c2')">HTMLコードをコピー</button>
+            <h2>駅名標型<span class="tag">横長</span></h2>
+            <div class="preview-area" id="view2"></div>
+            <div class="edit-area">
+                <textarea class="code-editor" id="edit2" oninput="updatePreview(2)"></textarea>
+                <div class="btn-group">
+                    <button class="action-btn copy-btn" onclick="copyText(2)">コードをコピー</button>
                 </div>
             </div>
         </div>
 
         <div class="renkei-section">
-            <h2>3. ヘッドマーク型 <span class="tag">正方形</span></h2>
-            <div class="preview-flex">
-                <div class="preview-box" id="pv3"></div>
-                <div class="code-container">
-                    <p>アイコンを主役にした丸型デザイン。スマホサイトの小さなスペースにも。</p>
-                    <div class="code-box" id="c3">&lt;div id="shino-s"&gt;&lt;/div&gt;&lt;script&gt;(function(){const w=document.getElementById('shino-s');w.innerHTML=`&lt;div style="width:160px;height:160px;border:5px solid #004da0;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;text-align:center;box-shadow:0 4px 6px rgba(0,0,0,0.1)"&gt;&lt;img src="https://shinorail.github.io/main/icon-512.png" style="width:55px;height:55px;border-radius:8px;margin-bottom:6px"&gt;&lt;div style="font-weight:bold;font-size:0.85em;color:#004da0"&gt;篠ノ井乗務区&lt;/div&gt;&lt;a href="https://shinorail.github.io/main/" target="_blank" style="font-size:0.65em;color:#fff;background:#004da0;text-decoration:none;padding:3px 10px;border-radius:12px;margin-top:5px"&gt;ENTER&lt;/a&gt;&lt;/div&gt;`;})();&lt;/script&gt;</div>
-                    <button class="copy-btn" onclick="copyCode('c3')">HTMLコードをコピー</button>
+            <h2>ヘッドマーク型<span class="tag">正方形</span></h2>
+            <div class="preview-area" id="view3"></div>
+            <div class="edit-area">
+                <textarea class="code-editor" id="edit3" oninput="updatePreview(3)"></textarea>
+                <div class="btn-group">
+                    <button class="action-btn copy-btn" onclick="copyText(3)">コードをコピー</button>
                 </div>
             </div>
         </div>
 
         <div class="renkei-section">
-            <h2>4. 電光掲示板型 <span class="tag">スリム</span></h2>
-            <div class="preview-flex">
-                <div class="preview-box" id="pv4"></div>
-                <div class="code-container">
-                    <p>駅の電光掲示板をイメージした、最新情報が1行で伝わるバナーです。</p>
-                    <div class="code-box" id="c4">&lt;div id="shino-b"&gt;&lt;/div&gt;&lt;script&gt;(function(){const w=document.getElementById('shino-b');w.innerHTML=`&lt;a href="https://shinorail.github.io/main/news.html" target="_blank" style="display:flex;align-items:center;background:#222;color:#f90;text-decoration:none;padding:10px 15px;border-radius:4px;max-width:450px;border:2px solid #555"&gt;&lt;span style="background:#f00;color:#fff;font-size:0.7em;padding:2px 5px;margin-right:10px"&gt;号外&lt;/span&gt;&lt;span style="font-family:monospace;font-size:0.9em;font-weight:bold"&gt;【篠ノ井新聞】閲覧システムを刷新しました。&lt;/span&gt;&lt;/a&gt;`;})();&lt;/script&gt;</div>
-                    <button class="copy-btn" onclick="copyCode('c4')">HTMLコードをコピー</button>
+            <h2>電光掲示板型<span class="tag">スリムバナー</span></h2>
+            <div class="preview-area" id="view4"></div>
+            <div class="edit-area">
+                <textarea class="code-editor" id="edit4" oninput="updatePreview(4)"></textarea>
+                <div class="btn-group">
+                    <button class="action-btn copy-btn" onclick="copyText(4)">コードをコピー</button>
                 </div>
             </div>
         </div>
-
-        <p style="text-align: center; color: #aaa; font-size: 0.8em; margin-top: 40px;">© 2026 篠ノ井乗務区 | 画像引用：icon-512.png</p>
     </div>
 </div>
 
 <script>
-    // プレビュー表示用スクリプト（ページ内表示用）
-    const p1 = `<div style="border:4px double #333;padding:5px;max-width:180px;font-family:serif;background:#fff;"><div style="border:1px solid #333;padding:10px"><div style="display:flex;align-items:center;gap:5px;border-bottom:2px solid #333;margin-bottom:10px;padding-bottom:5px"><img src="icon-512.png" style="width:20px;height:20px;border-radius:3px"><span style="font-weight:bold;font-size:0.8em">篠ノ井新聞</span></div><div style="background:#000;color:#fff;text-align:center;padding:3px;font-weight:bold;font-size:1.1em;margin-bottom:10px">閲 覧 改 革</div><div style="text-align:center;font-size:0.6em;border:1px solid #333;padding:4px">詳細を読む</div></div></div>`;
-    const p2 = `<div style="border:2px solid #333;width:280px;font-family:sans-serif;background:#fff;padding:10px;border-radius:5px"><div style="border-bottom:3px solid #004da0;text-align:center;padding-bottom:5px;margin-bottom:5px"><div style="font-size:1.1em;font-weight:bold;letter-spacing:2px;color:#004da0">篠ノ井乗務区</div></div><div style="display:flex;justify-content:space-between;font-size:0.6em;color:#444"><span>◀ NEWS</span><span>PHOTO ▶</span></div></div>`;
-    const p3 = `<div style="width:130px;height:130px;border:4px solid #004da0;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;text-align:center"><img src="icon-512.png" style="width:45px;height:45px;border-radius:6px;margin-bottom:4px"><div style="font-weight:bold;font-size:0.7em;color:#004da0">篠ノ井乗務区</div></div>`;
-    const p4 = `<div style="display:flex;align-items:center;background:#222;color:#f90;padding:8px 12px;border-radius:4px;width:300px;border:2px solid #555"><span style="background:#f00;color:#fff;font-size:0.6em;padding:1px 4px;margin-right:8px">号外</span><span style="font-size:0.75em;font-weight:bold">システム刷新のお知らせ</span></div>`;
+    // 初期コード設定（エスケープ解除版をinnerHTMLに、文字列版をtextareaに）
+    const initialCodes = {
+        1: `<div style="border:4px double #333;padding:5px;max-width:240px;font-family:serif;background:#fff;box-shadow:5px 5px 0 #ccc"><div style="border:1px solid #333;padding:10px"><div style="display:flex;align-items:center;gap:8px;border-bottom:2px solid #333;margin-bottom:10px;padding-bottom:5px"><img src="https://shinorail.github.io/main/icon-512.png" style="width:25px;height:25px;border-radius:4px"><span style="font-weight:bold;font-size:1em">篠ノ井新聞</span></div><div style="background:#000;color:#fff;text-align:center;padding:4px;font-weight:bold;font-size:1.3em;margin-bottom:10px">閲 覧 改 革</div><a href="https://shinorail.github.io/main/news.html" target="_blank" style="display:block;text-align:center;border:1px solid #333;color:#000;text-decoration:none;padding:8px;font-weight:bold;font-size:0.8em;background:#f9f9f9">詳細を読む ≫</a></div></div>`,
+        2: `<div style="border:2px solid #333;width:100%;max-width:350px;font-family:sans-serif;background:#fff;padding:12px;border-radius:6px"><div style="border-bottom:3px solid #004da0;text-align:center;padding-bottom:5px;margin-bottom:8px"><div style="font-size:1.4em;font-weight:bold;letter-spacing:4px;color:#004da0">篠ノ井乗務区</div></div><div style="display:flex;justify-content:space-between;font-size:0.75em;font-weight:bold"><span>◀ NEWS</span><span>PHOTO ▶</span></div><a href="https://shinorail.github.io/main/" target="_blank" style="display:block;text-align:center;margin-top:12px;font-size:0.85em;color:#fff;background:#004da0;text-decoration:none;padding:6px;border-radius:3px">公式サイトへ乗車</a></div>`,
+        3: `<div style="width:150px;height:150px;border:5px solid #004da0;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;text-align:center;box-shadow:0 4px 6px rgba(0,0,0,0.1)"><img src="https://shinorail.github.io/main/icon-512.png" style="width:50px;height:50px;border-radius:8px;margin-bottom:6px"><div style="font-weight:bold;font-size:0.8em;color:#004da0">篠ノ井乗務区</div><a href="https://shinorail.github.io/main/" target="_blank" style="font-size:0.6em;color:#fff;background:#004da0;text-decoration:none;padding:2px 8px;border-radius:10px;margin-top:5px">ENTER</a></div>`,
+        4: `<a href="https://shinorail.github.io/main/news.html" target="_blank" style="display:flex;align-items:center;background:#222;color:#f90;text-decoration:none;padding:10px 15px;border-radius:4px;width:100%;max-width:400px;border:2px solid #555"><span style="background:#f00;color:#fff;font-size:0.7em;padding:2px 5px;margin-right:10px">号外</span><span style="font-family:monospace;font-size:0.9em;font-weight:bold">【篠ノ井新聞】閲覧システムを刷新しました。</span></a>`
+    };
 
-    document.getElementById('pv1').innerHTML = p1;
-    document.getElementById('pv2').innerHTML = p2;
-    document.getElementById('pv3').innerHTML = p3;
-    document.getElementById('pv4').innerHTML = p4;
+    // 初期化
+    for(let i=1; i<=4; i++) {
+        document.getElementById('edit' + i).value = initialCodes[i];
+        updatePreview(i);
+    }
 
-    function copyCode(id) {
-        const text = document.getElementById(id).innerText;
-        navigator.clipboard.writeText(text).then(() => { alert("連携コードをコピーしました！"); });
+    // プレビュー更新関数
+    function updatePreview(id) {
+        const code = document.getElementById('edit' + id).value;
+        document.getElementById('view' + id).innerHTML = code;
+    }
+
+    // コピー機能
+    function copyText(id) {
+        const text = document.getElementById('edit' + id).value;
+        navigator.clipboard.writeText(text).then(() => {
+            alert("コードをコピーしました！連携先に貼り付けてください。");
+        });
     }
 </script>
+
 </body>
 </html>
