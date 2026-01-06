@@ -1,0 +1,12 @@
+<script>
+async function sendResetMail(event) {
+    event.preventDefault();
+    const url = "https://script.google.com/macros/s/AKfycbzuta6xRTHYX7wHtYJ54O_QhJzXRwxGOBC8j7zjIwbE-mK23Afi_M5JJAIqYNo6OO79kQ/exec";
+    const formData = new FormData(event.target);
+    formData.append("action", "forgotPassword");
+
+    const response = await fetch(url, { method: "POST", body: formData });
+    const result = await response.text();
+    alert(result); // 「メールを送信しました」等のメッセージを表示
+}
+</script>
