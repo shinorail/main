@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Train-News 第1号 - 篠ノ井線新聞</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .newspaper-article {
+            max-width: 850px;
+            margin: 30px auto;
+            background: #fff;
+            padding: 40px;
+            border: 1px solid #333;
+            font-family: "serif";
+        }
+        .paper-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            border-bottom: 5px double #333;
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+        }
+        .paper-name { font-size: 3.2em; font-weight: bold; margin: 0; }
+        .paper-meta { text-align: right; font-size: 0.9em; line-height: 1.5; }
+
+        .headline {
+            font-size: 1.8em;
+            background: #f0f0f0;
+            padding: 15px;
+            border-left: 12px solid #004da0;
+            margin-bottom: 25px;
+        }
+
+        /* グラフとリンク */
+        .chart-box {
+            float: right;
+            width: 320px;
+            margin: 0 0 20px 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            background: #fff;
+        }
+        .chart-box img { width: 100%; height: auto; margin-bottom: 10px; }
+        .source-url {
+            font-size: 0.75em;
+            word-break: break-all;
+            color: #004da0;
+        }
+
+        /* 運営ピン留め */
+        .admin-pin {
+            clear: both;
+            background: #e8f5e9;
+            border: 2px solid #2e7d32;
+            padding: 15px;
+            margin: 40px 0 20px 0;
+            font-family: sans-serif;
+        }
+        .pin-tag {
+            background: #2e7d32;
+            color: #fff;
+            padding: 2px 10px;
+            font-weight: bold;
+            font-size: 0.8em;
+        }
+
+        /* コメント表示エリア */
+        .comment-display {
+            margin-top: 20px;
+            border-top: 1px solid #ccc;
+            padding-top: 20px;
+            font-family: sans-serif;
+        }
+        .comment-item {
+            background: #f9f9f9;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-bottom: 1px dashed #ccc;
+        }
+        .comment-user { font-weight: bold; color: #004da0; font-size: 0.9em; }
+        .comment-text { margin-top: 5px; font-size: 1em; }
+
+        /* 入力フォーム */
+        .comment-form {
+            background: #eee;
+            padding: 20px;
+            margin-top: 20px;
+            font-family: sans-serif;
+        }
+        .input-text {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        .submit-button {
+            background: #004da0;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<header></header><nav></nav>
+
+<main>
+    <div class="newspaper-article">
+        <div class="paper-header">
+            <h1 class="paper-name">篠ノ井線新聞</h1>
+            <div class="paper-meta">
+                創刊号 No.1 [cite: 39] <br>
+                発行日: 2025年9月19日 [cite: 40] <br>
+                発行: 篠ノ井線新聞編集部 [cite: 37] 
+            </div>
+        </div>
+
+        <div class="headline">
+            <h2>篠ノ井線沿線で乗客数が減少 地域活性化の取り組みが急務 [cite: 14]</h2>
+        </div>
+
+        <div class="chart-box">
+            <img src="Graph-001.png" alt="平均通過人員の推移">
+            <p style="font-size:0.8em; font-weight:bold; margin-bottom:5px;">図1: 塩尻〜篠ノ井間 平均通過人員の推移 [cite: 36]</p>
+            <p class="source-url">
+                出典: JR東日本［路線別ご利用状況］<br>
+                <a href="https://www.jreast.co.jp/rosen_avr/pdf/rosen02.pdf" target="_blank">https://www.jreast.co.jp/rosen_avr/pdf/rosen02.pdf</a> 
+            </p>
+        </div>
+
+        <p>近年、篠ノ井線沿線では通勤・通学での鉄道利用者数が徐々に減少しています [cite: 15]。人口減少や自家用車の利用増加が背景にあるとみられ、沿線自治体や事業者は活性化策を急いでいます [cite: 15]。</p>
+        <p>1987年には15,000人以上だった平均通過人員は減少傾向にありますが、地域の特色を活かした持続可能な鉄道利用の推進が求められています [cite: 31, 34]。</p>
+
+        <div class="admin-pin">
+            <span class="pin-tag">運営ピン留め</span>
+            <p style="margin: 10px 0 0 0; font-weight: bold; color: #2e7d32;">
+                この記事はコメント可能です。投稿された内容は以下に公開されます。
+            </p>
+        </div>
+
+        <div class="comment-display" id="comment-list">
+            <div class="comment-item">
+                <span class="comment-user">篠ノ井乗務区（運営）</span>
+                <p class="comment-text">創刊号へのご意見をお待ちしております！</p>
+            </div>
+        </div>
+
+        <div class="comment-form">
+            <p style="font-size: 0.9em; margin-bottom: 10px; font-weight: bold;">💬 コメントを投稿する</p>
+            <input type="text" id="user-name" class="input-text" placeholder="名前">
+            <textarea id="user-content" class="input-text" rows="3" placeholder="コメント内容"></textarea>
+            <button type="button" class="submit-button" onclick="postComment()">投稿する</button>
+        </div>
+    </div>
+</main>
+
+<script>
+    function postComment() {
+        const name = document.getElementById('user-name').value;
+        const content = document.getElementById('user-content').value;
+        
+        if (!name || !content) {
+            alert("名前と内容を入力してください");
+            return;
+        }
+
+        // 画面に新しいコメントを追加する処理
+        const list = document.getElementById('comment-list');
+        const newItem = document.createElement('div');
+        newItem.className = 'comment-item';
+        newItem.innerHTML = `<span class="comment-user">${name}</span><p class="comment-text">${content}</p>`;
+        
+        list.appendChild(newItem);
+
+        // 入力欄をクリア
+        document.getElementById('user-name').value = '';
+        document.getElementById('user-content').value = '';
+        
+        alert("コメントが公開されました！");
+    }
+</script>
+
+<footer></footer>
+<script src="menu.js"></script>
+</body>
+</html>
