@@ -1,5 +1,29 @@
 document.addEventListener("DOMContentLoaded", function() {
-    // 1. ヘッダー
+    // 1. 季節判定とボディクラス付与
+    const month = new Date().getMonth() + 1;
+    let seasonClass = 'winter';
+    if (month >= 3 && month <= 5) seasonClass = 'spring';
+    else if (month >= 6 && month <= 8) seasonClass = 'summer';
+    else if (month >= 9 && month <= 11) seasonClass = 'autumn';
+    document.body.classList.add(seasonClass);
+
+    // 2. スタンプの自動記録（規約同意済みの場合のみ）
+    if (localStorage.getItem('stamp_agreed') === 'true') {
+        const pagesMap = {
+            'index.html': 'index',
+            'news.html': 'news',
+            'train-news.html': 'train-news',
+            'renkei.html': 'renkei'
+        };
+        const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+        if (pagesMap[currentPath]) {
+            let history = JSON.parse(localStorage.getItem('stampHistory') || '{}');
+            history[pagesMap[currentPath]] = true;
+            localStorage.setItem('stampHistory', JSON.stringify(history));
+        }
+    }
+
+    // 3. ヘッダー
     const header = document.querySelector('header');
     if (header) {
         header.innerHTML = `
@@ -9,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function() {
         `;
     }
 
-    // 2. ナビゲーション（連携パーツ配布を追加）
+    // 4. ナビゲーション（乗車印帳を追加）
     const nav = document.querySelector('nav');
     if (nav) {
         nav.innerHTML = `
@@ -19,6 +43,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 <li><a href="train-news.html">Train-News</a></li>
                 <li><a href="mission.html">活動理念</a></li>
                 <li><a href="photo.html">写真記録</a></li>
+                <li><a href="stamp.html" style="color: #e63946; font-weight: bold;">乗車印帳</a></li>
                 <li><a href="contact.html">お問い合わせ</a></li>
                 <li><a href="faq.html">よくある質問</a></li>
                 <li><a href="links.html">SNS/外部リンク</a></li>
@@ -27,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function() {
         `;
     }
 
-    // 3. フッター（メンテナンス表記を削除し、2026年版に更新）
+    // 5. フッター
     const footer = document.querySelector('footer');
     if (footer) {
         footer.innerHTML = `
@@ -46,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function() {
         `;
     }
 
-    // 4. お知らせ取得（index.html用）
+    // 6. お知らせ取得（index.html用）
     const topNewsContainer = document.getElementById('top-news-list');
     if (topNewsContainer) {
         loadTopNews(topNewsContainer);
