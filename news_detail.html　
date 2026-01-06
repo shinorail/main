@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>アップデート詳細 - 篠ノ井新聞</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;700&display=swap');
+
+        .newspaper-body {
+            background-color: #f4f4f2; /* 新聞紙の色 */
+            font-family: 'Shippori Mincho', serif;
+            padding: 20px;
+        }
+
+        .newspaper-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        /* 新聞のヘッダー部分 */
+        .newspaper-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px double #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+        }
+
+        .newspaper-header .masthead {
+            font-size: 2em;
+            font-weight: bold;
+            letter-spacing: 0.2em;
+        }
+
+        .newspaper-info {
+            text-align: right;
+            font-size: 0.9em;
+        }
+
+        /* 記事のタイトル（縦書き・迫力） */
+        .article-title-area {
+            display: flex;
+            border-bottom: 1px solid #333;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+        }
+
+        .main-title {
+            writing-mode: vertical-rl;
+            font-size: 3em;
+            font-weight: bold;
+            line-height: 1.1;
+            padding: 10px;
+            border-left: 2px solid #333;
+            margin-left: 20px;
+        }
+
+        .sub-title {
+            writing-mode: vertical-rl;
+            font-size: 1.2em;
+            color: #555;
+            padding-top: 10px;
+        }
+
+        /* 記事の本文（多段組み） */
+        .newspaper-content {
+            writing-mode: vertical-rl;
+            text-align: justify;
+            font-size: 1.1em;
+            line-height: 2;
+            height: 500px; /* 段組みを機能させるための高さ固定 */
+            column-count: 3;
+            column-gap: 40px;
+            column-rule: 1px dotted #ccc;
+        }
+
+        .newspaper-content p {
+            margin: 0 0 1em 0;
+            text-indent: 1em;
+        }
+
+        .highlight-box {
+            border: 2px solid #333;
+            padding: 10px;
+            margin-right: 20px;
+            writing-mode: horizontal-tb; /* ボックス内は横書きで読みやすく */
+            column-span: all; /* 全体を通した横長のボックス */
+            background: #f9f9f9;
+        }
+
+        .btn-back {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 8px 15px;
+            background: #333;
+            color: #fff;
+            text-decoration: none;
+            font-family: sans-serif;
+            font-size: 0.8em;
+        }
+
+        /* スマホ対応（スマホでは横書きに戻す） */
+        @media (max-width: 768px) {
+            .newspaper-content {
+                writing-mode: horizontal-tb;
+                height: auto;
+                column-count: 1;
+            }
+            .article-title-area {
+                display: block;
+            }
+            .main-title, .sub-title {
+                writing-mode: horizontal-tb;
+                border: none;
+                margin: 0;
+                padding: 0;
+            }
+            .main-title { font-size: 1.8em; margin-bottom: 10px; }
+        }
+    </style>
+</head>
+<body class="newspaper-body">
+
+<header></header>
+<nav></nav>
+
+<div class="newspaper-container">
+    <div class="newspaper-header">
+        <div class="masthead">篠ノ井新聞</div>
+        <div class="newspaper-info">
+            2026年（令和8年）1月6日（火曜日）<br>
+            第 16 号
+        </div>
+    </div>
+
+    <div class="article-title-area">
+        <div class="sub-title">読者の利便性向上へ</div>
+        <h1 class="main-title">閲覧システム刷新<br>多機能化を実現</h1>
+    </div>
+
+    <div class="newspaper-content">
+        <p>【篠ノ井】篠ノ井乗務区は六日、当サイトの基幹コンテンツである「Train-News」の閲覧システムを全面刷新したと発表した。これまで課題となっていたスマートフォン利用時の操作性を大幅に改善し、より手軽に情報を取得できる環境を整えた。</p>
+        
+        <p>新システムでは「完結型ビューワー」を採用。外部アプリや別タブを開く手間を省き、記事と読者の距離を縮めた。また、スライド式のコメント投稿機能を搭載し、閲覧を妨げることなく即座に感想を共有できる仕組みを構築した。</p>
+
+        <p>さらに注目すべきは「公式認証機能」の導入である。運営側が投稿するコメントには専用のラベルが付与され、なりすましを防止。情報の信頼性を担保するとともに、読者との双方向のコミュニケーションをこれまで以上に円滑に進める狙いがある。</p>
+
+        <p>篠ノ井乗務区代表は「鉄道情報の面白さを伝えるだけでなく、読みやすさにもこだわり抜いた。今後も地域の鉄道ファンに寄り添った情報発信を続けていきたい」と抱負を語った。これからの篠ノ井乗務区の展開に期待が高まる。</p>
+    </div>
+
+    <div class="highlight-box">
+        <strong>【今号の主な改修点】</strong>
+        ● スマホでのPDF表示を最適化 ● 画面下部からのスライド式コメント欄 ● 公式アカウントの識別ラベル表示
+    </div>
+
+    <a href="news.html" class="btn-back">お知らせ一覧に戻る</a>
+</div>
+
+<footer></footer>
+
+<script src="menu.js"></script>
+</body>
+</html>
