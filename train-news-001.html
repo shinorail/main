@@ -11,7 +11,7 @@
             background: #fff;
             padding: 30px;
             border: 1px solid #000;
-            font-family: "Sawarabi Mincho", "Hiragino Mincho ProN", "serif";
+            font-family: "Sawarabi Mincho", "serif";
             line-height: 1.6;
         }
 
@@ -30,14 +30,10 @@
         /* 三段組のレイアウト */
         .newspaper-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr 240px; /* 左段・中段・広告欄 */
+            grid-template-columns: 1fr 1fr 240px;
             gap: 25px;
         }
 
-        /* 各段のスタイル */
-        .column {
-            padding-right: 5px;
-        }
         .headline {
             font-size: 1.6em;
             font-weight: bold;
@@ -59,16 +55,17 @@
         .chart-box img { width: 100%; height: auto; }
         .source-url { font-size: 0.7em; word-break: break-all; color: #004da0; }
 
-        /* 歴史年表ボックス */
-        .history-box {
+        /* 歴史年表簡易ボックス */
+        .history-summary {
             background: #f4f4f4;
             padding: 15px;
             border: 1px solid #999;
             font-size: 0.9em;
         }
-        .history-box h3 { margin-top: 0; border-bottom: 1px solid #000; }
+        .history-summary h3 { margin-top: 0; border-bottom: 1px solid #000; }
+        .detail-link { color: #004da0; font-weight: bold; text-decoration: underline; }
 
-        /* 広告欄（三段目） */
+        /* 広告欄 */
         .ad-column {
             border-left: 1px solid #ddd;
             padding-left: 15px;
@@ -81,18 +78,7 @@
             text-align: center;
         }
         .ad-title { font-weight: bold; font-size: 1.1em; color: #d32f2f; }
-
-        /* 運営ピン留め（コメント廃止案内） */
-        .admin-pin {
-            grid-column: span 3; /* 全幅表示 */
-            background: #fff5f5;
-            border: 1px solid #ff0000;
-            padding: 10px;
-            margin-top: 20px;
-            font-family: sans-serif;
-            font-size: 0.85em;
-            color: #d32f2f;
-        }
+        .contact-link { display: inline-block; margin-top: 10px; color: #004da0; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -112,8 +98,7 @@
         <div class="newspaper-grid">
             <div class="column">
                 <div class="headline">篠ノ井線沿線で乗客数が減少 地域活性化の取り組みが急務</div>
-                <p>近年、長野市と塩尻市を結ぶ篠ノ井線沿線では、通勤・通学での鉄道利用者数が徐々に減少しています。地域の人口減少や、自家用車の利用増加がその背景にあるとみられています。</p>
-                <p>篠ノ井線は地域の重要な交通手段であり、観光や買い物などの日常生活にも欠かせません。沿線の高齢化や若年層の流出に伴い、今後の採算面での課題も指摘されています。</p>
+                <p>近年、篠ノ井線沿線では、通勤・通学での鉄道利用者数が減少傾向にあります。人口減少や自家用車の普及が背景にあり、沿線自治体は活性化策を急いでいます。</p>
                 
                 <div class="chart-box">
                     <img src="Graph-001.png" alt="平均通過人員の推移">
@@ -126,37 +111,27 @@
             </div>
 
             <div class="column">
-                <div class="history-box">
+                <div class="history-summary">
                     <h3>特集：篠ノ井線の歴史年表</h3>
-                    <p><strong>篠ノ井線 拡張・整備期 (1927~1945)</strong></p>
-                    <ul style="padding-left: 20px;">
-                        <li>1927年11月3日：坂北駅新設</li>
-                        <li>1933年7月10日：広丘駅新設</li>
-                        <li>1937年1月31日：冠着信号場新設</li>
-                        <li>1944年9月1日：南松本駅新設</li>
-                        <li>1945年4月1日：冠着駅へ格上げ</li>
-                    </ul>
-                    <p style="font-size:0.8em; border-top:1px solid #ccc; padding-top:5px;">
-                        ※詳細は公式サイトの歴史ページをご覧ください。
+                    <p>1927年 坂北駅新設、1944年 南松本駅新設など、路線の拡張期を振り返ります。</p>
+                    <p>年表の詳しい歴史については、以下の詳細ページに掲載しております。</p>
+                    <p style="text-align: center; margin-top: 20px;">
+                        <a href="ayumi.html" class="detail-link">→ 歴史の詳細（ayumi.html）はこちら</a>
                     </p>
                 </div>
-                <p>持続可能な鉄道利用の推進が求められており、地元の特産品を活かした観光列車の運行やイベント開催など、新たな魅力づくりが急がれます。</p>
+                <p style="margin-top: 20px;">地域の足を守るため、観光列車の運行やイベントなど、持続可能な鉄道利用への協力が求められています。</p>
             </div>
 
             <div class="ad-column">
                 <div class="ad-box">
                     <div class="ad-title">広告募集中</div>
-                    <p style="font-size:0.8em;">当新聞では、沿線地域のイベントや店舗の広告を募集しています。</p>
-                    <div style="background:#004da0; color:#fff; padding:5px; font-size:0.9em;">無料掲載中</div>
-                    <p style="font-size:0.7em; margin-top:10px;">お問い合わせは<br>トイアワセまで</p>
+                    <p style="font-size:0.8em;">沿線地域のイベントや店舗の広告を無料掲載いたします。</p>
+                    <div style="background:#004da0; color:#fff; padding:5px; font-size:0.9em;">掲載：無料</div>
+                    <a href="contact.html" class="contact-link">お問い合わせはこちら</a>
                 </div>
                 <div class="ad-box" style="background:#eee; border:1px solid #ccc;">
-                    <p style="font-size:0.8em;">空き枠</p>
+                    <p style="font-size:0.8em; color:#999;">空き枠</p>
                 </div>
-            </div>
-
-            <div class="admin-pin">
-                📌 運営からのお知らせ：現在、この記事ではコメントの投稿を受け付けておりません。
             </div>
         </div>
     </div>
