@@ -7,26 +7,24 @@
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="icon-512.png">
     <style>
+        :root { --season-color: #004da0; } /* 初期値は冬 */
+        
         .renkei-container { max-width: 900px; margin: 40px auto; padding: 20px; background: #fff; border-radius: 12px; border: 1px solid #ddd; font-family: sans-serif; }
-        .renkei-header { border-bottom: 4px solid #004da0; margin-bottom: 30px; padding-bottom: 15px; display: flex; align-items: center; justify-content: space-between; }
+        .renkei-header { border-bottom: 4px solid var(--season-color); margin-bottom: 30px; padding-bottom: 15px; display: flex; align-items: center; justify-content: space-between; }
         .header-left { display: flex; align-items: center; gap: 20px; }
         .site-icon-main { width: 70px; height: 70px; border-radius: 10px; }
         
-        .nav-links { display: flex; gap: 10px; }
-        .nav-btn { background: #fff; color: #004da0; border: 2px solid #004da0; padding: 8px 15px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.85em; transition: 0.3s; }
-        .nav-btn:hover { background: #004da0; color: #fff; }
+        .nav-btn { background: #fff; color: var(--season-color); border: 2px solid var(--season-color); padding: 8px 15px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.85em; transition: 0.3s; }
+        .nav-btn:hover { background: var(--season-color); color: #fff; }
 
         .renkei-section { margin-bottom: 40px; padding: 25px; background: #fdfdfd; border-radius: 10px; border: 1px solid #eee; position: relative; }
-        .new-badge { position: absolute; top: -10px; right: -10px; background: #ff0000; color: #fff; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 0.8em; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 10; }
-
-        .coming-soon { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); display: none; justify-content: center; align-items: center; z-index: 50; border-radius: 10px; font-weight: bold; color: #004da0; font-size: 1.2em; border: 2px dashed #004da0; box-sizing: border-box; }
+        .season-badge { background: var(--season-color); color: #fff; padding: 2px 10px; border-radius: 15px; font-size: 0.7em; vertical-align: middle; margin-left: 10px; }
 
         .preview-area { background: #f0f0f0; padding: 20px; border-radius: 8px; margin-bottom: 15px; display: flex; justify-content: center; align-items: center; overflow: hidden; min-height: 160px; border: 1px inset #ddd; }
         .code-editor { background: #1e1e1e; color: #d4d4d4; padding: 12px; border-radius: 5px; font-family: monospace; font-size: 0.85em; width: 100%; height: 100px; border: 1px solid #333; resize: vertical; box-sizing: border-box; }
+        .copy-btn { background: var(--season-color); color: #fff; border: none; padding: 8px 16px; border-radius: 4px; font-weight: bold; cursor: pointer; }
         
-        .btn-group { display: flex; gap: 10px; margin-top: 10px; }
-        .action-btn { padding: 8px 16px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
-        .copy-btn { background: #004da0; color: #fff; }
+        .coming-soon { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); display: none; justify-content: center; align-items: center; z-index: 50; border-radius: 10px; font-weight: bold; color: var(--season-color); font-size: 1.2em; border: 2px dashed var(--season-color); box-sizing: border-box; }
     </style>
 </head>
 <body>
@@ -39,38 +37,29 @@
         <div class="header-left">
             <img src="icon-512.png" alt="icon" class="site-icon-main">
             <div>
-                <h1 style="margin:0;">連携パーツ配布所</h1>
-                <p style="margin:5px 0 0 0; color: #666;">公式パーツ配布中</p>
+                <h1 style="margin:0;">連携パーツ配布所 <span id="season-label" class="season-badge"></span></h1>
+                <p id="season-msg" style="margin:5px 0 0 0; color: #666;"></p>
             </div>
         </div>
         <div class="nav-links">
-            <a href="train-news.html" class="nav-btn">Train-Newsに戻る</a>
-            <a href="sample.html" class="nav-btn">設置例を見る</a>
+            <a href="train-news.html" class="nav-btn">Train-Newsへ</a>
+            <a href="sample.html" class="nav-btn">設置例</a>
         </div>
     </div>
 
     <div class="renkei-section">
-        <div class="new-badge">NEW</div>
-        <h2 style="font-size: 1.1em; color: #004da0; margin-top: 0;">1. 号外新聞型（縦長）</h2>
+        <h2 style="font-size: 1.1em; color: var(--season-color); margin-top: 0;">1. 号外新聞型</h2>
         <div class="preview-area" id="view1"></div>
         <textarea class="code-editor" id="edit1" oninput="updatePreview(1)"></textarea>
-        <div class="btn-group"><button class="action-btn copy-btn" onclick="copyText(1)">コピー</button></div>
+        <div style="margin-top:10px;"><button class="copy-btn" onclick="copyText(1)">コピー</button></div>
     </div>
 
-    <div class="renkei-section" id="sec2">
+    <div class="renkei-section">
         <div id="soon2" class="coming-soon">【 1月7日 公開予定 】</div>
-        <h2 style="font-size: 1.1em; color: #004da0; margin-top: 0;">2. 駅名標型（横長）</h2>
+        <h2 style="font-size: 1.1em; color: var(--season-color); margin-top: 0;">2. 駅名標型</h2>
         <div class="preview-area" id="view2"></div>
         <textarea class="code-editor" id="edit2" oninput="updatePreview(2)"></textarea>
-        <div class="btn-group"><button class="action-btn copy-btn" onclick="copyText(2)">コピー</button></div>
-    </div>
-
-    <div class="renkei-section" id="sec3">
-        <div id="soon3" class="coming-soon">【 1月7日 公開予定 】</div>
-        <h2 style="font-size: 1.1em; color: #004da0; margin-top: 0;">3. ＬＥＤスリム掲示板型</h2>
-        <div class="preview-area" id="view3"></div>
-        <textarea class="code-editor" id="edit3" oninput="updatePreview(3)"></textarea>
-        <div class="btn-group"><button class="action-btn copy-btn" onclick="copyText(3)">コピー</button></div>
+        <div style="margin-top:10px;"><button class="copy-btn" onclick="copyText(2)">コピー</button></div>
     </div>
 </div>
 
@@ -78,22 +67,41 @@
 <script>
     const codes = {
         1: `<div style="border:4px double #333;padding:5px;max-width:240px;font-family:serif;background:#fff;box-shadow:5px 5px 0 #ccc"><div style="border:1px solid #333;padding:10px"><div style="display:flex;align-items:center;gap:8px;border-bottom:2px solid #333;margin-bottom:10px;padding-bottom:5px"><img src="https://shinorail.github.io/main/icon-512.png" style="width:25px;height:25px;border-radius:4px"><span style="font-weight:bold;font-size:1em">篠ノ井新聞</span></div><div style="background:#000;color:#fff;text-align:center;padding:4px;font-weight:bold;font-size:1.3em;margin-bottom:10px">閲 覧 改 革</div><a href="https://shinorail.github.io/main/news.html" target="_blank" style="display:block;text-align:center;border:1px solid #333;color:#000;text-decoration:none;padding:8px;font-weight:bold;font-size:0.8em;background:#f9f9f9">詳細を読む ≫</a></div></div>`,
-        2: `<div style="border:2px solid #333;width:100%;max-width:350px;font-family:sans-serif;background:#fff;padding:12px;border-radius:6px"><div style="border-bottom:3px solid #004da0;text-align:center;padding-bottom:5px;margin-bottom:8px"><div style="font-size:1.3em;font-weight:bold;letter-spacing:4px;color:#004da0">篠ノ井乗務区</div></div><div style="display:flex;justify-content:space-between;font-size:0.75em;font-weight:bold"><span>◀ NEWS</span><span>PHOTO ▶</span></div><a href="https://shinorail.github.io/main/" target="_blank" style="display:block;text-align:center;margin-top:12px;font-size:0.85em;color:#fff;background:#004da0;text-decoration:none;padding:6px;border-radius:3px">公式サイトへ乗車</a></div>`,
-        3: `<a href="https://shinorail.github.io/main/news.html" target="_blank" style="display:flex;align-items:center;background:#222;color:#f90;text-decoration:none;padding:10px 15px;border-radius:4px;width:100%;max-width:400px;border:2px solid #555"><span style="background:#f00;color:#fff;font-size:0.7em;padding:2px 5px;margin-right:10px">号外</span><span style="font-family:monospace;font-size:0.9em;font-weight:bold">【篠ノ井新聞】閲覧システムを刷新しました。</span></a>`
+        2: `<div style="border:2px solid #333;width:100%;max-width:350px;font-family:sans-serif;background:#fff;padding:12px;border-radius:6px"><div style="border-bottom:3px solid #004da0;text-align:center;padding-bottom:5px;margin-bottom:8px"><div style="font-size:1.3em;font-weight:bold;letter-spacing:4px;color:#004da0">篠ノ井乗務区</div></div><a href="https://shinorail.github.io/main/" target="_blank" style="display:block;text-align:center;margin-top:12px;font-size:0.85em;color:#fff;background:#004da0;text-decoration:none;padding:6px;border-radius:3px">公式サイトへ乗車</a></div>`
     };
 
+    function setSeason() {
+        const month = new Date().getMonth() + 1;
+        const root = document.documentElement;
+        let label = "", msg = "", color = "";
+
+        if (month >= 3 && month <= 5) {
+            label = "春季テーマ"; msg = "春の旅情を誘う、桜色のパーツをご用意しました。"; color = "#ffb7c5";
+        } else if (month >= 6 && month <= 8) {
+            label = "夏季テーマ"; msg = "夏の青空に映える、爽やかなパーツを配布中です。"; color = "#0074d9";
+        } else if (month >= 9 && month <= 11) {
+            label = "秋季テーマ"; msg = "紅葉シーズンの彩りを、あなたのサイトへ。"; color = "#e67e22";
+        } else {
+            label = "冬季テーマ"; msg = "冬の雪景色に映える、凛としたパーツをどうぞ。"; color = "#004da0";
+        }
+
+        root.style.setProperty('--season-color', color);
+        document.getElementById('season-label').innerText = label;
+        document.getElementById('season-msg').innerText = msg;
+    }
+
     function init() {
+        setSeason();
         const now = new Date();
         const releaseDate = new Date('2026-01-07T00:00:00');
 
-        for(let i=1; i<=3; i++) {
+        for(let i=1; i<=2; i++) {
             document.getElementById('edit' + i).value = codes[i];
             updatePreview(i);
         }
 
         if (now < releaseDate) {
             document.getElementById('soon2').style.display = 'flex';
-            document.getElementById('soon3').style.display = 'flex';
         }
     }
 
