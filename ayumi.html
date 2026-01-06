@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>篠ノ井線100年の歩み | 篠ノ井タイムズ</title>
+<style>
+body {
+    font-family: "Yu Gothic","Meiryo",sans-serif;
+    line-height: 1.6;
+    margin: 10px;
+    padding: 0;
+    color: #333;
+}
+h1, h2 {
+    color: #003366;
+}
+h1 {
+    font-size: 2em;
+    margin-bottom: 0.5em;
+}
+h2 {
+    font-size: 1.4em;
+    margin-top: 1.5em;
+}
+ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+li {
+    margin-bottom: 8px;
+}
+.details {
+    display: none;
+    margin-left: 0;
+    padding-left: 10px;
+    border-left: 3px solid #ccc;
+}
+.toggle-btn {
+    cursor: pointer;
+    color: #0066cc;
+    text-decoration: underline;
+    font-size: 1em;
+}
+a {
+    color: #0066cc;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+/* レスポンシブ調整 */
+@media (max-width: 768px) {
+    h1 { font-size: 1.6em; }
+    h2 { font-size: 1.2em; }
+    li { font-size: 0.95em; }
+    .toggle-btn { font-size: 0.95em; }
+}
+@media (max-width: 480px) {
+    h1 { font-size: 1.4em; }
+    h2 { font-size: 1em; }
+    li { font-size: 0.9em; }
+}
+</style>
+</head>
+<body>
+
+<h1>篠ノ井線100年の歩み</h1>
+<p>新聞「篠ノ井タイムズ」では拡張・整備期の抜粋年表を掲載しています。詳細な年表は以下でご覧ください。</p>
+
+<h2>開業期（1896〜1911） <span class="toggle-btn" onclick="toggle('period1')">[表示/非表示]</span></h2>
+<div class="details" id="period1">
+<ul>
+<li>1896年（明治29年）10月：篠ノ井線工事着工</li>
+<li>1900年（明治33年）11月1日：篠ノ井－西条間開業（稲荷山・姨捨・麻績・西条駅新設）</li>
+<li>1902年（明治35年）6月15日：西条－松本間開業（明科・田沢・松本駅新設）</li>
+<li>1902年（明治35年）12月15日：松本－塩尻間開業（村井・塩尻駅新設）</li>
+<li>1911年（明治44年）5月1日：篠ノ井線として分離</li>
+</ul>
+</div>
+
+<h2>拡張・整備期（1927〜1945） <span class="toggle-btn" onclick="toggle('period2')">[表示/非表示]</span></h2>
+<div class="details" id="period2">
+<ul>
+<li>1927年（昭和2年）11月3日：坂北駅新設</li>
+<li>1933年（昭和8年）7月10日：広丘駅新設</li>
+<li>1937年（昭和12年）1月31日：麻績－姨捨間に冠着信号場新設</li>
+<li>1944年（昭和19年）9月1日：南松本駅新設</li>
+<li>1945年（昭和20年）4月1日：冠着信号場を駅に格上げ、冠着駅新設</li>
+</ul>
+</div>
+
+<h2>近代化期（1961〜1988） <span class="toggle-btn" onclick="toggle('period3')">[表示/非表示]</span></h2>
+<div class="details" id="period3">
+<ul>
+<li>1961年：潮沢信号場廃止、姨捨－稲荷山間に信号場新設</li>
+<li>1965年：平瀬信号場新設（現存）</li>
+<li>1966年：羽尾信号場新設（2009年廃止）</li>
+<li>1970年：DD51形ディーゼル機関車30両配置、無煙化完了</li>
+<li>1973年：381系振り子式電車「しなの」運転開始</li>
+<li>1976年：麻績駅を聖高原駅に名称変更</li>
+<li>1982年：塩尻駅移転（北側0.5km）</li>
+<li>1987年：JR東日本継承</li>
+<li>1988年：明科－西条間線路付け替え、潮沢信号場廃止（廃線敷はトレッキングコース）</li>
+</ul>
+</div>
+
+<h2>最近の動き（2007〜） <span class="toggle-btn" onclick="toggle('period4')">[表示/非表示]</span></h2>
+<div class="details" id="period4">
+<ul>
+<li>2007年（平成19年）3月18日：平田駅新設（篠ノ井線として62年ぶり）</li>
+<li>2025年3月16日　篠ノ井線(長野から～松本)区間でSUICA利用可能に</li>
+</ul>
+</div>
+
+<p>新聞紙面に載せた抜粋年表の詳細はこちらのページ</a>でご覧いただけます。</p>
+
+<script>
+function toggle(id) {
+    var el = document.getElementById(id);
+    if (el.style.display === "none" || el.style.display === "") {
+        el.style.display = "block";
+    } else {
+        el.style.display = "none";
+    }
+}
+</script>
+
+</body>
+</html>
