@@ -2,9 +2,18 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>Train-News 第1号 - 篠ノ井線新聞</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Train-News 第1号 - 篠ノ井タイムズ</title>
     <link rel="stylesheet" href="style.css">
     <style>
+        /* 全体設定 */
+        body {
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
         .newspaper-container {
             max-width: 1000px;
             margin: 20px auto;
@@ -12,10 +21,10 @@
             padding: 30px;
             border: 1px solid #000;
             font-family: "Sawarabi Mincho", "serif";
-            line-height: 1.6;
+            line-height: 1.7;
         }
 
-        /* 新聞見出し */
+        /* 新聞ヘッダー */
         .paper-header {
             display: flex;
             justify-content: space-between;
@@ -27,11 +36,15 @@
         .paper-title { font-size: 3.5em; font-weight: bold; margin: 0; }
         .paper-meta { text-align: right; font-size: 0.9em; }
 
-        /* 三段組のレイアウト */
+        /* 新聞の三段組（スマホ対応） */
         .newspaper-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 240px;
             gap: 25px;
+        }
+
+        .column {
+            min-width: 0;
         }
 
         .headline {
@@ -52,23 +65,23 @@
             background: #fdfdfd;
             text-align: center;
         }
-        .chart-box img { width: 100%; height: auto; }
-        .source-url { font-size: 0.7em; word-break: break-all; color: #004da0; }
+        .chart-box img { width: 100%; height: auto; display: block; }
+        .source-url { font-size: 0.75em; word-break: break-all; color: #004da0; text-align: left; margin-top: 5px; }
 
-        /* 歴史年表簡易ボックス */
+        /* 特集ボックス */
         .history-summary {
-            background: #f4f4f4;
+            background: #f9f9f9;
             padding: 15px;
             border: 1px solid #999;
-            font-size: 0.9em;
+            font-size: 0.95em;
         }
-        .history-summary h3 { margin-top: 0; border-bottom: 1px solid #000; }
+        .history-summary h3 { margin-top: 0; border-bottom: 1px solid #000; padding-bottom: 5px; }
         .detail-link { color: #004da0; font-weight: bold; text-decoration: underline; }
 
-        /* 広告欄 */
+        /* 広告欄（三段目） */
         .ad-column {
             border-left: 1px solid #ddd;
-            padding-left: 15px;
+            padding-left: 20px;
         }
         .ad-box {
             border: 2px dashed #666;
@@ -79,6 +92,25 @@
         }
         .ad-title { font-weight: bold; font-size: 1.1em; color: #d32f2f; }
         .contact-link { display: inline-block; margin-top: 10px; color: #004da0; font-weight: bold; }
+
+        /* ★スマホ対応レスポンシブ★ */
+        @media (max-width: 768px) {
+            .newspaper-container { margin: 10px; padding: 15px; }
+            .paper-header { flex-direction: column; text-align: center; }
+            .paper-title { font-size: 2.2em; }
+            .paper-meta { text-align: center; margin-top: 10px; }
+            
+            .newspaper-grid {
+                grid-template-columns: 1fr; /* 縦一列にする */
+                gap: 30px;
+            }
+            .ad-column {
+                border-left: none;
+                border-top: 1px dashed #ddd;
+                padding-left: 0;
+                padding-top: 20px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -87,7 +119,7 @@
 <main>
     <div class="newspaper-container">
         <div class="paper-header">
-            <h1 class="paper-title">篠ノ井線新聞</h1>
+            <h1 class="paper-title">篠ノ井タイムズ</h1>
             <div class="paper-meta">
                 創刊号 No.1<br>
                 発行日: 2025年9月19日<br>
@@ -102,7 +134,7 @@
                 
                 <div class="chart-box">
                     <img src="Graph-001.png" alt="平均通過人員の推移">
-                    <p style="font-size:0.8em; margin:5px 0;">図1: 塩尻〜篠ノ井間 平均通過人員の推移</p>
+                    <p style="font-size:0.8em; margin:5px 0; font-weight: bold;">図1: 塩尻〜篠ノ井間 平均通過人員の推移</p>
                     <p class="source-url">
                         出典: JR東日本<br>
                         <a href="https://www.jreast.co.jp/rosen_avr/pdf/rosen02.pdf" target="_blank">https://www.jreast.co.jp/rosen_avr/pdf/rosen02.pdf</a>
@@ -113,24 +145,24 @@
             <div class="column">
                 <div class="history-summary">
                     <h3>特集：篠ノ井線の歴史年表</h3>
-                    <p>1927年 坂北駅新設、1944年 南松本駅新設など、路線の拡張期を振り返ります。</p>
-                    <p>年表の詳しい歴史については、以下の詳細ページに掲載しております。</p>
+                    <p>1927年の坂北駅新設から1945年の冠着駅昇格まで、路線の拡張期を中心に振り返ります。</p>
+                    <p>より詳細な「篠ノ井線100年の歩み」については、以下の歴史詳細ページにて全データを公開しております。</p>
                     <p style="text-align: center; margin-top: 20px;">
                         <a href="ayumi.html" class="detail-link">→ 歴史の詳細（ayumi.html）はこちら</a>
                     </p>
                 </div>
-                <p style="margin-top: 20px;">地域の足を守るため、観光列車の運行やイベントなど、持続可能な鉄道利用への協力が求められています。</p>
+                <p style="margin-top: 20px;">地域の貴重な足を守るため、沿線自治体と連携した新たな魅力づくりが今、改めて問われています。</p>
             </div>
 
             <div class="ad-column">
                 <div class="ad-box">
                     <div class="ad-title">広告募集中</div>
-                    <p style="font-size:0.8em;">沿線地域のイベントや店舗の広告を無料掲載いたします。</p>
-                    <div style="background:#004da0; color:#fff; padding:5px; font-size:0.9em;">掲載：無料</div>
-                    <a href="contact.html" class="contact-link">お問い合わせはこちら</a>
+                    <p style="font-size:0.8em;">地域の店舗やイベントの広告を無料掲載いたします。</p>
+                    <div style="background:#004da0; color:#fff; padding:5px; font-size:0.9em;">掲載料：無料</div>
+                    <a href="contact.html" class="contact-link">お問い合わせ（contact.html）</a>
                 </div>
                 <div class="ad-box" style="background:#eee; border:1px solid #ccc;">
-                    <p style="font-size:0.8em; color:#999;">空き枠</p>
+                    <p style="font-size:0.8em; color:#999;">（広告スペース）</p>
                 </div>
             </div>
         </div>
