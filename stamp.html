@@ -3,108 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>デジタル乗車印帳 - 篠ノ井乗務区</title>
+    <title>乗車印帳 - 篠ノ井乗務区</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="icon-512.png">
     <style>
-        :root { --season-primary: #004da0; }
-        body { background: #fdfaf5; margin: 0; }
-        .stamp-container { max-width: 800px; margin: 20px auto; padding: 15px; background: #fff; border-radius: 12px; border: 2px solid #d4c4a8; box-sizing: border-box; display: none; }
-        
-        /* 規約モーダル風 */
-        #terms-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; display: flex; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
-        .terms-box { background: #fff; padding: 25px; border-radius: 10px; max-width: 500px; width: 100%; line-height: 1.6; }
-        .terms-scroll { height: 150px; overflow-y: scroll; background: #f9f9f9; padding: 10px; border: 1px solid #ddd; font-size: 0.85em; margin: 15px 0; }
-        .agree-btn { background: #e63946; color: #fff; border: none; width: 100%; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer; }
-
-        /* スタンプのデザイン */
-        .stamp-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 20px; }
-        @media (min-width: 600px) { .stamp-grid { grid-template-columns: repeat(4, 1fr); } }
-        
-        .stamp-slot { aspect-ratio: 1/1; border: 2px dashed #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; background: #fff; }
+        body { background: #fdfaf5; }
+        .stamp-container { max-width: 600px; margin: 20px auto; padding: 20px; background: #fff; border: 2px solid #d4c4a8; border-radius: 8px; display: none; text-align: center; }
+        #terms-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:10000; display:flex; justify-content:center; align-items:center; }
+        .terms-box { background:#fff; padding:20px; border-radius:10px; max-width:400px; text-align:center; }
+        .stamp-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .stamp-slot { aspect-ratio: 1/1; border: 2px dashed #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
         .stamp-slot.active { border: 2px solid #e63946; }
-        .ink-stamp { width: 80%; height: 80%; border: 3px solid #e63946; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #e63946; font-weight: bold; transform: rotate(-15deg); opacity: 0; transition: opacity 0.5s; font-size: 0.9em; text-align: center; }
-        .active .ink-stamp { opacity: 0.8; }
-        
-        .completion-msg { display: none; margin-top: 25px; padding: 15px; background: #fff4f4; border: 2px solid #e63946; border-radius: 10px; text-align: center; }
+        .ink-stamp { border: 3px solid #e63946; border-radius: 50%; width: 70%; height: 70%; display: flex; align-items: center; justify-content: center; color: #e63946; font-weight: bold; opacity: 0; transform: rotate(-15deg); }
+        .active .ink-stamp { opacity: 0.7; }
+        .completion-msg { border: 2px solid #d4af37; background: #000; padding: 20px; margin-top: 20px; box-shadow: 0 0 15px rgba(212,175,55,0.3); }
     </style>
 </head>
 <body>
-
-<header></header>
-<nav></nav>
-
+<header></header><nav></nav>
 <div id="terms-overlay">
     <div class="terms-box">
-        <h2 style="margin-top:0; font-size: 1.2em; color: #e63946;">スタンプラリー利用規約</h2>
-        <div class="terms-scroll">
-            ・本スタンプラリーはブラウザの保存機能（LocalStorage）を利用します。<br>
-            ・クラウド連携機能は搭載しておりません。そのため、<b>機種変更やブラウザのキャッシュ消去、異なるデバイス間でのデータの引き継ぎ・連携は一切できません。</b><br>
-            ・不適切な利用が確認された場合、記録を無効化することがあります。<br>
-            ・本企画は予告なく終了する場合があります。
-        </div>
-        <p style="font-size: 0.8em; color: #666;">上記の内容を確認し、データ引き継ぎが不可であることに同意して開始してください。</p>
-        <button class="agree-btn" onclick="agreeTerms()">同意してスタンプ帳を作る</button>
+        <h3>デジタル乗車印帳 利用規約</h3>
+        <p style="font-size:0.8em; text-align:left;">サイト内を巡ると自動でスタンプが押されます。データはブラウザに保存されます。</p>
+        <button onclick="agree()" style="background:#e63946; color:#fff; border:none; padding:10px 20px; cursor:pointer;">同意して開始</button>
     </div>
 </div>
-
 <div class="stamp-container" id="main-content">
-    <div style="text-align: center; border-bottom: 2px solid #eee; padding-bottom: 15px;">
-        <h1 style="color: #5d4037; font-size: 1.4em;">デジタル乗車印帳</h1>
-        <div id="progress-text" style="font-weight: bold; color: var(--season-primary); font-size: 0.9em;">現在の記録: 0 / 4 箇所</div>
-    </div>
-
+    <h1>デジタル乗車印帳</h1>
     <div class="stamp-grid">
-        <div class="stamp-slot" id="slot-index"><div class="ink-stamp">篠ノ井<br>本区</div><span style="position:absolute; bottom:5px; font-size:0.6em; color:#ccc;">ホーム</span></div>
-        <div class="stamp-slot" id="slot-news"><div class="ink-stamp">長野<br>派出</div><span style="position:absolute; bottom:5px; font-size:0.6em; color:#ccc;">お知らせ</span></div>
-        <div class="stamp-slot" id="slot-train-news"><div class="ink-stamp">松本<br>派出</div><span style="position:absolute; bottom:5px; font-size:0.6em; color:#ccc;">TrainNews</span></div>
-        <div class="stamp-slot" id="slot-renkei"><div class="ink-stamp">記念<br>印</div><span style="position:absolute; bottom:5px; font-size:0.6em; color:#ccc;">配布所</span></div>
+        <div class="stamp-slot" id="slot-index"><div class="ink-stamp">篠ノ井</div></div>
+        <div class="stamp-slot" id="slot-news"><div class="ink-stamp">長野</div></div>
+        <div class="stamp-slot" id="slot-train-news"><div class="ink-stamp">松本</div></div>
+        <div class="stamp-slot" id="slot-renkei"><div class="ink-stamp">踏破</div></div>
     </div>
-
-    <div id="completion-area" class="completion-msg">
-        <h3 style="color: #e63946; margin: 0 0 10px 0;">全区間踏破記念</h3>
-        <p style="font-size: 0.85em;">すべての印が揃いました！</p>
-        <div style="background:#000; color:#ffd700; padding:10px; border:2px solid #ffd700; font-family:serif; font-size: 0.9em;">
-            篠ノ井乗務区 [特急：完走記念]
-        </div>
+    <div id="completion-area" class="completion-msg" style="display:none;">
+        <p style="color:#d4af37; font-family:serif; font-size:0.8em; letter-spacing:2px;">SPECIAL PRIVILEGE</p>
+        <h2 style="color:#d4af37; font-family:serif;">全区間踏破 達成</h2>
+        <a href="secret.html" style="display:inline-block; margin-top:15px; padding:10px 25px; border:1px solid #d4af37; color:#d4af37; text-decoration:none; font-family:serif;">特別室へ入室する</a>
     </div>
 </div>
-
 <script src="menu.js"></script>
 <script>
-    const pages = { 'index.html': 'index', 'news.html': 'news', 'train-news.html': 'train-news', 'renkei.html': 'renkei' };
-
-    function checkTerms() {
-        if (localStorage.getItem('stamp_agreed') === 'true') {
-            document.getElementById('terms-overlay').style.display = 'none';
-            document.getElementById('main-content').style.display = 'block';
-            updateDisplay();
-        }
-    }
-
-    function agreeTerms() {
-        localStorage.setItem('stamp_agreed', 'true');
-        document.getElementById('terms-overlay').style.display = 'none';
-        document.getElementById('main-content').style.display = 'block';
-        updateDisplay();
-    }
-
-    function updateDisplay() {
-        let history = JSON.parse(localStorage.getItem('stampHistory') || '{}');
+    function agree() { localStorage.setItem('stamp_agreed', 'true'); location.reload(); }
+    if(localStorage.getItem('stamp_agreed') === 'true') {
+        document.getElementById('terms-overlay').style.display='none';
+        document.getElementById('main-content').style.display='block';
+        const history = JSON.parse(localStorage.getItem('stampHistory') || '{}');
+        const ids = ['index', 'news', 'train-news', 'renkei'];
         let count = 0;
-        Object.keys(pages).forEach(p => {
-            const key = pages[p];
-            if (history[key]) {
-                const slot = document.getElementById('slot-' + key);
-                if (slot) slot.classList.add('active');
-                count++;
-            }
-        });
-        document.getElementById('progress-text').innerText = `現在の記録: ${count} / 4 箇所`;
-        if (count >= 4) document.getElementById('completion-area').style.display = 'block';
+        ids.forEach(id => { if(history[id]) { document.getElementById('slot-'+id).classList.add('active'); count++; } });
+        if(count >= 4) document.getElementById('completion-area').style.display='block';
     }
-
-    checkTerms();
 </script>
 </body>
 </html>
