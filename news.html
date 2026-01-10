@@ -3,58 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>お知らせ - 篠ノ井乗務区</title>
+    <title>お知らせ一覧 - 篠ノ井乗務区</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* スマホ向け調整 */
-        @media (max-width: 600px) {
-            .update-list li {
-                flex-direction: column; /* 日付、バッジ、内容を縦に並べる */
-                align-items: flex-start;
-                gap: 5px;
-            }
-            .update-date {
-                font-size: 0.8em;
-                min-width: auto;
-            }
-        }
+        .news-container { background: #fff; padding: 20px; border-radius: 8px; border-top: 4px solid #004da0; }
+        .news-item { border-bottom: 1px dashed #ccc; padding: 15px 0; }
+        .news-item:last-child { border-bottom: none; }
+        .news-date { color: #666; font-size: 0.85em; margin-bottom: 5px; }
+        .news-tag { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 0.75em; color: #fff; margin-right: 10px; font-weight: bold; background: #004da0; }
+        .tag-update { background: #d00; }
+        .tag-event { background: #080; }
+        .news-title { font-weight: bold; color: #333; font-size: 1.1em; }
+        #loading { text-align: center; padding: 30px; color: #666; }
     </style>
 </head>
 <body>
-    <header></header><nav></nav>
-    <div class="container">
-        <h2>更新情報</h2>
-        <div id="loading-area">
-            <p style="text-align: center; font-size: 14px; color: #666;">列車がデータを運んでいます...</p>
-            <div class="loading-rail"><div class="train-icon"></div></div>
-        </div>
-        <ul id="update-list" class="update-list"></ul>
+
+<header></header>
+<nav></nav>
+
+<div class="container">
+    <div class="news-container">
+        <h2>お知らせ一覧</h2>
+        <div id="loading">読み込み中...</div>
+        <div id="news-list"></div>
     </div>
-    <footer></footer>
-    <script src="menu.js"></script>
-    <script>
-        const spreadsheetUrl = "https://script.google.com/macros/s/AKfycbwbUTBxVeTkRlAJ1dnBlgcmpGaWI9B0SeMwkwKSwAJYjRDAtVcX67QwA5FcNGaJE9Cq/exec";
-        async function loadNews() {
-            try {
-                const response = await fetch(spreadsheetUrl);
-                const data = await response.json();
-                document.getElementById('loading-area').style.display = 'none';
-                const list = document.getElementById('update-list');
-                data.reverse().forEach((item, i) => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `
-                        <span class="update-date">${item.日付 || ''}</span>
-                        <span class="badge">${item.カテゴリ || '更新'}</span>
-                        <span class="update-text">${item.内容 || ''}</span>
-                    `;
-                    list.appendChild(li);
-                    setTimeout(() => li.classList.add('show'), i * 150);
-                });
-            } catch (e) { 
-                document.getElementById('loading-area').innerHTML = "<p>データの連結に失敗しました（脱線）</p>"; 
+</div>
+
+<script src="menu.js"></script>
+<script>
+    // index.htmlと同じGASのURLを入れてください
+    const newsScriptUrl = "https://script.google.com/macros/s/AKfycbwbUTBxVeTkRlAJ1dnBlgcmpGaWI9B0SeMwkwKSwAJYjRDAtVcX67QwA5FcNGaJE9Cq/exec";
+
+    async function loadAllNews() {
+        const list = document.getElementById('news-list');
+        const loading = document.getElementById('loading');
+
+        try {
+            // 重要：URLの末尾に「?sheet=お知らせ」を付けて呼び出す
+            const response = await fetch(newsScriptUrl + "?sheet=お知らせ");
+            const data = await response.json();
+
+            if (data.error) throw new Error(data.error);
+
+            loading.style.display = 'none';
+            list.innerHTML = "";
+
+            if (!data || data.length === 0) {
+                list.innerHTML = "<p>現在お知らせはありません。</p>";
+                return;
             }
+
+            // 新しい順にすべて表示
+            data.reverse().forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'news-item';
+
+                let tagClass = "";
+                let tagName = item['タグ'] || "重要";
+                if(tagName === "更新") tagClass = "tag-update";
+                if(tagName === "行事") tagClass = "tag-event";
+
+                div.innerHTML = `
+                    <div class="news-date">${item['日付'] || ""}</div>
+                    <div>
+                        <span class="news-tag ${tagClass}">${tagName}</span>
+                        <span class="news-title">${item['見出し'] || "無題"}</span>
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+        } catch (error) {
+            loading.innerText = "お知らせの読み込みに失敗しました。";
+            console.error(error);
         }
-        loadNews();
-    </script>
+    }
+
+    loadAllNews();
+</script>
 </body>
 </html>
