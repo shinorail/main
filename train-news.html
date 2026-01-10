@@ -6,7 +6,6 @@
     <title>Train-News - 篠ノ井乗務区</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* ニュースカード専用の追加スタイル */
         .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px 0; }
         .news-card { 
             background: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 8px; 
@@ -67,7 +66,7 @@
             <form id="comment-form" style="padding:15px; background:#eee; border-top:1px solid #ccc;">
                 <input type="text" id="u-name" placeholder="お名前" required style="width:100%; margin-bottom:8px; padding:8px; border:1px solid #ccc; border-radius:4px;">
                 <textarea id="u-msg" placeholder="コメントを入力" required style="width:100%; margin-bottom:8px; padding:8px; border:1px solid #ccc; border-radius:4px; height:60px;"></textarea>
-                <button type="submit" style="width:100%; background:#004da0; color:white; border:none; padding:12px; font-weight:bold; border-radius:4px; cursor:pointer;">送信 (承認後に掲載)</button>
+                <button type="submit" style="width:100%; background:#004da0; color:white; border:none; padding:12px; font-weight:bold; border-radius:4px; cursor:pointer;">送信</button>
             </form>
         </div>
     </div>
@@ -78,7 +77,6 @@
 <script>
     const newsScriptUrl = "https://script.google.com/macros/s/AKfycbwbUTBxVeTkRlAJ1dnBlgcmpGaWI9B0SeMwkwKSwAJYjRDAtVcX67QwA5FcNGaJE9Cq/exec";
 
-    // ログイン状態の表示
     function updateLoginUI() {
         const email = localStorage.getItem("userEmail");
         if (email) {
@@ -88,7 +86,6 @@
     }
     function logout() { localStorage.removeItem("userEmail"); location.reload(); }
 
-    // お気に入り機能
     function toggleFavorite(event, id, title) {
         event.stopPropagation();
         let favs = JSON.parse(localStorage.getItem("favNews") || "[]");
@@ -103,11 +100,12 @@
         localStorage.setItem("favNews", JSON.stringify(favs));
     }
 
-    // ニュース読み込み
     async function loadNews() {
         try {
             const res = await fetch(newsScriptUrl + "?sheet=新聞");
             const data = await res.json();
+            if (data.error) throw new Error(data.error);
+            
             document.getElementById('loading').style.display = 'none';
             const list = document.getElementById('news-list');
             const favs = JSON.parse(localStorage.getItem("favNews") || "[]");
@@ -118,8 +116,6 @@
                 const isLocked = item.isMemberOnly;
                 const lockLabel = isLocked ? '<span style="color:red; font-size:0.8em;"> [会員限定]</span>' : '';
                 const isFaved = favs.some(f => f.id == item['号数']) ? "active" : "";
-
-                // A列の「号数」が空の場合は「号外」と表示
                 const gou = item['号数'] ? `第 ${item['号数']} 号` : "号外";
 
                 card.onclick = () => openViewer(item.URL, item['号数'], item['見出し'], isLocked);
@@ -133,11 +129,10 @@
                 list.appendChild(card);
             });
         } catch(e) { 
-            document.getElementById('loading').innerText = "データの取得に失敗しました。"; 
+            document.getElementById('loading').innerText = "データの取得に失敗しました。GASの設定とシート名を確認してください。"; 
         }
     }
 
-    // ビューアー操作
     function openViewer(url, id, title, isLocked) {
         if (isLocked && !localStorage.getItem("userEmail")) {
             alert("この記事は会員限定です。ログインしてください。");
@@ -160,7 +155,6 @@
         document.getElementById('comment-area').classList.toggle('open', show); 
     }
 
-    // コメント読み込み
     async function loadComments(id) {
         const list = document.getElementById('comment-list');
         list.innerHTML = "<small>読込中...</small>";
@@ -177,11 +171,10 @@
         } catch(e) { list.innerHTML = "<small>読み込みエラー</small>"; }
     }
 
-    // コメント投稿
     document.getElementById('comment-form').onsubmit = async (e) => {
         e.preventDefault();
-        const idMatch = document.getElementById('v-title').innerText.match(/\d+/);
-        const id = idMatch ? idMatch[0] : "";
+        const idStr = document.getElementById('v-title').innerText.match(/\d+/);
+        const id = idStr ? idStr[0] : "";
         const data = {
             action: "postComment", id: id,
             name: document.getElementById('u-name').value,
