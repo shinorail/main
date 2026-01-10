@@ -9,6 +9,8 @@
         .container { background:#fff; width:90%; max-width:400px; padding:30px; border:1px solid #000; box-shadow:5px 5px 0px #ccc; }
         input { width:100%; padding:10px; margin:10px 0; border:1px solid #ccc; box-sizing:border-box; }
         button { width:100%; padding:15px; background:#004da0; color:#fff; border:none; font-weight:bold; cursor:pointer; }
+        /* 処理中のボタン表示 */
+        button:disabled { background:#ccc; cursor:not-allowed; }
     </style>
 </head>
 <body>
@@ -23,7 +25,7 @@
             <input type="password" name="password" minlength="8" required>
             <label>生年月日</label>
             <input type="date" name="birthday" required>
-            <button type="submit">この内容で登録する</button>
+            <button type="submit" id="regBtn">この内容で登録する</button>
         </form>
         <p style="text-align:center;"><a href="login.html">ログインはこちら</a></p>
     </div>
@@ -31,7 +33,14 @@
     <script>
     async function registerProcess(event) {
         event.preventDefault();
-        // ★ここをあなたのGASのURLに書き換え
+        
+        const regBtn = document.getElementById("regBtn");
+        const originalText = regBtn.innerText;
+        
+        // ボタンを無効化してテキストを変更
+        regBtn.disabled = true;
+        regBtn.innerText = "登録処理中...";
+
         const url = "https://script.google.com/macros/s/AKfycbzuta6xRTHYX7wHtYJ54O_QhJzXRwxGOBC8j7zjIwbE-mK23Afi_M5JJAIqYNo6OO79kQ/exec";
         const formData = new FormData(event.target);
         formData.append("action", "register");
@@ -39,11 +48,22 @@
         try {
             const response = await fetch(url, { method: "POST", body: formData });
             const result = await response.text();
+            
             if (result === "登録完了") {
                 alert("登録しました！ログインしてください。");
                 window.location.href = "login.html";
-            } else { alert("登録失敗: " + result); }
-        } catch (e) { alert("エラーが発生しました。GASの設定（全員に公開）を確認してください。"); }
+            } else { 
+                alert("登録失敗: " + result); 
+                // 失敗時はボタンを戻す
+                regBtn.disabled = false;
+                regBtn.innerText = originalText;
+            }
+        } catch (e) { 
+            alert("エラーが発生しました。GASの設定を確認してください。"); 
+            // エラー時もボタンを戻す
+            regBtn.disabled = false;
+            regBtn.innerText = originalText;
+        }
     }
     </script>
 </body>
