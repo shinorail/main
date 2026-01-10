@@ -68,7 +68,6 @@
 <script>
     const newsScriptUrl = "https://script.google.com/macros/s/AKfycbwbUTBxVeTkRlAJ1dnBlgcmpGaWI9B0SeMwkwKSwAJYjRDAtVcX67QwA5FcNGaJE9Cq/exec";
 
-    // password2026 の簡易ハッシュ
     const _auth = "cGFzc3dvcmQyMDI2"; 
     const isAuthorized = (p) => btoa(p) === _auth;
 
@@ -121,7 +120,7 @@
                 `;
                 list.appendChild(card);
             });
-        } catch(e) { document.getElementById('loading').innerText = "エラー：データ取得に失敗しました。GASのデプロイ設定を再確認してください。"; }
+        } catch(e) { document.getElementById('loading').innerText = "エラー：データ取得に失敗しました。"; }
     }
 
     function openViewer(url, id, title, isLocked) {
