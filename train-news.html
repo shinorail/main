@@ -6,20 +6,32 @@
     <title>Train-News - 篠ノ井乗務区</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* --- 既存のスタイルを維持 --- */
+        /* --- 既存のスタイル --- */
         .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px 0; }
-        .news-card { background: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; border-left: 5px solid #004da0; }
+        .news-card { 
+            background: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 8px; 
+            cursor: pointer; transition: 0.3s; border-left: 5px solid #004da0; 
+            position: relative; /* 星ボタン配置用 */
+        }
         .news-card:hover { transform: translateY(-3px); border-color: #004da0; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .news-card h3 { margin: 0 0 10px; color: #004da0; font-size: 1.1em; }
+        .news-card h3 { margin: 0 0 10px; color: #004da0; font-size: 1.1em; padding-right: 30px; }
         .news-card p { margin: 5px 0; font-size: 0.9em; color: #444; }
 
-        /* ユーザーバーの追加 */
+        /* お気に入りボタンのスタイル */
+        .fav-btn {
+            position: absolute; top: 10px; right: 10px;
+            background: none; border: none; font-size: 1.4em;
+            cursor: pointer; z-index: 10; padding: 5px;
+            filter: grayscale(1); transition: 0.2s;
+        }
+        .fav-btn.active { filter: grayscale(0); }
+
         .user-status-bar {
             background: #f8f8f8; padding: 10px; border-bottom: 1px solid #ccc;
             display: flex; justify-content: flex-end; align-items: center; font-size: 0.85em;
         }
 
-        /* --- 以下、既存のビューアーとコメントのスタイル --- */
+        /* --- ビューアー等のスタイル --- */
         .viewer-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #fff; display: none; flex-direction: column; z-index: 2000000;
@@ -71,8 +83,8 @@
 
     <div id="memberOnlyArea" style="display:none; margin-top:30px; border: 2px solid #d32f2f; padding:20px; background:#fffcf0;">
         <h3 style="color:#d32f2f;">⭐ 会員限定特別コンテンツ</h3>
-        <p>ログイン中の会員様だけが閲覧できる「篠ノ井タイムズ」特別コラムを準備中です。</p>
-        <a href="mypage.html" style="color:#004da0;">→ マイページはこちら</a>
+        <p>ログイン中の会員様だけが閲覧できる特別コラムを準備中です。</p>
+        <a href="mypage.html" style="color:#004da0;">→ マイページでお気に入りを確認</a>
     </div>
 </div>
 
@@ -98,29 +110,47 @@
     </div>
 </div>
 
-<footer></footer>
-
 <script src="menu.js"></script>
 <script>
-    // 先ほど作成したログイン管理用のURL
-    const memberScriptUrl = "https://script.google.com/macros/s/AKfycbzuta6xRTHYX7wHtYJ54O_QhJzXRwxGOBC8j7zjIwbE-mK23Afi_M5JJAIqYNo6OO79kQ/exec";
-    // ニュース取得用の既存URL
     const newsScriptUrl = "https://script.google.com/macros/s/AKfycbwbUTBxVeTkRlAJ1dnBlgcmpGaWI9B0SeMwkwKSwAJYjRDAtVcX67QwA5FcNGaJE9Cq/exec";
 
-    // ログイン状態の反映
     function updateLoginUI() {
         const email = localStorage.getItem("userEmail");
         if (email) {
             document.getElementById("userInfoDisplay").innerHTML = 
                 `${email} 様 | <a href="mypage.html">マイページ</a> | <a href="#" onclick="logout()">ログアウト</a>`;
             document.getElementById("memberOnlyArea").style.display = "block";
-            document.getElementById("u-name").value = email.split('@')[0]; // 初期値にメールのID部分を入れる
+            document.getElementById("u-name").value = email.split('@')[0];
         }
     }
 
     function logout() {
-        localStorage.removeItem("userEmail");
-        location.reload();
+        if(confirm("ログアウトしますか？")) {
+            localStorage.removeItem("userEmail");
+            location.reload();
+        }
+    }
+
+    // お気に入り切り替え機能
+    function toggleFavorite(event, id, title) {
+        event.stopPropagation(); // カードクリック（閲覧）を発生させない
+        const email = localStorage.getItem("userEmail");
+        if (!email) {
+            alert("お気に入り機能を使うにはログインが必要です。");
+            return;
+        }
+
+        let favs = JSON.parse(localStorage.getItem("favNews") || "[]");
+        const index = favs.findIndex(f => f.id === id);
+        
+        if (index > -1) {
+            favs.splice(index, 1);
+            event.target.classList.remove("active");
+        } else {
+            favs.push({id: id, title: title});
+            event.target.classList.add("active");
+        }
+        localStorage.setItem("favNews", JSON.stringify(favs));
     }
 
     async function loadNews() {
@@ -129,17 +159,38 @@
             const data = await res.json();
             document.getElementById('loading').style.display = 'none';
             const list = document.getElementById('news-list');
+            
+            const favs = JSON.parse(localStorage.getItem("favNews") || "[]");
+
             data.reverse().forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'news-card';
-                card.onclick = () => openViewer(item.URL, item.号数, item.見出し);
-                card.innerHTML = `<h3>第 ${item.号数 || "号外"} 号</h3><p><strong>${item.発行日 || ""}</strong></p><p>${item.見出し || "無題"}</p>`;
+                
+                // 会員限定判定（10号以上）
+                const isLocked = (parseInt(item.号数) >= 10); 
+                const lockLabel = isLocked ? '<span style="color:red; font-size:0.8em;"> [会員限定]</span>' : '';
+                const isFaved = favs.some(f => f.id === item.号数) ? "active" : "";
+
+                card.onclick = () => openViewer(item.URL, item.号数, item.見出し, isLocked);
+                card.innerHTML = `
+                    <button class="fav-btn ${isFaved}" onclick="toggleFavorite(event, '${item.号数}', '${item.見出し}')">⭐</button>
+                    <h3>第 ${item.号数 || "号外"} 号${lockLabel}</h3>
+                    <p><strong>${item.発行日 || ""}</strong></p>
+                    <p>${item.見出し || "無題"}</p>
+                `;
                 list.appendChild(card);
             });
         } catch(e) { document.getElementById('loading').innerText = "データの取得に失敗しました。"; }
     }
 
-    function openViewer(url, id, title) {
+    function openViewer(url, id, title, isLocked) {
+        const email = localStorage.getItem("userEmail");
+        if (isLocked && !email) {
+            alert("この記事は会員限定です。ログインしてください。");
+            window.location.href = "login.html";
+            return;
+        }
+
         document.getElementById('target-id').value = id;
         document.getElementById('v-title').innerText = "第" + id + "号 " + title;
         const previewUrl = url.replace('/view?usp=sharing', '/preview').replace('uc?id=', 'file/d/') + (url.includes('file/d/') ? '/preview' : '');
@@ -186,14 +237,6 @@
     document.getElementById('comment-form').onsubmit = async (e) => {
         e.preventDefault();
         const nameInput = document.getElementById('u-name').value;
-        const email = localStorage.getItem("userEmail");
-
-        // 非ログイン時の「公式」騙り防止
-        if (nameInput === "篠ノ井乗務区" && !email) {
-            alert("公式アカウントとして投稿するにはログインが必要です。");
-            return;
-        }
-
         const btn = document.getElementById('submit-btn');
         btn.disabled = true; btn.innerText = "送信中...";
         const id = document.getElementById('target-id').value;
