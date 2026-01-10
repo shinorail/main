@@ -9,17 +9,19 @@
         .container { background:#fff; width:90%; max-width:400px; padding:30px; border:1px solid #000; box-shadow:5px 5px 0px #ccc; }
         input { width:100%; padding:10px; margin:10px 0; border:1px solid #ccc; box-sizing:border-box; }
         button { width:100%; padding:15px; background:#004da0; color:#fff; border:none; font-weight:bold; cursor:pointer; }
+        /* 処理中ボタンのスタイル */
+        button:disabled { background:#ccc; cursor:not-allowed; }
     </style>
 </head>
 <body>
     <div class="container">
         <h2 style="border-bottom:2px solid #000; text-align:center;">会員ログイン</h2>
-        <form onsubmit="loginProcess(event)">
+        <form id="loginForm" onsubmit="loginProcess(event)">
             <label>メールアドレス</label>
             <input type="email" name="email" required>
             <label>パスワード</label>
             <input type="password" name="password" required>
-            <button type="submit">ログイン</button>
+            <button type="submit" id="submitBtn">ログイン</button>
         </form>
         <p style="text-align:center;"><a href="register.html">新規登録はこちら</a></p>
         <p style="text-align:center;"><a href="forgot.html">パスワードを忘れた方</a></p>
@@ -28,7 +30,14 @@
     <script>
     async function loginProcess(event) {
         event.preventDefault();
-        // ★ここをあなたのGASのURLに書き換え
+        
+        const submitBtn = document.getElementById("submitBtn");
+        const originalText = submitBtn.innerText;
+        
+        // 処理中の状態にする
+        submitBtn.disabled = true;
+        submitBtn.innerText = "処理中...";
+
         const url = "https://script.google.com/macros/s/AKfycbzuta6xRTHYX7wHtYJ54O_QhJzXRwxGOBC8j7zjIwbE-mK23Afi_M5JJAIqYNo6OO79kQ/exec";
         const formData = new FormData(event.target);
         formData.append("action", "login");
@@ -36,12 +45,23 @@
         try {
             const response = await fetch(url, { method: "POST", body: formData });
             const result = await response.text();
+            
             if (result === "success") {
                 localStorage.setItem("userEmail", formData.get("email"));
                 alert("ログイン成功！");
                 window.location.href = "train-news.html";
-            } else { alert("メールアドレスかパスワードが違います"); }
-        } catch (e) { alert("通信エラーが発生しました"); }
+            } else { 
+                alert("メールアドレスかパスワードが違います");
+                // 失敗した場合はボタンを元に戻す
+                submitBtn.disabled = false;
+                submitBtn.innerText = originalText;
+            }
+        } catch (e) { 
+            alert("通信エラーが発生しました");
+            // エラー時もボタンを元に戻す
+            submitBtn.disabled = false;
+            submitBtn.innerText = originalText;
+        }
     }
     </script>
 </body>
