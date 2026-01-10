@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新パスワード設定 | 篠ノ井タイムズ</title>
+    <style>
+        body { background-color: #f4f4f4; font-family: "serif"; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .container { background: #fff; width: 90%; max-width: 400px; padding: 30px; border: 1px solid #000; box-shadow: 5px 5px 0px #ccc; }
+        h2 { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-top: 0; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 0.85em; margin-bottom: 5px; font-weight: bold; }
+        .form-input { width: 100%; padding: 12px; border: 1px solid #ccc; box-sizing: border-box; }
+        .btn { width: 100%; padding: 15px; background: #d32f2f; color: #fff; border: none; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .status-msg { text-align: center; margin-top: 15px; font-size: 0.9em; color: #d32f2f; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>新パスワード設定</h2>
+        <form onsubmit="updatePassword(event)">
+            <div class="form-group">
+                <label>新しいパスワード（8文字以上）</label>
+                <input type="password" name="newPassword" class="form-input" minlength="8" required>
+            </div>
+            <div class="form-group">
+                <label>確認のため再入力</label>
+                <input type="password" id="confirmPassword" class="form-input" required>
+            </div>
+            <button type="submit" class="btn">パスワードを更新する</button>
+        </form>
+        <div id="status" class="status-msg"></div>
+    </div>
+
+    <script>
+    async function updatePassword(event) {
+        event.preventDefault();
+        const statusDiv = document.getElementById("status");
+        const newPassword = event.target.newPassword.value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
+
+        if (newPassword !== confirmPassword) {
+            statusDiv.innerText = "パスワードが一致しません。";
+            return;
+        }
+
+        statusDiv.innerText = "更新中...";
+
+        const params = new URLSearchParams(window.location.search);
+        const email = params.get("email");
+        const token = params.get("token");
+        const url = "https://script.google.com/macros/s/AKfycbzuta6xRTHYX7wHtYJ54O_QhJzXRwxGOBC8j7zjIwbE-mK23Afi_M5JJAIqYNo6OO79kQ/exec";
+
+        const formData = new FormData();
+        formData.append("action", "resetPassword");
+        formData.append("email", email);
+        formData.append("token", token);
+        formData.append("newPassword", newPassword);
+
+        try {
+            const response = await fetch(url, { method: "POST", body: formData });
+            const result = await response.text();
+
+            if (result === "更新成功") {
+                alert("パスワードを更新しました。");
+                window.location.href = "login.html";
+            } else {
+                statusDiv.innerText = "エラー: " + result;
+            }
+        } catch (error) {
+            statusDiv.innerText = "通信エラーが発生しました。";
+        }
+    }
+    </script>
+</body>
+</html>
