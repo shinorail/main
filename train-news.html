@@ -6,25 +6,29 @@
     <title>Train-News - 篠ノ井乗務区</title>
     <link rel="stylesheet" href="style.css">
     <style>
+        /* ニュースカードのデザイン */
         .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px 0; }
         .news-card { 
             background: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 8px; 
             cursor: pointer; transition: 0.3s; border-left: 5px solid #004da0; position: relative; 
         }
         .news-card:hover { transform: translateY(-3px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .news-card h3 { margin: 0 0 5px; color: #004da0; font-size: 1.1em; padding-right: 30px; }
+        .news-card h3 { margin: 0 0 5px; color: #004da0; font-size: 1.1em; padding-right: 35px; }
         
+        /* お気に入り星ボタン */
         .fav-btn { 
             position: absolute; top: 12px; right: 10px; background: none; border: none; 
-            font-size: 1.3em; cursor: pointer; filter: grayscale(1); transition: 0.2s; 
+            font-size: 1.4em; cursor: pointer; filter: grayscale(1); transition: 0.2s; z-index: 10;
         }
         .fav-btn.active { filter: grayscale(0); }
         
+        /* ビューアー設定 */
         .viewer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; display: none; flex-direction: column; z-index: 9999; }
         .viewer-header { background: #004da0; color: white; padding: 10px; display: flex; justify-content: space-between; align-items: center; }
         .viewer-body { flex: 1; position: relative; background: #525659; overflow: hidden; }
         #pdf-frame { width: 100%; height: 100%; border: none; }
         
+        /* コメント欄 */
         .comment-sidebar { 
             position: absolute; bottom: -100%; left: 0; width: 100%; height: 75%; 
             background: #f9f9f9; transition: 0.3s; z-index: 10000; display: flex; flex-direction: column; 
@@ -33,7 +37,6 @@
         .comment-sidebar.open { bottom: 0; }
         .comment-list { flex: 1; overflow-y: auto; padding: 15px; }
         .comment-item { background: #fff; padding: 10px; margin-bottom: 8px; border-radius: 5px; border: 1px solid #ddd; font-size: 0.9em; }
-        .comment-official { border-left: 4px solid #ffaa00; background: #fff9f0; }
     </style>
 </head>
 <body>
@@ -47,26 +50,26 @@
 
 <div class="container">
     <h2 style="border-bottom: 2px solid #004da0; padding-bottom: 10px; margin-top: 20px;">Train-News 一覧</h2>
-    <div id="loading" style="text-align:center; padding:20px;">読み込み中...</div>
+    <div id="loading" style="text-align:center; padding:40px;">データを読み込み中...</div>
     <div id="news-list" class="news-grid"></div>
 </div>
 
 <div id="viewer" class="viewer-overlay">
     <div class="viewer-header">
         <h2 id="v-title" style="font-size:0.9em; margin:0;"></h2>
-        <button onclick="closeViewer()" style="background:#ff4444; color:white; border:none; padding:5px 10px; border-radius:3px; cursor:pointer;">閉じる</button>
+        <button onclick="closeViewer()" style="background:#ff4444; color:white; border:none; padding:5px 15px; border-radius:3px; cursor:pointer;">閉じる</button>
     </div>
     <div class="viewer-body">
         <iframe id="pdf-frame"></iframe>
-        <button onclick="toggleComments(true)" style="position:absolute; right:0; top:40%; background:#004da0; color:white; border:none; padding:15px 5px; writing-mode:vertical-rl; border-radius:5px 0 0 5px; cursor:pointer; font-weight:bold;">💬 コメント</button>
+        <button onclick="toggleComments(true)" style="position:absolute; right:0; top:40%; background:#004da0; color:white; border:none; padding:15px 8px; writing-mode:vertical-rl; border-radius:5px 0 0 5px; cursor:pointer; font-weight:bold;">💬 コメント</button>
         
         <div id="comment-area" class="comment-sidebar">
             <div onclick="toggleComments(false)" style="background:#ddd; text-align:center; padding:10px; font-weight:bold; cursor:pointer;">▼ 閉じる</div>
             <div id="comment-list" class="comment-list"></div>
             <form id="comment-form" style="padding:15px; background:#eee; border-top:1px solid #ccc;">
-                <input type="text" id="u-name" placeholder="お名前" required style="width:100%; margin-bottom:8px; padding:8px; border:1px solid #ccc; border-radius:4px;">
-                <textarea id="u-msg" placeholder="コメントを入力" required style="width:100%; margin-bottom:8px; padding:8px; border:1px solid #ccc; border-radius:4px; height:60px;"></textarea>
-                <button type="submit" style="width:100%; background:#004da0; color:white; border:none; padding:12px; font-weight:bold; border-radius:4px; cursor:pointer;">送信</button>
+                <input type="text" id="u-name" placeholder="お名前" required style="width:100%; margin-bottom:8px; padding:10px; box-sizing:border-box;">
+                <textarea id="u-msg" placeholder="コメントを入力（承認後に掲載されます）" required style="width:100%; margin-bottom:8px; padding:10px; box-sizing:border-box; height:60px;"></textarea>
+                <button type="submit" style="width:100%; background:#004da0; color:white; border:none; padding:12px; font-weight:bold; cursor:pointer; border-radius:4px;">コメント送信</button>
             </form>
         </div>
     </div>
@@ -77,19 +80,22 @@
 <script>
     const newsScriptUrl = "https://script.google.com/macros/s/AKfycbwbUTBxVeTkRlAJ1dnBlgcmpGaWI9B0SeMwkwKSwAJYjRDAtVcX67QwA5FcNGaJE9Cq/exec";
 
+    // ログイン状態の確認
     function updateLoginUI() {
         const email = localStorage.getItem("userEmail");
+        const name = localStorage.getItem("userName");
         if (email) {
-            document.getElementById("userInfoDisplay").innerHTML = `${email} 様 | <a href="mypage.html">マイページ</a> | <a href="#" onclick="logout()">ログアウト</a>`;
-            document.getElementById("u-name").value = email.split('@')[0];
+            document.getElementById("userInfoDisplay").innerHTML = `${name || email} 様 | <a href="mypage.html">マイページ</a> | <a href="#" onclick="logout()">ログアウト</a>`;
+            if(name) document.getElementById("u-name").value = name;
         }
     }
     function logout() { localStorage.removeItem("userEmail"); location.reload(); }
 
+    // お気に入り登録の切り替え
     function toggleFavorite(event, id, title) {
         event.stopPropagation();
         let favs = JSON.parse(localStorage.getItem("favNews") || "[]");
-        const index = favs.findIndex(f => f.id === id);
+        const index = favs.findIndex(f => f.id == id);
         if (index > -1) { 
             favs.splice(index, 1); 
             event.target.classList.remove("active"); 
@@ -100,12 +106,17 @@
         localStorage.setItem("favNews", JSON.stringify(favs));
     }
 
+    // ニュースデータの読み込み
     async function loadNews() {
         try {
+            // シート名を明示的に指定して取得
             const res = await fetch(newsScriptUrl + "?sheet=新聞");
             const data = await res.json();
-            if (data.error) throw new Error(data.error);
             
+            if (!Array.isArray(data)) {
+                throw new Error("データが配列ではありません");
+            }
+
             document.getElementById('loading').style.display = 'none';
             const list = document.getElementById('news-list');
             const favs = JSON.parse(localStorage.getItem("favNews") || "[]");
@@ -113,32 +124,42 @@
             data.reverse().forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'news-card';
-                const isLocked = item.isMemberOnly;
+                
+                // 会員限定フラグ（GAS側のF列）
+                const isLocked = item.isMemberOnly || item['限定'] === true || item['限定'] === "TRUE";
                 const lockLabel = isLocked ? '<span style="color:red; font-size:0.8em;"> [会員限定]</span>' : '';
+                
+                // お気に入り状態
                 const isFaved = favs.some(f => f.id == item['号数']) ? "active" : "";
-                const gou = item['号数'] ? `第 ${item['号数']} 号` : "号外";
+                
+                // 号数の表示（空なら号外）
+                const gouLabel = item['号数'] ? `第 ${item['号数']} 号` : "号外";
 
                 card.onclick = () => openViewer(item.URL, item['号数'], item['見出し'], isLocked);
                 card.innerHTML = `
                     <button class="fav-btn ${isFaved}" onclick="toggleFavorite(event, '${item['号数']}', '${item['見出し']}')">⭐</button>
-                    <h3>${gou}${lockLabel}</h3>
+                    <h3>${gouLabel}${lockLabel}</h3>
                     <p style="font-size:0.85em; color:#666; margin-bottom:5px;">📅 発行日: ${item['発行日'] || "未設定"}</p>
-                    <p style="font-weight:bold; margin:0;">${item['見出し'] || "無題"}</p>
-                    <p style="font-size:0.8em; color:#888; margin-top:8px; line-height:1.4;">${item['概要'] || ""}</p>
+                    <p style="font-weight:bold; margin:0; color:#333;">${item['見出し'] || "無題"}</p>
+                    <p style="font-size:0.8em; color:#777; margin-top:10px; line-height:1.4;">${item['概要'] || ""}</p>
                 `;
                 list.appendChild(card);
             });
         } catch(e) { 
-            document.getElementById('loading').innerText = "データの取得に失敗しました。GASの設定とシート名を確認してください。"; 
+            console.error(e);
+            document.getElementById('loading').innerHTML = `<p style="color:red;">データの取得に失敗しました。<br><small>GASのURLまたはデプロイ設定（全員に公開）を確認してください。</small></p>`; 
         }
     }
 
+    // PDFビューアー
     function openViewer(url, id, title, isLocked) {
         if (isLocked && !localStorage.getItem("userEmail")) {
-            alert("この記事は会員限定です。ログインしてください。");
+            alert("この記事は会員限定です。ログイン後に閲覧できます。");
             location.href = "login.html";
             return;
         }
+        if (!url) { alert("PDFのURLが見つかりません。"); return; }
+
         const gouText = id ? `第${id}号` : "号外";
         document.getElementById('v-title').innerText = `${gouText} ${title}`;
         document.getElementById('pdf-frame').src = url.replace('/view?usp=sharing', '/preview');
@@ -155,39 +176,47 @@
         document.getElementById('comment-area').classList.toggle('open', show); 
     }
 
+    // コメント取得
     async function loadComments(id) {
         const list = document.getElementById('comment-list');
-        list.innerHTML = "<small>読込中...</small>";
+        list.innerHTML = "<small>読み込み中...</small>";
         try {
-            const res = await fetch(newsScriptUrl + "?action=getComments&id=" + id);
+            const res = await fetch(`${newsScriptUrl}?action=getComments&id=${id}`);
             const data = await res.json();
-            list.innerHTML = data.length ? "" : "<small>コメントはありません</small>";
+            list.innerHTML = data.length ? "" : "<small>コメントはまだありません。</small>";
             data.forEach(c => {
                 const div = document.createElement('div');
-                div.className = 'comment-item' + (c.名前 === "篠ノ井乗務区" ? " comment-official" : "");
+                div.className = 'comment-item';
                 div.innerHTML = `<strong>${c.名前}</strong> <small style="color:#999;">${c.日付}</small><br>${c.内容}`;
                 list.appendChild(div);
             });
-        } catch(e) { list.innerHTML = "<small>読み込みエラー</small>"; }
+        } catch(e) { list.innerHTML = "<small>コメントの取得に失敗しました。</small>"; }
     }
 
+    // コメント投稿
     document.getElementById('comment-form').onsubmit = async (e) => {
         e.preventDefault();
-        const idStr = document.getElementById('v-title').innerText.match(/\d+/);
-        const id = idStr ? idStr[0] : "";
+        const idMatch = document.getElementById('v-title').innerText.match(/\d+/);
+        const id = idMatch ? idMatch[0] : "";
+        
         const data = {
-            action: "postComment", id: id,
+            action: "postComment",
+            id: id,
             name: document.getElementById('u-name').value,
             comment: document.getElementById('u-msg').value
         };
-        const res = await fetch(newsScriptUrl, { method: 'POST', body: JSON.stringify(data) });
-        const result = await res.text();
-        if (result === "NG_WORD") alert("不適切な表現が含まれています。");
-        else { 
-            alert("投稿しました。管理者の承認後に反映されます。"); 
-            document.getElementById('u-msg').value = ""; 
-        }
-        toggleComments(false);
+
+        try {
+            const res = await fetch(newsScriptUrl, { method: 'POST', body: JSON.stringify(data) });
+            const result = await res.text();
+            if (result === "NG_WORD") {
+                alert("不適切な言葉が含まれています。");
+            } else {
+                alert("送信しました。管理者の承認後に表示されます。");
+                document.getElementById('u-msg').value = "";
+                toggleComments(false);
+            }
+        } catch(e) { alert("送信エラーが発生しました。"); }
     };
 
     updateLoginUI();
