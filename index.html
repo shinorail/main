@@ -56,6 +56,13 @@
   border-radius:5px;
 }
 
+/* ===== お知らせ表示用スタイル ===== */
+#top-news-list { list-style: none; padding: 0; }
+.top-news-item { border-bottom: 1px solid #eee; padding: 10px 0; font-size: 14px; }
+.info-tag { font-size: 10px; padding: 2px 6px; border-radius: 3px; color: #fff; margin-right: 8px; background: #004da0; }
+.tag-red { background: #d00; }
+.tag-green { background: #080; }
+
 /* ===== アンケート ===== */
 .survey-toggle{
   position:fixed;
@@ -89,7 +96,7 @@
   justify-content:space-between;
 }
 .survey-body{padding:15px}
-.s-rating{display:flex;gap:5px}
+.s-rating{display:flex;gap:5px;margin-bottom:10px;}
 .s-rating input{display:none}
 .s-rating label{
   flex:1;
@@ -111,7 +118,9 @@
   padding:12px;
   border-radius:4px;
   font-weight:bold;
+  cursor:pointer;
 }
+#msg { width:100%; box-sizing:border-box; margin-bottom:10px; padding:8px; }
 
 /* ===== 更新通知 ===== */
 .update-toast{
@@ -186,7 +195,7 @@
       <input id="r5" type="radio" name="rate" value="5"><label for="r5">5</label>
     </div>
     <textarea id="msg" rows="3" placeholder="ご自由にお書きください"></textarea>
-    <button class="s-submit">送信する</button>
+    <button type="submit" class="s-submit" id="survey-btn">送信する</button>
   </form>
 
   <div id="survey-thanks" style="display:none;padding:20px;text-align:center">
@@ -215,13 +224,74 @@ function googleTranslateElementInit() {
 <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 <script>
-/* ===== アンケート ===== */
+const scriptUrl = "https://script.google.com/macros/s/AKfycbwbUTBxVeTkRlAJ1dnBlgcmpGaWI9B0SeMwkwKSwAJYjRDAtVcX67QwA5FcNGaJE9Cq/exec";
+
+/* ===== お知らせ読み込み ===== */
+async function loadTopNews() {
+    try {
+        const res = await fetch(scriptUrl + "?sheet=お知らせ");
+        const data = await res.json();
+        
+        document.getElementById('news-loading').style.display = 'none';
+        const list = document.getElementById('top-news-list');
+        
+        // 最新の3件だけ表示
+        data.reverse().slice(0, 3).forEach(item => {
+            const li = document.createElement('li');
+            li.className = 'top-news-item';
+            
+            let tagClass = "";
+            if(item['タグ'] === "更新") tagClass = "tag-red";
+            if(item['タグ'] === "行事") tagClass = "tag-green";
+
+            li.innerHTML = `
+                <span class="info-date" style="color:#888; font-size:12px;">${item['日付'] || ""}</span><br>
+                <span class="info-tag ${tagClass}">${item['タグ'] || "重要"}</span>
+                <span class="info-title"><strong>${item['見出し'] || "無題"}</strong></span>
+            `;
+            list.appendChild(li);
+        });
+    } catch(e) {
+        document.getElementById('news-loading').innerText = "お知らせの読み込みに失敗しました。";
+    }
+}
+
+/* ===== アンケート送信 ===== */
+document.getElementById('survey-form').onsubmit = async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('survey-btn');
+    btn.disabled = true;
+    btn.innerText = "送信中...";
+
+    const rate = document.querySelector('input[name="rate"]:checked').value;
+    const msg = document.getElementById('msg').value;
+    const name = localStorage.getItem("userName") || "ゲスト";
+
+    const data = {
+        action: "postSurvey", // GAS側のelseルートでアンケートシートへ
+        name: name,
+        rating: rate,
+        message: msg
+    };
+
+    try {
+        await fetch(scriptUrl, { method: 'POST', body: JSON.stringify(data) });
+        document.getElementById('survey-form').style.display = 'none';
+        document.getElementById('survey-thanks').style.display = 'block';
+        setTimeout(() => toggleSurvey(), 3000);
+    } catch(e) {
+        alert("送信に失敗しました。");
+        btn.disabled = false;
+        btn.innerText = "送信する";
+    }
+};
+
+/* ===== アンケート表示切替 ===== */
 function toggleSurvey(){
   const s=document.getElementById('survey-container');
   s.style.display=s.style.display==='flex'?'none':'flex';
 }
 
-/* オフライン時はアンケート非表示 */
 function surveyVisibility(){
   document.getElementById('survey-toggle').style.display =
     navigator.onLine ? 'block' : 'none';
@@ -230,12 +300,10 @@ window.addEventListener('online',surveyVisibility);
 window.addEventListener('offline',surveyVisibility);
 surveyVisibility();
 
-/* ===== Service Worker 登録 & PWA制御 ===== */
+/* ===== PWA / Service Worker ===== */
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./service-worker.js').then(reg => {
-      console.log('PWA Ready');
-      
       reg.addEventListener('updatefound', () => {
         const nw = reg.installing;
         nw.addEventListener('statechange', () => {
@@ -257,6 +325,9 @@ function showUpdate(waitingSW){
     location.reload();
   }, 2000);
 }
+
+// 初期実行
+loadTopNews();
 </script>
 
 </body>
