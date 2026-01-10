@@ -5,66 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>マイページ | 篠ノ井タイムズ</title>
     <style>
-        body { background-color: #f4f4f4; font-family: "serif"; margin: 0; padding: 20px; }
-        .container { max-width: 600px; margin: 0 auto; background: #fff; padding: 30px; border: 1px solid #000; box-shadow: 5px 5px 0px #ccc; }
-        .info-box { border: 1px dashed #999; padding: 15px; margin: 20px 0; }
-        .birthday-msg { display: none; background: #fff0f0; border: 2px solid #ff0000; padding: 15px; color: #d32f2f; font-weight: bold; text-align: center; margin-bottom: 20px; }
-        .btn { display: inline-block; padding: 10px 20px; background: #004da0; color: #fff; text-decoration: none; border: none; cursor: pointer; }
+        body { background:#f4f4f4; font-family:serif; margin:0; padding:20px; }
+        .container { background:#fff; max-width:600px; margin:0 auto; padding:30px; border:1px solid #000; box-shadow:5px 5px 0px #ccc; }
+        h2 { border-bottom:2px solid #004da0; color:#004da0; padding-bottom:10px; }
+        .info-box { background:#f9f9f9; padding:15px; border:1px solid #ddd; margin:20px 0; line-height:1.8; }
+        .label { font-weight:bold; color:#555; width:100px; display:inline-block; }
+        .btn-group { display:flex; gap:10px; margin-top:20px; }
+        .btn { flex:1; padding:12px; text-align:center; text-decoration:none; font-weight:bold; cursor:pointer; border:none; }
+        .btn-back { background:#004da0; color:#fff; }
+        .btn-logout { background:#666; color:#fff; }
+        #loading { color: #666; font-style: italic; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1 style="border-bottom: 2px solid #000;">マイページ</h1>
-        
-        <div id="birthdayMessage" class="birthday-msg">
-            🎂 お誕生日おめでとうございます！<br>今月は篠ノ井タイムズからささやかなニュースレターをお送りします。
-        </div>
 
-        <div class="info-box">
-            <p><strong>メールアドレス:</strong> <span id="userEmail">取得中...</span></p>
-            <p><strong>生年月日:</strong> <span id="userBirthday">取得中...</span></p>
+<div class="container">
+    <h2>会員マイページ</h2>
+    
+    <div class="info-box">
+        <div><span class="label">メールアドレス:</span> <span id="displayEmail">読み込み中...</span></div>
+        <div id="loading">詳細情報を取得中...</div>
+        <div id="userDetails" style="display:none;">
+            <div><span class="label">ユーザー名:</span> <span id="displayUsername"></span></div>
+            <div><span class="label">生年月日:</span> <span id="displayBirthday"></span></div>
+            <div><span class="label">登録日:</span> <span id="displayRegDate"></span></div>
         </div>
-
-        <button onclick="logout()" class="btn" style="background:#666;">ログアウト</button>
-        <a href="train-news.html" class="btn">新聞トップへ戻る</a>
     </div>
 
-    <script>
-    window.onload = async function() {
-        const email = localStorage.getItem("userEmail");
-        if (!email) {
-            alert("ログインが必要です");
-            window.location.href = "login.html";
-            return;
+    <div class="btn-group">
+        <a href="train-news.html" class="btn btn-back">ニュース一覧に戻る</a>
+        <button onclick="logout()" class="btn btn-logout">ログアウト</button>
+    </div>
+</div>
+
+<script>
+async function loadMyPage() {
+    const email = localStorage.getItem("userEmail");
+    
+    // ログインしていない場合はログイン画面へ飛ばす
+    if (!email) {
+        alert("ログインが必要です");
+        window.location.href = "login.html";
+        return;
+    }
+
+    document.getElementById("displayEmail").innerText = email;
+
+    // GASから詳細情報を取得
+    const url = "https://script.google.com/macros/s/AKfycbzuta6xRTHYX7wHtYJ54O_QhJzXRwxGOBC8j7zjIwbE-mK23Afi_M5JJAIqYNo6OO79kQ/exec";
+    
+    try {
+        // GAS側に「ユーザー情報を返す」機能が必要なため、今回は簡易的にメールのみ表示
+        // もしGAS側を拡張して情報を送る場合は以下の処理を使います
+        const response = await fetch(`${url}?action=getUserInfo&email=${encodeURIComponent(email)}`);
+        const data = await response.json();
+
+        if (data.status === "success") {
+            document.getElementById("loading").style.display = "none";
+            document.getElementById("userDetails").style.display = "block";
+            document.getElementById("displayUsername").innerText = data.username;
+            document.getElementById("displayBirthday").innerText = data.birthday;
+            document.getElementById("displayRegDate").innerText = new Date(data.regDate).toLocaleDateString();
+        } else {
+            document.getElementById("loading").innerText = "詳細情報の取得に失敗しました。";
         }
-        document.getElementById("userEmail").innerText = email;
+    } catch (e) {
+        document.getElementById("loading").innerText = "会員限定エリアです。";
+    }
+}
 
-        const url = "https://script.google.com/macros/s/AKfycbzuta6xRTHYX7wHtYJ54O_QhJzXRwxGOBC8j7zjIwbE-mK23Afi_M5JJAIqYNo6OO79kQ/exec";
-        
-        // GASからユーザー情報を取得
-        try {
-            const response = await fetch(`${url}?action=getUserInfo&email=${email}`);
-            const data = await response.json();
-
-            if (data.status === "success") {
-                const birthday = new Date(data.birthday);
-                document.getElementById("userBirthday").innerText = data.birthday;
-
-                // 誕生月の判定
-                const today = new Date();
-                if (birthday.getMonth() === today.getMonth()) {
-                    document.getElementById("birthdayMessage").style.display = "block";
-                }
-            }
-        } catch (e) {
-            console.error("データ取得エラー", e);
-        }
-    };
-
-    function logout() {
+function logout() {
+    if(confirm("ログアウトしますか？")) {
         localStorage.removeItem("userEmail");
         window.location.href = "login.html";
     }
-    </script>
+}
+
+// ページ読み込み時に実行
+loadMyPage();
+</script>
+
 </body>
 </html>
