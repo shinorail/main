@@ -6,254 +6,141 @@
     <title>Train-News - 篠ノ井乗務区</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* --- 既存のスタイル --- */
         .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px 0; }
-        .news-card { 
-            background: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 8px; 
-            cursor: pointer; transition: 0.3s; border-left: 5px solid #004da0; 
-            position: relative; /* 星ボタン配置用 */
-        }
-        .news-card:hover { transform: translateY(-3px); border-color: #004da0; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .news-card h3 { margin: 0 0 10px; color: #004da0; font-size: 1.1em; padding-right: 30px; }
-        .news-card p { margin: 5px 0; font-size: 0.9em; color: #444; }
-
-        /* お気に入りボタンのスタイル */
-        .fav-btn {
-            position: absolute; top: 10px; right: 10px;
-            background: none; border: none; font-size: 1.4em;
-            cursor: pointer; z-index: 10; padding: 5px;
-            filter: grayscale(1); transition: 0.2s;
-        }
+        .news-card { background: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; border-left: 5px solid #004da0; position: relative; }
+        .news-card:hover { transform: translateY(-3px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .news-card h3 { margin: 0 0 5px; color: #004da0; font-size: 1.1em; padding-right: 30px; }
+        .fav-btn { position: absolute; top: 12px; right: 10px; background: none; border: none; font-size: 1.3em; cursor: pointer; filter: grayscale(1); transition: 0.2s; }
         .fav-btn.active { filter: grayscale(0); }
-
-        .user-status-bar {
-            background: #f8f8f8; padding: 10px; border-bottom: 1px solid #ccc;
-            display: flex; justify-content: flex-end; align-items: center; font-size: 0.85em;
-        }
-
-        /* --- ビューアー等のスタイル --- */
-        .viewer-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #fff; display: none; flex-direction: column; z-index: 2000000;
-        }
-        .viewer-header {
-            background: #004da0; color: white; padding: 10px 15px;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .close-btn { background: #ff4444; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; }
-        .viewer-body { display: flex; flex: 1; overflow: hidden; background: #525659; position: relative; }
+        .viewer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; display: none; flex-direction: column; z-index: 9999; }
+        .viewer-header { background: #004da0; color: white; padding: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .viewer-body { flex: 1; position: relative; background: #525659; overflow: hidden; }
         #pdf-frame { width: 100%; height: 100%; border: none; }
-        .comment-sidebar {
-            position: absolute; bottom: -100%; left: 0; width: 100%; height: 80%;
-            background: #f4f4f4; display: flex; flex-direction: column;
-            transition: bottom 0.3s ease-in-out; border-top: 3px solid #004da0;
-            z-index: 2000001; box-shadow: 0 -5px 15px rgba(0,0,0,0.3);
-        }
+        .comment-sidebar { position: absolute; bottom: -100%; left: 0; width: 100%; height: 75%; background: #f9f9f9; transition: 0.3s; z-index: 10000; display: flex; flex-direction: column; box-shadow: 0 -5px 15px rgba(0,0,0,0.2); }
         .comment-sidebar.open { bottom: 0; }
         .comment-list { flex: 1; overflow-y: auto; padding: 15px; }
-        .comment-item { background: #fff; padding: 10px; border-radius: 4px; margin-bottom: 10px; border: 1px solid #ddd; font-size: 0.85em; }
-        .comment-official { border-left: 5px solid #ffaa00 !important; background: #fff9f0 !important; }
-        .official-label { color: #d48800; font-weight: bold; margin-bottom: 2px; display: block; }
-        .comment-form { padding: 10px; background: #eee; border-top: 1px solid #ccc; }
-        .comment-form input, .comment-form textarea {
-            width: 100%; padding: 8px; margin-bottom: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 16px;
-        }
-        .comment-toggle-btn {
-            position: absolute; top: 50%; right: 0; transform: translateY(-50%);
-            background: #004da0; color: white; border: none; padding: 15px 10px;
-            border-radius: 10px 0 0 10px; cursor: pointer; font-weight: bold; z-index: 2000002;
-            writing-mode: vertical-rl; text-orientation: upright;
-        }
-        .comment-close-bar { background: #ddd; padding: 10px; text-align: center; cursor: pointer; font-weight: bold; }
+        .comment-item { background: #fff; padding: 10px; margin-bottom: 8px; border-radius: 5px; border: 1px solid #ddd; font-size: 0.9em; }
+        .comment-official { border-left: 4px solid #ffaa00; background: #fff9f0; }
     </style>
 </head>
 <body>
 
-<div id="userBar" class="user-status-bar">
+<div class="user-status-bar" style="text-align:right; padding:10px; background:#f0f0f0; font-size:0.85em;">
     <span id="userInfoDisplay">ゲスト 様 | <a href="login.html">ログイン</a></span>
 </div>
 
-<header></header>
-<nav></nav>
-
 <div class="container">
     <h2>Train-News 一覧</h2>
-    <div id="loading" style="text-align:center; padding: 20px;">読み込み中...</div>
+    <div id="loading" style="text-align:center; padding:20px;">読み込み中...</div>
     <div id="news-list" class="news-grid"></div>
-
-    <div id="memberOnlyArea" style="display:none; margin-top:30px; border: 2px solid #d32f2f; padding:20px; background:#fffcf0;">
-        <h3 style="color:#d32f2f;">⭐ 会員限定特別コンテンツ</h3>
-        <p>ログイン中の会員様だけが閲覧できる特別コラムを準備中です。</p>
-        <a href="mypage.html" style="color:#004da0;">→ マイページでお気に入りを確認</a>
-    </div>
 </div>
 
 <div id="viewer" class="viewer-overlay">
     <div class="viewer-header">
-        <h2 id="v-title">記事タイトル</h2>
-        <button class="close-btn" onclick="closeViewer()">閉じる</button>
+        <h2 id="v-title" style="font-size:0.9em; margin:0;"></h2>
+        <button onclick="closeViewer()" style="background:#ff4444; color:white; border:none; padding:5px 10px; border-radius:3px;">閉じる</button>
     </div>
     <div class="viewer-body">
-        <iframe id="pdf-frame" src=""></iframe>
-        <button class="comment-toggle-btn" onclick="toggleComments(true)">💬 コメント</button>
+        <iframe id="pdf-frame"></iframe>
+        <button onclick="toggleComments(true)" style="position:absolute; right:0; top:40%; background:#004da0; color:white; border:none; padding:15px 5px; writing-mode:vertical-rl; border-radius:5px 0 0 5px; cursor:pointer;">💬 コメント</button>
         <div id="comment-area" class="comment-sidebar">
-            <div class="comment-close-bar" onclick="toggleComments(false)">▼ 閉じる</div>
-            <div style="background:#004da0; color:white; padding:5px 15px; font-weight:bold; font-size:0.8em;">コメント</div>
+            <div onclick="toggleComments(false)" style="background:#ddd; text-align:center; padding:10px; font-weight:bold; cursor:pointer;">▼ 閉じる</div>
             <div id="comment-list" class="comment-list"></div>
-            <form id="comment-form" class="comment-form">
-                <input type="hidden" id="target-id">
-                <input type="text" id="u-name" placeholder="お名前" required>
-                <textarea id="u-msg" placeholder="感想をどうぞ！" required></textarea>
-                <button type="submit" id="submit-btn" style="width:100%; background:#004da0; color:white; border:none; padding:10px; cursor:pointer; font-weight:bold; border-radius:4px;">投稿</button>
+            <form id="comment-form" style="padding:15px; background:#eee; border-top:1px solid #ccc;">
+                <input type="text" id="u-name" placeholder="お名前" required style="width:100%; margin-bottom:8px; padding:8px; border:1px solid #ccc; border-radius:4px;">
+                <textarea id="u-msg" placeholder="コメントを入力" required style="width:100%; margin-bottom:8px; padding:8px; border:1px solid #ccc; border-radius:4px;"></textarea>
+                <button type="submit" style="width:100%; background:#004da0; color:white; border:none; padding:12px; font-weight:bold; border-radius:4px; cursor:pointer;">送信 (承認後に掲載)</button>
             </form>
         </div>
     </div>
 </div>
 
-<script src="menu.js"></script>
 <script>
     const newsScriptUrl = "https://script.google.com/macros/s/AKfycbwbUTBxVeTkRlAJ1dnBlgcmpGaWI9B0SeMwkwKSwAJYjRDAtVcX67QwA5FcNGaJE9Cq/exec";
 
-    function updateLoginUI() {
-        const email = localStorage.getItem("userEmail");
-        if (email) {
-            document.getElementById("userInfoDisplay").innerHTML = 
-                `${email} 様 | <a href="mypage.html">マイページ</a> | <a href="#" onclick="logout()">ログアウト</a>`;
-            document.getElementById("memberOnlyArea").style.display = "block";
-            document.getElementById("u-name").value = email.split('@')[0];
-        }
-    }
-
-    function logout() {
-        if(confirm("ログアウトしますか？")) {
-            localStorage.removeItem("userEmail");
-            location.reload();
-        }
-    }
-
-    // お気に入り切り替え機能
-    function toggleFavorite(event, id, title) {
-        event.stopPropagation(); // カードクリック（閲覧）を発生させない
-        const email = localStorage.getItem("userEmail");
-        if (!email) {
-            alert("お気に入り機能を使うにはログインが必要です。");
-            return;
-        }
-
-        let favs = JSON.parse(localStorage.getItem("favNews") || "[]");
-        const index = favs.findIndex(f => f.id === id);
-        
-        if (index > -1) {
-            favs.splice(index, 1);
-            event.target.classList.remove("active");
-        } else {
-            favs.push({id: id, title: title});
-            event.target.classList.add("active");
-        }
-        localStorage.setItem("favNews", JSON.stringify(favs));
-    }
-
     async function loadNews() {
         try {
-            const res = await fetch(newsScriptUrl + "?sheet=" + encodeURIComponent("新聞"));
+            const res = await fetch(newsScriptUrl + "?sheet=新聞");
             const data = await res.json();
             document.getElementById('loading').style.display = 'none';
             const list = document.getElementById('news-list');
-            
             const favs = JSON.parse(localStorage.getItem("favNews") || "[]");
 
             data.reverse().forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'news-card';
-                
-                // 会員限定判定（10号以上）
-                const isLocked = (parseInt(item.号数) >= 10); 
+                const isLocked = item.isMemberOnly;
                 const lockLabel = isLocked ? '<span style="color:red; font-size:0.8em;"> [会員限定]</span>' : '';
-                const isFaved = favs.some(f => f.id === item.号数) ? "active" : "";
+                const isFaved = favs.some(f => f.id == item['号数']) ? "active" : "";
 
-                card.onclick = () => openViewer(item.URL, item.号数, item.見出し, isLocked);
+                card.onclick = () => openViewer(item.URL, item['号数'], item['見出し'], isLocked);
                 card.innerHTML = `
-                    <button class="fav-btn ${isFaved}" onclick="toggleFavorite(event, '${item.号数}', '${item.見出し}')">⭐</button>
-                    <h3>第 ${item.号数 || "号外"} 号${lockLabel}</h3>
-                    <p><strong>${item.発行日 || ""}</strong></p>
-                    <p>${item.見出し || "無題"}</p>
+                    <button class="fav-btn ${isFaved}" onclick="toggleFavorite(event, '${item['号数']}', '${item['見出し']}')">⭐</button>
+                    <h3>第 ${item['号数'] || "号外"} 号${lockLabel}</h3>
+                    <p style="font-size:0.8em; color:#666; margin-bottom:5px;">📅 ${item['発行日'] || ""}</p>
+                    <p style="font-weight:bold; margin:0;">${item['見出し'] || "無題"}</p>
+                    <p style="font-size:0.8em; color:#888; margin-top:8px;">${item['概要'] || ""}</p>
                 `;
                 list.appendChild(card);
             });
         } catch(e) { document.getElementById('loading').innerText = "データの取得に失敗しました。"; }
     }
 
+    function toggleFavorite(event, id, title) {
+        event.stopPropagation();
+        let favs = JSON.parse(localStorage.getItem("favNews") || "[]");
+        const index = favs.findIndex(f => f.id === id);
+        if (index > -1) { favs.splice(index, 1); event.target.classList.remove("active"); }
+        else { favs.push({id: id, title: title}); event.target.classList.add("active"); }
+        localStorage.setItem("favNews", JSON.stringify(favs));
+    }
+
     function openViewer(url, id, title, isLocked) {
-        const email = localStorage.getItem("userEmail");
-        if (isLocked && !email) {
+        if (isLocked && !localStorage.getItem("userEmail")) {
             alert("この記事は会員限定です。ログインしてください。");
-            window.location.href = "login.html";
+            location.href = "login.html";
             return;
         }
-
-        document.getElementById('target-id').value = id;
         document.getElementById('v-title').innerText = "第" + id + "号 " + title;
-        const previewUrl = url.replace('/view?usp=sharing', '/preview').replace('uc?id=', 'file/d/') + (url.includes('file/d/') ? '/preview' : '');
-        document.getElementById('pdf-frame').src = previewUrl;
+        document.getElementById('pdf-frame').src = url.replace('/view?usp=sharing', '/preview');
         document.getElementById('viewer').style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-        toggleComments(false);
         loadComments(id);
     }
 
-    function closeViewer() {
-        document.getElementById('viewer').style.display = 'none';
-        document.body.style.overflow = 'auto';
-        document.getElementById('pdf-frame').src = "";
-    }
-
-    function toggleComments(show) {
-        const area = document.getElementById('comment-area');
-        if (show) area.classList.add('open');
-        else area.classList.remove('open');
-    }
+    function closeViewer() { document.getElementById('viewer').style.display = 'none'; document.getElementById('pdf-frame').src = ""; }
+    function toggleComments(show) { document.getElementById('comment-area').classList.toggle('open', show); }
 
     async function loadComments(id) {
         const list = document.getElementById('comment-list');
         list.innerHTML = "<small>読込中...</small>";
         try {
-            const res = await fetch(newsScriptUrl + "?action=getComments&id=" + encodeURIComponent(id));
+            const res = await fetch(newsScriptUrl + "?action=getComments&id=" + id);
             const data = await res.json();
-            list.innerHTML = data.length ? "" : "<small style='color:#999;'>まだコメントはありません</small>";
+            list.innerHTML = data.length ? "" : "<small>コメントはありません</small>";
             data.forEach(c => {
                 const div = document.createElement('div');
-                div.className = 'comment-item';
-                if (c.名前 === "篠ノ井乗務区") {
-                    div.classList.add('comment-official');
-                    div.innerHTML = `<span class="official-label">★公式</span><strong>${c.名前}</strong><br>${c.内容}`;
-                } else {
-                    div.innerHTML = `<strong>${c.名前}</strong><br>${c.内容}`;
-                }
+                div.className = 'comment-item' + (c.名前 === "篠ノ井乗務区" ? " comment-official" : "");
+                div.innerHTML = `<strong>${c.名前}</strong> <small style="color:#999;">${c.日付}</small><br>${c.内容}`;
                 list.appendChild(div);
             });
-        } catch(e) { list.innerHTML = "<small>エラー</small>"; }
+        } catch(e) { list.innerHTML = "<small>エラーが発生しました</small>"; }
     }
 
     document.getElementById('comment-form').onsubmit = async (e) => {
         e.preventDefault();
-        const nameInput = document.getElementById('u-name').value;
-        const btn = document.getElementById('submit-btn');
-        btn.disabled = true; btn.innerText = "送信中...";
-        const id = document.getElementById('target-id').value;
+        const id = document.getElementById('v-title').innerText.match(/\d+/)[0];
         const data = {
             action: "postComment", id: id,
-            name: nameInput,
+            name: document.getElementById('u-name').value,
             comment: document.getElementById('u-msg').value
         };
-        try {
-            await fetch(newsScriptUrl, { method: 'POST', body: JSON.stringify(data) });
-            document.getElementById('u-msg').value = "";
-            await loadComments(id);
-        } catch(error) { alert("送信に失敗しました"); }
-        finally { btn.disabled = false; btn.innerText = "投稿"; }
+        const res = await fetch(newsScriptUrl, { method: 'POST', body: JSON.stringify(data) });
+        const result = await res.text();
+        if (result === "NG_WORD") alert("不適切な表現が含まれています。");
+        else { alert("投稿しました。管理者の承認後に反映されます。"); document.getElementById('u-msg').value = ""; }
+        toggleComments(false);
     };
 
-    updateLoginUI();
     loadNews();
 </script>
 </body>
