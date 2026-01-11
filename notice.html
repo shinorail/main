@@ -5,41 +5,105 @@
     <title>ホームページ移設のご案内｜篠ノ井乗務区</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- 既存CSSをリンク -->
+    <!-- 既存CSS -->
     <link rel="stylesheet" href="style.css">
-</head>
-<body>
 
+    <!-- このページ専用メニューCSS（notice-menu.css 相当） -->
+    <style>
+        /* ===== 共通 ===== */
+        body.notice-page nav#menu ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        body.notice-page nav#menu a {
+            text-decoration: none;
+            display: block;
+        }
+
+        /* ===== PC：上部・横並びメニュー ===== */
+        @media screen and (min-width: 769px) {
+            body.notice-page nav#menu ul {
+                display: flex;
+                justify-content: center;
+                gap: 2rem;
+            }
+
+            body.notice-page nav#menu a {
+                padding: 0.5rem 1.2rem;
+            }
+        }
+
+        /* ===== スマホ：上部・縦（垂直タブ） ===== */
+        @media screen and (max-width: 768px) {
+            body.notice-page nav#menu ul {
+                border-top: 1px solid #ccc;
+            }
+
+            body.notice-page nav#menu li {
+                border-bottom: 1px solid #ccc;
+            }
+
+            body.notice-page nav#menu a {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body class="notice-page">
+
+    <!-- ヘッダー -->
     <header>
         <h1>篠ノ井乗務区</h1>
 
-        <!-- 既存menu.jsが使うメニュー領域 -->
+        <!-- ★ 必ず上に表示されるメニュー -->
         <nav id="menu"></nav>
     </header>
 
+    <!-- メイン -->
     <main>
         <section>
             <h2>ホームページ移設のご案内</h2>
 
             <p>
                 平素より、篠ノ井乗務区のホームページをご覧いただき、誠にありがとうございます。
-                日頃から多くの皆さまにご利用いただいておりますこと、心より御礼申し上げます。
+                日頃から多くの皆さまに当ホームページをご利用いただいておりますこと、
+                心より御礼申し上げます。
             </p>
 
             <p>
                 このたび、当乗務区ではホームページの構成および管理体制の見直しに伴い、
-                従来公開しておりました旧ホームページから、新しいホームページへ移設を行いました。
+                従来公開しておりました旧ホームページから、
+                新しいホームページへ移設を行いました。
             </p>
 
             <p>
                 旧ホームページにつきましては、長期間にわたり情報発信の場として運用してまいりました。
-                これまで閲覧してくださった皆さまに、改めて深く感謝申し上げます。
+                これまで閲覧してくださった皆さま、
+                ならびに継続してご関心をお寄せいただいた皆さまに、
+                改めて深く感謝申し上げます。
             </p>
 
             <p>
-                新しいホームページでは、より分かりやすく、見やすい情報提供を目指し、
-                内容の整理および改善を進めております。
-                今後も随時更新を行い、正確で有益な情報発信に努めてまいります。
+                新しいホームページでは、情報の整理および内容の充実を図り、
+                より分かりやすく、より見やすい構成となるよう改善を行っております。
+                初めてご覧になる方にも、これまでご利用いただいていた方にも、
+                安心してご覧いただけるページづくりを目指しております。
+            </p>
+
+            <p>
+                今後は、掲載内容の随時更新や必要に応じた情報追加を行い、
+                正確で最新の情報をお伝えできるよう努めてまいります。
+                また、閲覧環境の多様化に対応し、
+                スマートフォン等からも快適にご利用いただけるよう、
+                継続的な改善を進めてまいります。
+            </p>
+
+            <p>
+                本ホームページが、皆さまにとって有益で信頼できる情報源となるよう、
+                今後も内容の充実と品質向上に取り組んでまいります。
             </p>
 
             <p>
@@ -47,17 +111,18 @@
                 何卒よろしくお願い申し上げます。
             </p>
 
-            <p class="sign">
+            <p style="text-align:right; margin-top:2em;">
                 篠ノ井乗務区
             </p>
         </section>
     </main>
 
+    <!-- フッター -->
     <footer>
         <p>&copy; 篠ノ井乗務区</p>
     </footer>
 
-    <!-- 既存JavaScriptをリンク -->
+    <!-- 既存JS -->
     <script src="menu.js"></script>
 
 </body>
