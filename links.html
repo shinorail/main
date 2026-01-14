@@ -1,71 +1,64 @@
 <!DOCTYPE html>
 
-<html lang="ja"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>SNS/外部リンク - 篠ノ井乗務区</title> <link rel="stylesheet" href="style.css"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> <style> /* ページ固有：機械的・タイルデザイン */ .info-bar { background-color: #b71c1c; color: #fff; padding: 10px; text-align: center; font-size: 13px; font-weight: bold; letter-spacing: 1px; border-bottom: 2px solid #000; }
+<html lang="ja"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>SNS/外部リンク - 篠ノ井乗務区</title> <link rel="stylesheet" href="style.css"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> <style> .info-bar { background-color: #b71c1c; color: #fff; padding: 12px; text-align: center; font-size: 14px; font-weight: bold; border-bottom: 2px solid #333; }
 
     .link-container {
-        max-width: 1000px;
+        max-width: 900px;
         margin: 0 auto;
         padding: 40px 20px;
     }
 
     .link-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 10px; /* タイル感を出すために隙間を狭く */
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 10px;
         margin-top: 30px;
     }
 
-    /* 機械的な四角ボタン */
+    /* 機械的な四角いボタン */
     .btn {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         padding: 40px 10px;
-        border-radius: 0px; /* 完全な四角 */
+        border-radius: 0;
         color: #fff;
         text-decoration: none;
         font-weight: bold;
         text-align: center;
-        border: 1px solid rgba(255,255,255,0.1);
-        transition: all 0.1s; /* 反応を速く */
-        box-shadow: inset 0 0 0 1px rgba(0,0,0,0.2);
+        border: 2px solid rgba(0,0,0,0.2);
+        transition: 0.1s;
+        box-shadow: 4px 4px 0px rgba(0,0,0,0.3);
     }
 
     .btn i {
-        font-size: 2.2em;
+        font-size: 2.5em;
         margin-bottom: 15px;
     }
 
-    .btn span {
-        font-size: 0.95em;
-        letter-spacing: 0.5px;
-    }
-
-    /* 押し込むようなクリック感 */
-    .btn:hover {
-        filter: brightness(1.2);
-        transform: scale(0.98);
-    }
-
     .btn:active {
-        transform: scale(0.95);
+        transform: translate(2px, 2px);
+        box-shadow: 1px 1px 0px rgba(0,0,0,0.3);
         filter: brightness(0.8);
     }
 
-    /* 配色：計器類のようなイメージ */
-    .btn-new { background: #1b5e20; }     /* 深緑 */
-    .btn-old { background: #455a64; }     /* 鋼鉄色 */
-    .btn-lab { background: #006064; }     /* 深い青緑 */
-    .btn-x { background: #000000; }       /* 黒 */
-    .btn-special { background: #212121; } /* 墨 */
-    .btn-contact { background: #0d47a1; } /* 濃紺 */
+    .btn:hover {
+        filter: brightness(1.1);
+    }
 
-    /* ポップアップ：機械的警告風 */
+    /* 配色 */
+    .btn-new { background-color: #2e7d32; }
+    .btn-old { background-color: #546e7a; }
+    .btn-lab { background-color: #00695c; }
+    .btn-x { background-color: #000000; }
+    .btn-special { background-color: #37474f; }
+    .btn-contact { background-color: #1565c0; }
+
     #popup-overlay {
         position: fixed;
         top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0,0,0,0.85);
+        background: rgba(0,0,0,0.8);
         display: flex;
         justify-content: center;
         align-items: center;
@@ -76,44 +69,41 @@
     }
     .show-popup { visibility: visible !important; opacity: 1 !important; }
     #popup-content {
-        background: #eee;
-        padding: 25px;
-        border: 4px double #333;
-        max-width: 380px;
+        background: #fff;
+        padding: 30px;
+        border: 5px solid #333;
+        max-width: 400px;
         text-align: center;
-        color: #000;
     }
     .close-btn {
         margin-top: 20px;
-        padding: 8px 20px;
+        padding: 10px 30px;
         background: #333;
         color: #fff;
         border: none;
         cursor: pointer;
         font-weight: bold;
-        border-radius: 0;
     }
 
     .version {
         text-align: center;
         margin-top: 50px;
-        color: #666;
-        font-size: 0.8em;
+        color: #888;
         font-family: monospace;
     }
 </style>
 </head> <body>
 
-<div class="info-bar"> SYSTEM UPDATE: OLD SITE WILL BE DECOMMISSIONED AFTER COMPLETION. </div>
+<div class="info-bar"> 【重要】旧サイトは新サイト完成まで同時更新し、完成後は閉鎖いたします。 </div>
 
-<div id="popup-overlay"> <div id="popup-content"> <h3 style="margin-top:0;">NOTICE</h3> <p>旧公式サイトは将来的に閉鎖されます。リンクの更新を確認してください。</p> <button class="close-btn" onclick="closePopup()">ACKNOWLEDGE</button> </div> </div>
+<div id="popup-overlay"> <div id="popup-content"> <h3>サイト移転のお知らせ</h3> <p>旧公式サイトは新サイトの完成に伴い、将来的に閲覧できなくなります。</p> <button class="close-btn" onclick="closePopup()">了解しました</button> </div> </div>
 
 <header></header> <nav></nav>
 
-<div class="container"> <div class="link-container"> <h2 style="text-align:center; letter-spacing: 4px;">EXT-LINKS</h2> <p style="text-align:center; font-size: 0.9em; margin-bottom: 40px;">CONNECTED NETWORK NODES</p>
+<div class="container"> <div class="link-container"> <h2 style="text-align:center;">SNS / 外部リンク</h2> <p style="text-align:center;">篠ノ井乗務区 関連リンク</p>
 
     <div class="link-grid">
-        <a href="index.html" class="btn btn-new">
+        <a href="[https://shinorail.github.io/main/](https://shinorail.github.io/main/)" class="btn btn-new">
             <i class="fa-brands fa-google"></i>
             <span>公式（新）</span>
         </a>
@@ -123,11 +113,11 @@
         </a>
         <a href="[https://shinorail.github.io/lab/](https://shinorail.github.io/lab/)" class="btn btn-lab" target="_blank">
             <i class="fa-solid fa-flask"></i>
-            <span>ラボ新</span>
+            <span>しのれーるらぼ新</span>
         </a>
         <a href="[https://sites.google.com/view/shinorail-lab/](https://sites.google.com/view/shinorail-lab/)" class="btn btn-old" target="_blank">
             <i class="fa-brands fa-google"></i>
-            <span>ラボ旧</span>
+            <span>らぼ（旧）</span>
         </a>
         <a href="[https://x.com/Shino_Rail](https://x.com/Shino_Rail)" class="btn btn-x" target="_blank">
             <i class="fa-brands fa-x-twitter"></i>
@@ -135,19 +125,19 @@
         </a>
         <a href="[https://x.com/shinorail_lab](https://x.com/shinorail_lab)" class="btn btn-x" target="_blank">
             <i class="fa-brands fa-x-twitter"></i>
-            <span>ラボ X</span>
+            <span>らぼ X</span>
         </a>
         <a href="[https://shinorail.github.io/shinonoi-2026/](https://shinorail.github.io/shinonoi-2026/)" class="btn btn-special" target="_blank">
-            <i class="fa-solid fa-microchip"></i>
+            <i class="fa-solid fa-clock"></i>
             <span>2026 COUNT</span>
         </a>
         <a href="contact.html" class="btn btn-contact">
-            <i class="fa-solid fa-envelope"></i>
+            <i class="fa-solid fa-paper-plane"></i>
             <span>CONTACT</span>
         </a>
     </div>
 
-    <div class="version">VER_2.4.1</div>
+    <div class="version">Version 2.4.1</div>
 </div>
 </div>
 
@@ -155,7 +145,7 @@
 
 <script src="menu.js"></script>
 
-<script> window.addEventListener('load', function() { setTimeout(function() { document.getElementById('popup-overlay').classList.add('show-popup'); }, 400); });
+<script> window.addEventListener('load', function() { setTimeout(function() { document.getElementById('popup-overlay').classList.add('show-popup'); }, 500); });
 
 function closePopup() {
     document.getElementById(&#39;popup-overlay&#39;).classList.remove(&#39;show-popup&#39;);
