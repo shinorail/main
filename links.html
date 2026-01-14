@@ -1,89 +1,184 @@
 <!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SNS/外部リンク - 篠ノ井乗務区</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ページ固有のスタイル調整：四角いタイルボタン用 */
+        .info-bar {
+            background-color: #d93025;
+            color: white;
+            padding: 12px 20px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
 
-<html lang="ja"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>SNS/外部リンク - 篠ノ井乗務区</title> <link rel="stylesheet" href="style.css"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> </head> <body>
+        .link-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
 
-<div class="info-bar"> 【重要】旧サイトは新サイト完成まで同時更新し、完成後は閉鎖いたします。 </div>
+        .link-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
 
-<div id="popup-overlay"> <div id="popup-content"> <h3>サイト移転のお知らせ</h3> <p>旧公式サイトは新サイトの完成に伴い、将来的に閲覧できなくなります。ブックマークの変更をお願いします。</p> <button class="close-btn" onclick="closePopup()">了解しました</button> </div> </div>
+        /* 四角ボタン（タイル）のデザイン */
+        .btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+            border-radius: 4px; /* 四角形 */
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
 
-<header></header> <nav></nav>
+        .btn i {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
 
-<div class="container"> <div class="header-text"> <h2>SNS / 外部リンク</h2> <p>篠ノ井乗務区に関連する各サイト・SNSの一覧です。</p> </div>
+        .btn span {
+            font-size: 1.1em;
+        }
 
-<div class="link-grid">
-    <a href="index.html" class="btn btn-new">
-        <i class="fa-brands fa-google"></i>
-        <span>篠ノ井乗務区 公式（新）</span>
-    </a>
-    <a href="[https://sites.google.com/view/shinorail/](https://sites.google.com/view/shinorail/)" class="btn btn-old" target="_blank">
-        <i class="fa-brands fa-google"></i>
-        <span>篠ノ井乗務区 公式（旧）</span>
-    </a>
-    <a href="[https://shinorail.github.io/lab/](https://shinorail.github.io/lab/)" class="btn btn-lab-new" target="_blank">
-        <i class="fa-solid fa-flask"></i>
-        <span>しのれーるらぼ新</span>
-    </a>
-    <a href="[https://sites.google.com/view/shinorail-lab/](https://sites.google.com/view/shinorail-lab/)" class="btn btn-old" target="_blank">
-        <i class="fa-brands fa-google"></i>
-        <span>しのれーるらぼ サイト（旧）</span>
-    </a>
-    <a href="[https://x.com/Shino_Rail](https://x.com/Shino_Rail)" class="btn btn-x">
-        <i class="fa-brands fa-x-twitter"></i>
-        <span>篠ノ井乗務区 X</span>
-    </a>
-    <a href="[https://x.com/shinorail_lab](https://x.com/shinorail_lab)" class="btn btn-x">
-        <i class="fa-brands fa-x-twitter"></i>
-        <span>しのれーるらぼ X</span>
-    </a>
-    <a href="[https://shinorail.github.io/shinonoi-2026/](https://shinorail.github.io/shinonoi-2026/)" class="btn btn-special" target="_blank">
-        <i class="fa-solid fa-wand-magic-sparkles"></i>
-        <span>2026カウントダウン</span>
-    </a>
-    <a href="contact.html" class="btn btn-contact">
-        <i class="fa-solid fa-paper-plane"></i>
-        <span>コンタクトページ</span>
-    </a>
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            filter: brightness(1.1);
+        }
+
+        /* ボタン配色 */
+        .btn-new { background: #2e7d32; }
+        .btn-old { background: #66bb6a; }
+        .btn-lab { background: #00897b; }
+        .btn-x { background: #000000; }
+        .btn-special { background: #455a64; }
+        .btn-contact { background: #1565c0; }
+
+        /* ポップアップ */
+        #popup-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            visibility: hidden;
+            opacity: 0;
+            transition: 0.3s;
+        }
+        #popup-content {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 400px;
+            text-align: center;
+            color: #333;
+        }
+        .show-popup { visibility: visible !important; opacity: 1 !important; }
+        .close-btn {
+            margin-top: 20px;
+            padding: 10px 25px;
+            background: #004da0;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="info-bar">
+    【重要】旧サイトは新サイト完成まで同時更新し、完成後は閉鎖いたします。
 </div>
 
-<div class="version">Version 2.4.1</div>
+<div id="popup-overlay">
+    <div id="popup-content">
+        <h3>サイト移転のお知らせ</h3>
+        <p>旧公式サイトは新サイトの完成に伴い、将来的に閲覧できなくなります。ブックマークの変更をお願いします。</p>
+        <button class="close-btn" onclick="closePopup()">了解しました</button>
+    </div>
+</div>
+
+<header></header>
+<nav></nav>
+
+<div class="container">
+    <div class="link-container">
+        <h2 style="text-align:center; font-size: 2em; margin-bottom: 10px;">SNS / 外部リンク</h2>
+        <p style="text-align:center; color: #666;">篠ノ井乗務区に関連する各サイト・SNSの一覧です。</p>
+
+        <div class="link-grid">
+            <a href="index.html" class="btn btn-new">
+                <i class="fa-brands fa-google"></i>
+                <span>篠ノ井乗務区 公式（新）</span>
+            </a>
+            <a href="https://sites.google.com/view/shinorail/" class="btn btn-old" target="_blank">
+                <i class="fa-brands fa-google"></i>
+                <span>篠ノ井乗務区 公式（旧）</span>
+            </a>
+            <a href="https://shinorail.github.io/lab/" class="btn btn-lab" target="_blank">
+                <i class="fa-solid fa-flask"></i>
+                <span>しのれーるらぼ新</span>
+            </a>
+            <a href="https://sites.google.com/view/shinorail-lab/" class="btn btn-old" target="_blank">
+                <i class="fa-brands fa-google"></i>
+                <span>しのれーるらぼ サイト（旧）</span>
+            </a>
+            <a href="https://x.com/Shino_Rail" class="btn btn-x" target="_blank">
+                <i class="fa-brands fa-x-twitter"></i>
+                <span>篠ノ井乗務区 X</span>
+            </a>
+            <a href="https://x.com/shinorail_lab" class="btn btn-x" target="_blank">
+                <i class="fa-brands fa-x-twitter"></i>
+                <span>しのれーるらぼ X</span>
+            </a>
+            <a href="https://shinorail.github.io/shinonoi-2026/" class="btn btn-special" target="_blank">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <span>2026カウントダウン</span>
+            </a>
+            <a href="contact.html" class="btn btn-contact">
+                <i class="fa-solid fa-paper-plane"></i>
+                <span>コンタクトページ</span>
+            </a>
+        </div>
+
+        <div style="text-align:center; margin-top:40px; color:#aaa; font-size:0.8em;">
+            Version 2.4.12
+        </div>
+    </div>
 </div>
 
 <footer></footer>
 
 <script src="menu.js"></script>
+<script>
+    // ポップアップ制御
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            document.getElementById('popup-overlay').classList.add('show-popup');
+        }, 500);
+    });
 
-<script> window.addEventListener('load', function() { setTimeout(function() { document.getElementById('popup-overlay').classList.add('show-popup'); }, 500); });
-
-function closePopup() {
-    document.getElementById(&#39;popup-overlay&#39;).classList.remove(&#39;show-popup&#39;);
-}
+    function closePopup() {
+        document.getElementById('popup-overlay').classList.remove('show-popup');
+    }
 </script>
-
-</body> </html>
-
-2. CSS (style.css)
-四角いボタン（タイル）のデザインを定義しています。
-
-body { margin: 0; padding: 0; font-family: "Helvetica Neue", Arial, sans-serif; background-color: #f5f7f9; color: #333; }
-
-.info-bar { background-color: #d32f2f; color: white; padding: 15px; text-align: center; font-weight: bold; font-size: 0.9em; }
-
-.container { max-width: 1000px; margin: 0 auto; padding: 50px 20px; }
-
-.header-text { text-align: center; margin-bottom: 40px; }
-
-.header-text h2 { font-size: 2em; color: #004da0; margin-bottom: 10px; }
-
-.link-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; }
-
-/* 四角ボタンの基本スタイル / .btn { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px 10px; border-radius: 4px; / 四角形に近い設定 */ color: white; text-decoration: none; font-weight: bold; transition: all 0.2s ease; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-
-.btn i { font-size: 2em; margin-bottom: 15px; }
-
-.btn:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.2); filter: brightness(1.1); }
-
-/* ボタン色 / .btn-new { background-color: #2e7d32; } / 濃い緑 / .btn-old { background-color: #66bb6a; } / 薄い緑 / .btn-lab-new { background-color: #00897b; } / ティール / .btn-x { background-color: #000000; } / X(黒) / .btn-special { background-color: #455a64; } / グレー / .btn-contact { background-color: #1565c0; } / 青 */
-
-/* ポップアップ */ #popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 9999; visibility: hidden; opacity: 0; transition: 0.3s; } .show-popup { visibility: visible !important; opacity: 1 !important; } #popup-content { background: white; padding: 30px; border-radius: 8px; max-width: 400px; text-align: center; } .close-btn { margin-top: 20px; padding: 10px 25px; background: #004da0; color: white; border: none; border-radius: 4px; cursor: pointer; }
-
-.version { text-align: center; margin-top: 40px; color: #aaa; font-size: 0.8em; }
+</body>
+</html>
