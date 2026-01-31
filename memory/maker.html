@@ -1,36 +1,54 @@
-申し訳ありません。入力した文字がプレビューに反映されない原因は、プログラム（JavaScript）が動くタイミングや、ブラウザの読み込みエラーが考えられます。
-
-そこで、ボタンを押さなくても**「入力した瞬間にプレビューが書き換わる」**ようにJSを改良しました。これなら、反映されないというトラブルを防げます。
-
-また、画像保存（html2canvas）もより安定して動くように設定しました。
-
 <!DOCTYPE html>
 
-<html lang="ja"> <head> <meta charset="UTF-8"> <title>デジタル硬券作成パネル（自動反映版）</title> <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script> <style> body { background-color: #333; color: white; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; } .control-panel { background-color: #444; padding: 20px; border-radius: 15px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; width: 900px; margin-bottom: 30px; } .input-group { display: flex; flex-direction: column; gap: 5px; } label { font-size: 12px; color: #ccc; } input, select { padding: 10px; border-radius: 4px; border: none; font-size: 14px; } .button-area { grid-column: span 3; display: flex; justify-content: center; margin-top: 10px; } .btn-save { background-color: #4CAF50; color: white; padding: 12px 40px; border-radius: 4px; font-weight: bold; cursor: pointer; border: none; font-size: 16px; }
+<html lang="ja"> <head> <meta charset="UTF-8"> <title>デジタル硬券作成パネル</title> <style> body { background-color: #333; color: white; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; } .panel { background-color: #444; padding: 20px; border-radius: 15px; width: 600px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); } .row { display: flex; margin-bottom: 10px; align-items: center; } label { width: 150px; font-size: 14px; color: #ccc; } input, select { flex: 1; padding: 8px; border-radius: 4px; border: none; }
 
-.preview-wrapper { padding: 40px; background-color: #222; border: 2px solid #000; } .ticket { width: 480px; height: 180px; background-color: #cfbc9b; position: relative; padding: 10px; box-sizing: border-box; color: #222; font-family: "serif"; overflow: hidden; } .red-bar { position: absolute; top: 48%; left: 0; width: 100%; height: 16px; background-color: rgba(180, 40, 40, 0.5); z-index: 1; } .date-side { position: absolute; left: 5px; top: 0; height: 100%; width: 60px; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5; } .main-content { margin-left: 65px; margin-right: 50px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; border-right: 1.2px solid #555; } #out-title { font-size: 44px; font-weight: 900; text-align: center; border-bottom: 2px solid #222; padding-bottom: 2px; letter-spacing: 4px; margin-top: 5px; } .type-price { display: flex; justify-content: space-between; font-size: 22px; font-weight: bold; padding: 0 10px; z-index: 5; } .footer { display: flex; justify-content: space-between; font-size: 13px; padding: 0 10px 5px; font-weight: bold; } .right-side { position: absolute; right: 0; top: 0; width: 50px; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 10px 0; } .red-stamp { position: absolute; top: 35%; left: 45%; display: none; gap: 15px; z-index: 10; } .oval { width: 22px; height: 60px; border: 3px solid rgba(180, 40, 40, 0.7); border-radius: 50%; } </style>
+/* 硬券のデザイン */ .ticket-area { padding: 40px; background-color: #222; border-radius: 10px; } .ticket { width: 480px; height: 180px; background-color: #cfbc9b; position: relative; color: #222; font-family: "MS Mincho", "serif"; border-radius: 2px; } .red-line { position: absolute; top: 85px; left: 0; width: 100%; height: 15px; background-color: rgba(200, 50, 50, 0.5); }
+
+.side-date { position: absolute; left: 10px; top: 0; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; } .name-text { writing-mode: vertical-rl; font-size: 11px; margin-bottom: 5px; font-weight: bold; } .date-text { writing-mode: vertical-rl; font-size: 24px; font-weight: bold; }
+
+.center-content { margin-left: 60px; margin-right: 50px; height: 100%; display: flex; flex-direction: column; justify-content: space-around; text-align: center; border-right: 1px solid #666; } .title-text { font-size: 44px; font-weight: 900; border-bottom: 2px solid #222; letter-spacing: 5px; } .type-price { display: flex; justify-content: space-between; padding: 0 20px; font-size: 22px; font-weight: bold; } .valid-text { font-size: 14px; font-weight: bold; }
+
+.right-side { position: absolute; right: 0; top: 0; width: 50px; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-around; } .hole { width: 15px; height: 15px; background: #222; border-radius: 50%; } .vert-text { writing-mode: vertical-rl; font-size: 14px; font-weight: bold; } .cat-text { font-size: 20px; font-weight: bold; }
+
+.red-stamp { position: absolute; top: 60px; left: 200px; display: none; gap: 15px; } .oval { width: 22px; height: 60px; border: 3px solid rgba(200, 50, 50, 0.7); border-radius: 50%; } </style>
 
 </head> <body>
 
-<h1>デジタル硬券 作成システム</h1>
+<div class="panel"> <div class="row"><label>応募者名</label><input type="text" id="i-name" oninput="draw()" value="篠ノ井 太郎"></div> <div class="row"><label>作品タイトル</label><input type="text" id="i-title" oninput="draw()" value="東京駅"></div> <div class="row"><label>券種</label><input type="text" id="i-type" oninput="draw()" value="完走記念券"></div> <div class="row"><label>ポイント</label><input type="text" id="i-price" oninput="draw()" value="100P"></div> <div class="row"><label>区分</label> <select id="i-cat" onchange="draw()"> <option value="一般">一般</option> <option value="小">小児</option> </select> </div> </div>
 
-<div class="control-panel"> <div class="input-group"><label>応募者名</label><input type="text" class="sync" id="in-name" value="篠ノ井 太郎"></div> <div class="input-group"><label>作品タイトル</label><input type="text" class="sync" id="in-title" value="東京駅"></div> <div class="input-group"><label>券種</label><input type="text" class="sync" id="in-type" value="完走記念券"></div> <div class="input-group"><label>ポイント</label><input type="text" class="sync" id="in-price" value="100P"></div> <div class="input-group"><label>日付</label><input type="text" class="sync" id="in-date" value="26.01.31"></div> <div class="input-group"><label>有効期限</label><input type="text" class="sync" id="in-valid" value="発券日1回限り有効"></div> <div class="input-group"><label>区分</label><select class="sync" id="in-cat"><option value="一般">一般</option><option value="小">小児</option></select></div> <div class="input-group"><label>右側縦書き</label><input type="text" class="sync" id="in-right" value="入 記録"></div> <div class="input-group"><label>注釈</label><input type="text" class="sync" id="in-note" value="旅客車内に立ち入ることはできません。"></div> <div class="button-area"> <button class="btn-save" id="downloadBtn">この内容で画像を保存する</button> </div> </div>
+<div class="ticket-area"> <div class="ticket"> <div class="red-line"></div> <div id="stamp" class="red-stamp"><div class="oval"></div><div class="oval" style="height:70px; margin-top:-5px;"></div><div class="oval"></div></div>
 
-<div class="preview-wrapper"> <div class="ticket" id="ticket-design"> <div class="red-bar"></div> <div class="red-stamp" id="stamp-layer"><div class="oval"></div><div class="oval" style="height:75px; margin-top:-7px;"></div><div class="oval"></div></div> <div class="date-side"> <div id="out-name" style="writing-mode:vertical-rl; font-size:11px; margin-bottom:5px; font-weight:bold;"></div> <div id="out-date" style="writing-mode:vertical-rl; font-size:24px; font-weight:bold;"></div> </div> <div class="main-content"> <div id="out-title"></div> <div class="type-price"><span id="out-type"></span><span id="out-price"></span></div> <div id="out-note" style="font-size:10px; margin-left:10px; font-weight:bold;"></div> <div class="footer"><span id="out-valid"></span><span>(改) (N)</span></div> </div> <div class="right-side"> <div style="width:14px; height:14px; background:#222; border-radius:50%;"></div> <div id="out-right" style="writing-mode:vertical-rl; font-size:14px; font-weight:bold;"></div> <div id="out-cat" style="font-size:20px; font-weight:bold;"></div> </div> </div> </div>
+<div class="side-date">
+  <div id="o-name" class="name-text"></div>
+  <div id="o-date" class="date-text">26.01.31</div>
+</div>
 
-<script> const ids = ['name', 'title', 'type', 'price', 'date', 'valid', 'cat', 'right', 'note'];
+<div class="center-content">
+  <div id="o-title" class="title-text"></div>
+  <div class="type-price">
+    <span id="o-type"></span>
+    <span id="o-price"></span>
+  </div>
+  <div id="o-valid" class="valid-text">発券日1回限り有効</div>
+</div>
 
-function refresh() { ids.forEach(id => { const input = document.getElementById('in-' + id); const output = document.getElementById('out-' + id); if (input && output) { output.innerText = input.value; } });
+<div class="right-side">
+  <div class="hole"></div>
+  <div class="vert-text">入 記録</div>
+  <div id="o-cat" class="cat-text"></div>
+</div>
+</div> </div>
 
-const title = document.getElementById(&#39;out-title&#39;);
-title.style.fontSize = title.innerText.length &gt; 5 ? &quot;26px&quot; : &quot;44px&quot;;
-document.getElementById(&#39;stamp-layer&#39;).style.display = document.getElementById(&#39;in-cat&#39;).value === &#39;小&#39; ? &#39;flex&#39; : &#39;none&#39;;
+<script> function draw() { // 入力から値を取得してそのまま反映 document.getElementById('o-name').innerText = document.getElementById('i-name').value; document.getElementById('o-title').innerText = document.getElementById('i-title').value; document.getElementById('o-type').innerText = document.getElementById('i-type').value; document.getElementById('o-price').innerText = document.getElementById('i-price').value; document.getElementById('o-cat').innerText = document.getElementById('i-cat').value;
+
+// タイトルの長さ調整
+const t = document.getElementById(&#39;o-title&#39;);
+t.style.fontSize = t.innerText.length &gt; 5 ? &quot;24px&quot; : &quot;44px&quot;;
+
+// スタンプの表示切り替え
+document.getElementById(&#39;stamp&#39;).style.display = (document.getElementById(&#39;i-cat&#39;).value === &quot;小&quot;) ? &quot;flex&quot; : &quot;none&quot;;
 }
 
-// 入力フォームに変更があったら即座に反映 document.querySelectorAll('.sync').forEach(el => { el.addEventListener('input', refresh); el.addEventListener('change', refresh); });
-
-// 保存ボタン document.getElementById('downloadBtn').addEventListener('click', function() { html2canvas(document.getElementById('ticket-design')).then(canvas => { const link = document.createElement('a'); link.download = 'ticket.png'; link.href = canvas.toDataURL(); link.click(); }); });
-
-// 起動時に反映 refresh(); </script>
+// ページが開いた瞬間に一度実行 window.onload = draw; </script>
 
 </body> </html>
