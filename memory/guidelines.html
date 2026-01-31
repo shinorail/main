@@ -1,34 +1,20 @@
 <!DOCTYPE html>
 
-<html lang="ja"> <head> <link rel="icon" href="../favicon.ico"> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>公式募集要項 - 鉄路の記憶</title> <link rel="stylesheet" href="../style.css"> <style> :root { --rail-gold: #8b6b23; /* 白背景で見やすい濃いめの金 / --deep-blue: #0d123e; --text-main: #222222; / 真っ黒に近いグレーで見やすく / --text-sub: #555555; --bg-light: #ffffff; / 背景を白に固定 */ }
+<html lang="ja"> <head> <link rel="icon" href="../favicon.ico"> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>公式募集要項 - 鉄路の記憶</title> <link rel="stylesheet" href="../style.css"> <style> :root { --rail-gold: #8b6b23; --deep-blue: #0d123e; --text-main: #000000; --text-sub: #333333; --bg-white: #ffffff; }
 
 body { 
-    background: var(--bg-light); 
+    background: var(--bg-white); 
     color: var(--text-main); 
-    font-family: "BIZ UDPGothic", "Hiragino Sans", sans-serif; 
+    font-family: "BIZ UDPGothic", "Hiragino Sans", "Meiryo", sans-serif; 
     line-height: 1.8; 
     margin: 0; 
 }
 
 .header-bar { 
     background: var(--deep-blue); 
-    padding: 25px; 
-    border-bottom: 4px solid #c5a059; 
+    padding: 30px 20px; 
+    border-bottom: 5px solid #c5a059; 
     text-align: center;
-    position: relative;
-}
-
-.menu-trigger {
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    color: #c5a059;
-    font-size: 1.8rem;
-    cursor: pointer;
-    z-index: 1001;
 }
 
 .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
@@ -37,55 +23,79 @@ body {
 .text-side { flex: 1; min-width: 320px; }
 .viewer-side { flex: 1.2; min-width: 320px; }
 
-h1 { color: #c5a059; font-size: 1.6rem; margin: 0; letter-spacing: 0.1em; }
+h1 { color: #c5a059; font-size: 1.8rem; margin: 0; letter-spacing: 0.1em; font-weight: bold; }
 
 h2 { 
     color: var(--deep-blue); 
-    border-bottom: 2px solid var(--rail-gold); 
-    padding-bottom: 8px; 
-    margin-top: 35px; 
-    font-size: 1.3rem;
+    border-left: 5px solid var(--rail-gold); 
+    padding-left: 15px;
+    margin-top: 40px; 
+    font-size: 1.4rem;
     font-weight: bold;
 }
 
 .status-badge { 
     display: inline-block; 
-    padding: 4px 14px; 
-    background: #fdf6e3; 
-    border: 1px solid var(--rail-gold); 
-    color: var(--rail-gold); 
+    padding: 5px 15px; 
+    background: #f0f0f0; 
+    border: 1px solid #ccc; 
+    color: #333; 
     border-radius: 4px; 
-    font-size: 0.75rem; 
+    font-size: 0.8rem; 
     margin-bottom: 20px; 
     font-weight: bold;
 }
 
 .pdf-frame { 
     width: 100%; 
-    height: 700px; 
-    border: 1px solid #ccc; 
+    height: 800px; 
+    border: 1px solid #999; 
     border-radius: 4px; 
-    background: #eee; 
+    background: #fff; 
 }
 
-.btn-group { margin-top: 40px; display: flex; flex-direction: column; gap: 15px; align-items: center; }
+.agree-area {
+    background: #f4f4f4;
+    padding: 25px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    margin-top: 40px;
+}
+
+.check-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #000;
+}
+
+.check-item input { width: 24px; height: 24px; cursor: pointer; }
+
+.btn-group { margin-top: 30px; display: flex; flex-direction: column; gap: 20px; align-items: center; }
 
 .btn-primary { 
     width: 100%;
-    max-width: 400px;
-    padding: 16px 32px; 
-    background: var(--deep-blue); 
+    max-width: 450px;
+    padding: 20px; 
+    background: #999; 
     color: #fff; 
     text-decoration: none; 
     font-weight: bold; 
-    border-radius: 4px; 
+    border-radius: 6px; 
     text-align: center;
+    font-size: 1.2rem;
+    pointer-events: none; 
+    transition: 0.3s;
 }
 
 .btn-secondary { 
     width: 100%;
-    max-width: 400px;
-    padding: 16px 32px; 
+    max-width: 450px;
+    padding: 15px; 
     border: 2px solid var(--deep-blue); 
     color: var(--deep-blue); 
     text-decoration: none; 
@@ -94,51 +104,60 @@ h2 {
     text-align: center; 
 }
 
-.safety-info { font-size: 0.75rem; color: #666; margin-top: 8px; text-align: center; }
+.safety-info { font-size: 0.85rem; color: #444; margin-top: 10px; font-weight: bold; }
 
-strong { color: #000; }
+strong { color: #000; font-weight: 900; }
 
 @media (max-width: 768px) {
     .viewer-side { display: none; }
-    .mobile-only-btn { display: block !important; }
+    .text-side { min-width: 100%; }
 }
 </style> </head> <body>
 
-<div class="header-bar"> <h1>全日本 鉄路の記憶</h1> <button class="menu-trigger" id="menu-btn">☰</button> </div>
+<div class="header-bar"> <h1>全日本 鉄路の記憶</h1> </div>
 
 <div class="container"> <div class="flex-layout">
 
     <div class="text-side">
         <div class="status-badge">OFFICIAL GUIDELINES</div>
-        <p style="color: var(--text-sub); font-weight: bold;">本コンテストの実施規定および安全に関する重要事項を掲載しています。応募前に必ず一読をお願いいたします。</p>
+        <p style="color: #000; font-weight: bold; font-size: 1.1rem; margin-bottom: 30px;">
+            本コンテストの実施規定および安全に関する重要事項を掲載しています。応募前に必ず一読をお願いいたします。
+        </p>
 
         <h2>賞とデジタル特典</h2>
         <p>
-            <strong style="color:var(--rail-gold);">● 最優秀賞：</strong>デジタル名誉区員証<br>
-            <strong style="color:var(--rail-gold);">● 優秀作品賞：</strong>特製デジタル賞状・限定壁紙<br>
-            <strong style="color:var(--rail-gold);">● 参加特典：</strong>デジタル硬券参加証（全員配布）
+            <strong>● 最優秀賞：</strong>デジタル名誉区員証<br>
+            <strong>● 優秀作品賞：</strong>特製デジタル賞状・限定壁紙<br>
+            <strong>● 参加特典：</strong>デジタル硬券参加証（全員配布）
         </p>
 
         <h2>応募のきまり</h2>
-        <ul style="font-size: 1rem; padding-left: 20px; color: var(--text-main);">
-            <li>形式：JPG / PNG / PDF（5MB以内）</li>
-            <li>点数：お一人様3点まで提出可能</li>
-            <li><span style="color:#d93025; font-weight:bold;">※線路内等の危険場所での撮影作品は失格</span></li>
+        <ul style="font-size: 1.1rem; padding-left: 20px; color: #000; font-weight: bold;">
+            <li>形式：JPG / PNG / PDF（10MB以内）</li>
+            <li>点数：お一人様5点まで一括送信可能</li>
+            <li><span style="color: #d93025;">※線路内等の危険場所での撮影作品は失格</span></li>
         </ul>
 
-        <div class="mobile-only-btn" style="display:none; margin-top:30px;">
-            <a href="PDF/railway-memory-guidelines.pdf" target="_blank" class="btn-primary" style="display:block;">
-                📄 募集要項(PDF)を全画面で表示
-            </a>
-        </div>
+        <div class="agree-area">
+            <label class="check-item">
+                <input type="checkbox" class="agree-input" id="check-guideline">
+                <span>募集要項をすべて確認しました。</span>
+            </label>
+            
+            <label class="check-item">
+                <input type="checkbox" class="agree-input" id="check-terms">
+                <span><a href="terms.html" target="_blank" style="color:var(--deep-blue); text-decoration: underline;">利用規約</a>に同意し、掲載を承諾します。</span>
+            </label>
 
-        <div class="btn-group">
-            <a href="mypage.html" class="btn-primary">マイページ（応募）へ進む</a>
-            <div style="width:100%; text-align:center;">
-                <a href="PDF/railway-memory-guidelines.pdf" download class="btn-secondary">PDFをダウンロード保存</a>
-                <p class="safety-info">
-                    ※公式ウイルスチェック済み。安全に閲覧いただけます。
-                </p>
+            <div class="btn-group">
+                <a href="[https://forms.gle/af1K29houfZsHVB29](https://forms.gle/af1K29houfZsHVB29)" target="_blank" class="btn-primary" id="submit-btn">作品提出フォームを開く</a>
+                
+                <div style="width:100%; text-align:center;">
+                    <a href="PDF/railway-memory-guidelines.pdf" download class="btn-secondary">募集要項(PDF)をダウンロード</a>
+                    <p class="safety-info">
+                        ※公式ウイルスチェック済み。安全に閲覧いただけます。
+                    </p>
+                </div>
             </div>
         </div>
     </div>
@@ -150,6 +169,24 @@ strong { color: #000; }
 </div>
 </div>
 
-<script src="memory-menu.js"></script>
+<script> const checks = document.querySelectorAll('.agree-input'); const btn = document.getElementById('submit-btn');
+
+function updateButtonState() {
+    const allChecked = Array.from(checks).every(c =&gt; c.checked);
+    if (allChecked) {
+        btn.style.background = &quot;#0d123e&quot;;
+        btn.style.pointerEvents = &quot;auto&quot;;
+        btn.style.boxShadow = &quot;0 4px 15px rgba(13, 18, 62, 0.3)&quot;;
+    } else {
+        btn.style.background = &quot;#999999&quot;;
+        btn.style.pointerEvents = &quot;none&quot;;
+        btn.style.boxShadow = &quot;none&quot;;
+    }
+}
+
+checks.forEach(check =&gt; {
+    check.addEventListener(&#39;change&#39;, updateButtonState);
+});
+</script>
 
 </body> </html>
