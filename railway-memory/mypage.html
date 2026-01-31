@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<link rel="icon" href="../favicon.ico">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>マイページ - 鉄路の記憶</title>
+<link rel="stylesheet" href="../style.css">
+<script src="../menu.js" defer></script>
+<style>
+    :root { --rail-gold: #c5a059; --deep-blue: #0d123e; }
+    body { background: #111; color: #eee; font-family: "BIZ UDPGothic", sans-serif; text-align: center; margin: 0; }
+    .auth-container { max-width: 450px; margin: 60px auto; padding: 30px; background: #222; border: 1px solid var(--rail-gold); border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    .google-btn { display: flex; align-items: center; justify-content: center; width: 100%; padding: 12px; background: #fff; color: #757575; border: none; border-radius: 4px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+    .google-btn img { width: 20px; margin-right: 12px; }
+    .user-card { display: none; }
+    .profile-img { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--rail-gold); margin-bottom: 15px; }
+    .nav-btn { display: block; text-decoration: none; padding: 15px; margin: 15px 0; border-radius: 4px; font-weight: bold; transition: 0.3s; }
+    .post-link { background: var(--rail-gold); color: var(--deep-blue); }
+    .logout-btn { background: #444; color: #ccc; border: none; width: 100%; cursor: pointer; }
+    #loading-msg { color: var(--rail-gold); font-size: 0.9rem; margin-top: 20px; }
+</style>
+</head>
+<body>
+
+<button class="menu-trigger">MENU</button>
+<nav id="mobile-nav">
+    <a href="../index.html" class="nav-link">メインポータル</a>
+    <a href="index.html" class="nav-link">フォトコンTOP</a>
+</nav>
+
+<div class="auth-container">
+    <div id="login-ui">
+        <h2 style="color:var(--rail-gold); margin-bottom:10px;">PROJECT AUTH</h2>
+        <p style="font-size:0.8rem; opacity:0.8; margin-bottom:30px;">Googleアカウントで認証を行い、<br>プロジェクトへ参加してください。</p>
+        <button class="google-btn" onclick="loginWithGoogle()">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G">
+            Googleでサインイン
+        </button>
+    </div>
+
+    <div id="user-ui" class="user-card">
+        <img id="user-pic" class="profile-img" src="" alt="User">
+        <div style="font-size:1.1rem; font-weight:bold; margin-bottom:5px;" id="user-name"></div>
+        <p style="font-size:0.8rem; color:#aaa; margin-bottom:25px;">認証済：作品の投稿・管理が可能です</p>
+        <a href="post.html" class="nav-btn post-link">作品提出フォームへ</a>
+        <button class="nav-btn logout-btn" onclick="logout()">ログアウト</button>
+    </div>
+    <div id="loading-msg">信号確認中...</div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBukPN3ZgMfBbtlMjZpYREhlZMtqUT4d38",
+    authDomain: "railway-memory.firebaseapp.com",
+    projectId: "railway-memory",
+    storageBucket: "railway-memory.firebasestorage.app",
+    messagingSenderId: "859129585420",
+    appId: "1:859129585420:web:e3e01423b1f8c8a4467329"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth();
+  const provider = new GoogleAuthProvider();
+
+  window.loginWithGoogle = () => {
+    signInWithPopup(auth, provider).catch(err => console.error(err));
+  };
+
+  window.logout = () => {
+    if(confirm("ログアウトしますか？")) signOut(auth);
+  };
+
+  onAuthStateChanged(auth, (user) => {
+    document.getElementById('loading-msg').style.display = 'none';
+    if (user) {
+      document.getElementById('login-ui').style.display = 'none';
+      document.getElementById('user-ui').style.display = 'block';
+      document.getElementById('user-name').innerText = user.displayName;
+      document.getElementById('user-pic').src = user.photoURL;
+    } else {
+      document.getElementById('login-ui').style.display = 'block';
+      document.getElementById('user-ui').style.display = 'none';
+    }
+  });
+</script>
+</body>
+</html>
