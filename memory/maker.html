@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+
+<html lang="ja"> <head> <meta charset="UTF-8"> <title>硬券作成・送信システム - 運営用</title> <style> body { background: #333; color: #fff; font-family: sans-serif; text-align: center; } .setup-area { background: #444; padding: 20px; margin: 20px auto; width: 80%; border-radius: 8px; } canvas { border: 2px solid #000; margin-top: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); } .input-box { margin: 10px; padding: 10px; width: 250px; } .btn { padding: 15px 30px; cursor: pointer; font-weight: bold; background: #c5a059; color: #000; border: none; } .send-btn { background: #28a745; color: white; margin-top: 20px; display: none; } </style> </head> <body>
+
+<h2>デジタル硬券 作成パネル</h2>
+
+<div class="setup-area"> <input type="text" id="vName" class="input-box" placeholder="応募者名（例：篠ノ井 太郎）"> <input type="text" id="vEmail" class="input-box" placeholder="送信先メールアドレス"> <input type="text" id="vTitle" class="input-box" placeholder="作品タイトル">
+
+
+<button class="btn" onclick="generateTicket()">硬券をプレビュー</button> </div>
+
+<canvas id="ticketCanvas" width="600" height="300"></canvas>
+
+<script> const canvas = document.getElementById('ticketCanvas'); const ctx = canvas.getContext('2d');
+
+function generateTicket() {
+    const name = document.getElementById(&#39;vName&#39;).value || &quot;乗車 太郎&quot;;
+    const date = new Date().toLocaleDateString(&#39;ja-JP&#39;, {year:&#39;numeric&#39;, month:&#39;2-digit&#39;, day:&#39;2-digit&#39;}).replace(/\//g, &#39;.&#39;);
+
+    // 背景（硬券の厚紙色）
+    ctx.fillStyle = &quot;#e0d6c3&quot;;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // 枠線
+    ctx.strokeStyle = &quot;#333&quot;;
+    ctx.lineWidth = 4;
+    ctx.strokeRect(10, 10, 580, 280);
+
+    // テキスト描画
+    ctx.fillStyle = &quot;#222&quot;;
+    
+    // 日付（左端）
+    ctx.font = &quot;bold 20px serif&quot;;
+    ctx.fillText(date, 30, 50);
+
+    // タイトル
+    ctx.font = &quot;24px sans-serif&quot;;
+    ctx.textAlign = &quot;center&quot;;
+    ctx.fillText(&quot;全日本 鉄路の記憶 参加記念&quot;, 300, 80);
+
+    // 区間風（名前）
+    ctx.font = &quot;bold 45px serif&quot;;
+    ctx.fillText(name + &quot; 殿&quot;, 300, 180);
+
+    // 下部メッセージ
+    ctx.font = &quot;20px sans-serif&quot;;
+    ctx.fillText(&quot;篠ノ井乗務区発行 / 有効期間満了まで記憶に有効&quot;, 300, 260);
+
+    // 入鋏風の印
+    ctx.beginPath();
+    ctx.arc(580, 150, 20, 0, Math.PI * 2);
+    ctx.fillStyle = &quot;#333&quot;;
+    ctx.fill();
+
+    document.getElementById(&#39;sendBtn&#39;).style.display = &quot;inline-block&quot;;
+}
+
+function sendTicketData() {
+    const email = document.getElementById(&#39;vEmail&#39;).value;
+    const name = document.getElementById(&#39;vName&#39;).value;
+    const imgData = canvas.toDataURL(&#39;image/png&#39;); // 画像をBase64変換
+
+    if(!email) { alert(&quot;送信先アドレスが必要です&quot;); return; }
+
+    const gasUrl = &quot;あなたのGASのウェブアプリURL&quot;;
+
+    fetch(gasUrl, {
+        method: &quot;POST&quot;,
+        body: JSON.stringify({
+            email: email,
+            name: name,
+            image: imgData
+        })
+    }).then(res =&gt; alert(&quot;送信リクエストを完了しました&quot;));
+}
+</script>
+
+</body> </html>
+
+2. GAS側：画像を受け取ってメールする全コード (POST対応)
+これをApps Scriptに追加してください。画像データを受け取って直接メール添付します。
+
+function doPost(e) { const data = JSON.parse(e.postData.contents); const email = data.email; const name = data.name; const base64Img = data.image.split(',')[1]; const decodedImg = Utilities.base64Decode(base64Img); const blob = Utilities.newBlob(decodedImg, 'image/png', 'digital-ticket.png');
+
+MailApp.sendEmail({ to: email, subject: "【鉄路の記憶】デジタル硬券をお届けします", body: name + " 様\n\nご参加ありがとうございます。作成したデジタル硬券を添付いたしました。", name: "鉄路の記憶 事務局", attachments: [blob] });
+
+return ContentService.createTextOutput("Success"); }
