@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
             <a href="index.html" class="nav-link">フォトコンTOP</a>
             <a href="guidelines.html" class="nav-link">公式募集要項</a>
             <a href="gallery.html" class="nav-link">写真館（ギャラリー）</a>
-            <a href="mypage.html" class="nav-link">マイページ</a>
             <a href="terms.html" class="nav-link" style="font-size: 0.8rem; color: #ccc;">利用規約・ポリシー</a>
             <a href="../index.html" class="nav-link" style="border-top:1px solid #444; margin-top:10px; color:#aaa;">ポータルに戻る</a>
         `;
