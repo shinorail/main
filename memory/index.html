@@ -7,7 +7,7 @@
 <title>全日本 鉄路の記憶 フォトプロジェクト</title>
 
 <link rel="stylesheet" href="../style.css">
-<script src="../menu.js" defer></script>
+<script src="memory-menu.js" defer></script>
 
 <style>
     :root { 
@@ -153,12 +153,6 @@
 </head>
 <body>
 
-<button class="menu-trigger">MENU</button>
-<nav id="mobile-nav">
-    <a href="../index.html" class="nav-link">メインポータル</a>
-    <a href="../links.html" class="nav-link">公式リンク集</a>
-</nav>
-
 <div class="project-hero">
     <span class="year-label">- MMXXVI -</span>
     <h1 class="main-title">全日本 鉄路の記憶</h1>
@@ -214,7 +208,7 @@ function copyHashtag() {
     });
 }
 
-// 3月1日になったらボタンを有効化する処理（menu.jsと併用）
+// 3月1日になったらボタンを有効化する処理
 document.addEventListener('DOMContentLoaded', () => {
     const startDate = new Date("2026-03-01T00:00:00+09:00").getTime();
     const now = new Date().getTime();
@@ -223,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (entryBtn && now >= startDate) {
         entryBtn.classList.add('active-launch');
         entryBtn.innerText = "写真を投稿して参加する";
-        entryBtn.href = "https://twitter.com/intent/tweet?hashtags=全国鉄道フォトコン2026";
+        entryBtn.href = "guidelines.html"; // 本番フォーム（募集要項）へ誘導
     }
 });
 </script>
