@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 
-<html lang="ja"> <head> <link rel="icon" href="../favicon.ico"> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>公式募集要項 - 鉄路の記憶</title> <link rel="stylesheet" href="../style.css"> <style> :root { --rail-gold: #c5a059; --deep-blue: #0d123e; --text-main: #d1d1d1; --text-sub: #a0a0a0; --bg-dark: #121216; }
+<html lang="ja"> <head> <link rel="icon" href="../favicon.ico"> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>公式募集要項 - 鉄路の記憶</title> <link rel="stylesheet" href="../style.css"> <style> :root { --rail-gold: #8b6b23; /* 白背景で見やすい濃いめの金 / --deep-blue: #0d123e; --text-main: #222222; / 真っ黒に近いグレーで見やすく / --text-sub: #555555; --bg-light: #ffffff; / 背景を白に固定 */ }
 
 body { 
-    background: var(--bg-dark); 
+    background: var(--bg-light); 
     color: var(--text-main); 
     font-family: "BIZ UDPGothic", "Hiragino Sans", sans-serif; 
-    line-height: 1.7; 
+    line-height: 1.8; 
     margin: 0; 
 }
 
 .header-bar { 
     background: var(--deep-blue); 
     padding: 25px; 
-    border-bottom: 3px solid var(--rail-gold); 
+    border-bottom: 4px solid #c5a059; 
     text-align: center;
     position: relative;
 }
@@ -25,11 +25,10 @@ body {
     transform: translateY(-50%);
     background: none;
     border: none;
-    color: var(--rail-gold);
+    color: #c5a059;
     font-size: 1.8rem;
     cursor: pointer;
     z-index: 1001;
-    padding: 10px;
 }
 
 .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
@@ -38,20 +37,21 @@ body {
 .text-side { flex: 1; min-width: 320px; }
 .viewer-side { flex: 1.2; min-width: 320px; }
 
-h1 { color: var(--rail-gold); font-size: 1.6rem; margin: 0; letter-spacing: 0.1em; }
+h1 { color: #c5a059; font-size: 1.6rem; margin: 0; letter-spacing: 0.1em; }
 
 h2 { 
-    color: var(--rail-gold); 
-    border-bottom: 1px solid rgba(197, 160, 89, 0.3); 
+    color: var(--deep-blue); 
+    border-bottom: 2px solid var(--rail-gold); 
     padding-bottom: 8px; 
     margin-top: 35px; 
-    font-size: 1.2rem; 
+    font-size: 1.3rem;
+    font-weight: bold;
 }
 
 .status-badge { 
     display: inline-block; 
     padding: 4px 14px; 
-    background: rgba(197, 160, 89, 0.1); 
+    background: #fdf6e3; 
     border: 1px solid var(--rail-gold); 
     color: var(--rail-gold); 
     border-radius: 4px; 
@@ -63,9 +63,9 @@ h2 {
 .pdf-frame { 
     width: 100%; 
     height: 700px; 
-    border: 2px solid #2a2a30; 
+    border: 1px solid #ccc; 
     border-radius: 4px; 
-    background: #1e1e24; 
+    background: #eee; 
 }
 
 .btn-group { margin-top: 40px; display: flex; flex-direction: column; gap: 15px; align-items: center; }
@@ -74,29 +74,29 @@ h2 {
     width: 100%;
     max-width: 400px;
     padding: 16px 32px; 
-    background: var(--rail-gold); 
-    color: #000; 
+    background: var(--deep-blue); 
+    color: #fff; 
     text-decoration: none; 
     font-weight: bold; 
     border-radius: 4px; 
     text-align: center;
-    transition: 0.2s;
 }
-.btn-primary:hover { background: #e0bb70; transform: scale(1.02); }
 
 .btn-secondary { 
     width: 100%;
     max-width: 400px;
     padding: 16px 32px; 
-    border: 1px solid #444; 
-    color: var(--text-main); 
+    border: 2px solid var(--deep-blue); 
+    color: var(--deep-blue); 
     text-decoration: none; 
+    font-weight: bold;
     border-radius: 4px; 
     text-align: center; 
-    transition: 0.2s;
 }
 
-.safety-info { font-size: 0.7rem; color: #777; margin-top: 8px; text-align: center; }
+.safety-info { font-size: 0.75rem; color: #666; margin-top: 8px; text-align: center; }
+
+strong { color: #000; }
 
 @media (max-width: 768px) {
     .viewer-side { display: none; }
@@ -110,7 +110,7 @@ h2 {
 
     <div class="text-side">
         <div class="status-badge">OFFICIAL GUIDELINES</div>
-        <p style="color: var(--text-sub);">本コンテストの実施規定および安全に関する重要事項を掲載しています。応募前に必ず一読をお願いいたします。</p>
+        <p style="color: var(--text-sub); font-weight: bold;">本コンテストの実施規定および安全に関する重要事項を掲載しています。応募前に必ず一読をお願いいたします。</p>
 
         <h2>賞とデジタル特典</h2>
         <p>
@@ -120,14 +120,14 @@ h2 {
         </p>
 
         <h2>応募のきまり</h2>
-        <ul style="font-size: 0.95rem; padding-left: 20px; color: var(--text-main);">
+        <ul style="font-size: 1rem; padding-left: 20px; color: var(--text-main);">
             <li>形式：JPG / PNG / PDF（5MB以内）</li>
             <li>点数：お一人様3点まで提出可能</li>
-            <li><span style="color:#ff6b6b; font-weight:bold;">※線路内等の危険場所での撮影作品は失格</span></li>
+            <li><span style="color:#d93025; font-weight:bold;">※線路内等の危険場所での撮影作品は失格</span></li>
         </ul>
 
         <div class="mobile-only-btn" style="display:none; margin-top:30px;">
-            <a href="PDF/railway-memory-guidelines.pdf" target="_blank" class="btn-primary">
+            <a href="PDF/railway-memory-guidelines.pdf" target="_blank" class="btn-primary" style="display:block;">
                 📄 募集要項(PDF)を全画面で表示
             </a>
         </div>
@@ -145,9 +145,6 @@ h2 {
 
     <div class="viewer-side">
         <iframe src="PDF/railway-memory-guidelines.pdf#view=FitH&toolbar=0" class="pdf-frame"></iframe>
-        <p style="font-size:0.7rem; text-align:center; margin-top:10px; color:var(--text-sub);">
-            プレビューが表示されない場合はダウンロードをお試しください
-        </p>
     </div>
 
 </div>
