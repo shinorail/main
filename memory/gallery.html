@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+
+<html lang="ja"> <head> <link rel="icon" href="../favicon.ico"> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>写真館 - 鉄路の記憶</title> <link rel="stylesheet" href="../style.css"> <style> :root { --rail-gold: #8b6b23; --deep-blue: #0d123e; --bg-white: #ffffff; --text-dark: #222222; }
+
+body { 
+    background: var(--bg-white); 
+    color: var(--text-dark); 
+    font-family: "BIZ UDPGothic", sans-serif; 
+    margin: 0; 
+}
+
+.header-bar { 
+    background: var(--deep-blue); 
+    padding: 20px; 
+    border-bottom: 4px solid #c5a059; 
+    text-align: center;
+    position: relative;
+}
+
+.menu-trigger {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #c5a059;
+    font-size: 1.8rem;
+    cursor: pointer;
+}
+
+h1 { color: #c5a059; font-size: 1.5rem; margin: 0; letter-spacing: 0.1em; }
+
+.container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+
+/* 写真カードのグリッド */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.photo-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+}
+.photo-card:hover { transform: translateY(-5px); }
+
+.photo-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    background: #f0f0f0;
+    cursor: pointer;
+}
+
+.photo-info { padding: 15px; }
+.photo-title { font-weight: bold; font-size: 1.1rem; margin-bottom: 5px; color: var(--deep-blue); }
+.photo-author { font-size: 0.85rem; color: #666; margin-bottom: 10px; }
+.photo-desc { font-size: 0.9rem; color: #444; line-height: 1.5; }
+
+#loading { text-align: center; padding: 50px; color: #999; }
+
+@media (max-width: 600px) {
+    .gallery-grid { grid-template-columns: 1fr; }
+}
+</style> </head> <body>
+
+<div class="header-bar"> <h1>鉄路の記憶 写真館</h1> <button class="menu-trigger" id="menu-btn">☰</button> </div>
+
+<div class="container"> <div id="loading">信号確認中（データを読み込んでいます）...</div> <div class="gallery-grid" id="gallery-list"></div> </div>
+
+<script type="module"> import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"; import { getFirestore, collection, query, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+
+const firebaseConfig = { apiKey: "AIzaSyBukPN3ZgMfBbtlMjZpYREhlZMtqUT4d38", authDomain: "https://www.google.com/search?q=railway-memory.firebaseapp.com", projectId: "railway-memory", storageBucket: "railway-memory.firebasestorage.app", messagingSenderId: "859129585420", appId: "1:859129585420:web:e3e01423b1f8c8a4467329" };
+
+const app = initializeApp(firebaseConfig); const db = getFirestore(app);
+
+async function loadGallery() { const listArea = document.getElementById('gallery-list'); const loading = document.getElementById('loading');
+
+try {
+  const q = query(collection(db, &quot;entries&quot;), orderBy(&quot;timestamp&quot;, &quot;desc&quot;));
+  const querySnapshot = await getDocs(q);
+  
+  loading.style.display = &#39;none&#39;;
+
+  querySnapshot.forEach((doc) =&gt; {
+    const data = doc.data();
+    const card = document.createElement(&#39;div&#39;);
+    card.className = &#39;photo-card&#39;;
+
+    // PDFの場合はアイコン、画像の場合は画像を表示
+    const isPDF = data.fileType === &#39;application/pdf&#39;;
+    const displayMedia = isPDF 
+      ? `&lt;div class=&quot;photo-img&quot; style=&quot;display:flex; align-items:center; justify-content:center; background:#eee; color:#666;&quot;&gt;PDF作品（クリックで閲覧）&lt;/div&gt;`
+      : `&lt;img src=&quot;${data.imageUrl}&quot; class=&quot;photo-img&quot; alt=&quot;${data.title}&quot;&gt;`;
+
+    card.innerHTML = `
+      &lt;a href=&quot;${data.imageUrl}&quot; target=&quot;_blank&quot; style=&quot;text-decoration:none; color:inherit;&quot;&gt;
+        ${displayMedia}
+        &lt;div class=&quot;photo-info&quot;&gt;
+          &lt;div class=&quot;photo-title&quot;&gt;${data.title}&lt;/div&gt;
+          &lt;div class=&quot;photo-author&quot;&gt;撮影者：${data.userName}&lt;/div&gt;
+          &lt;div class=&quot;photo-desc&quot;&gt;${data.description || &#39;&#39;}&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/a&gt;
+    `;
+    listArea.appendChild(card);
+  });
+
+  if (querySnapshot.empty) {
+    loading.innerText = &quot;まだ作品がありません。最初の投稿をお待ちしています！&quot;;
+    loading.style.display = &#39;block&#39;;
+  }
+
+} catch (err) {
+  console.error(err);
+  loading.innerText = &quot;信号故障（読み込みエラー）が発生しました。&quot;;
+}
+}
+
+loadGallery(); </script>
+
+<script src="memory-menu.js"></script>
+
+</body> </html>
