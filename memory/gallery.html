@@ -7,25 +7,58 @@
 <link rel="stylesheet" href="../style.css">
 <script src="memory-menu.js" defer></script>
 <style>
-    body { background: #000; color: #fff; text-align: center; }
-    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; padding: 20px; }
-    .photo-card { background: #1a1a1a; border: 1px solid #333; padding: 10px; border-radius: 4px; }
-    .photo-card img { width: 100%; height: 200px; object-fit: cover; border-radius: 2px; }
-    .photo-info { text-align: left; padding: 10px; }
-    .photo-title { font-weight: bold; color: #c5a059; }
-    .photo-author { font-size: 0.8rem; color: #aaa; }
+    body { background: #000; color: #fff; text-align: center; font-family: sans-serif; }
+    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; padding: 20px; max-width: 1200px; margin: 0 auto; }
+    .photo-card { background: #111; border: 1px solid #333; padding: 15px; border-radius: 8px; text-align: left; transition: 0.3s; }
+    .photo-card:hover { border-color: #c5a059; }
+    .photo-card img { width: 100%; height: 200px; object-fit: cover; border-radius: 4px; background: #222; }
+    .photo-title { color: #c5a059; font-weight: bold; margin-top: 12px; font-size: 1.1rem; }
+    .photo-author { font-size: 0.85rem; color: #aaa; margin: 5px 0 10px; }
+    .photo-episode { font-size: 0.8rem; line-height: 1.6; color: #ddd; white-space: pre-wrap; }
+    .loading { padding: 50px; color: #c5a059; }
 </style>
 </head>
 <body>
-    <h2 style="margin-top:40px; color:#c5a059;">写真館 - GALLERY</h2>
-    <div class="gallery-grid">
-        <div class="photo-card">
-            <img src="img/sample.jpg" alt="作品画像">
-            <div class="photo-info">
-                <div class="photo-title">作品タイトルが入ります</div>
-                <div class="photo-author">撮影：ペンネーム 様</div>
-            </div>
-        </div>
+    <h2 style="margin-top:40px; color:#c5a059; letter-spacing: 0.2em;">写真館 - GALLERY</h2>
+    <div id="gallery" class="gallery-grid">
+        <div class="loading">作品を連結中...</div>
     </div>
+
+<script>
+    // あなたが発行したウェブアプリURL
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbxSHmW_-CpehuVoBceLCcBKBBlL2IRXIUj2SGQwe4F6uLRXGAyIABigi3OuGdoV0aUk5w/exec";
+
+    async function loadGallery() {
+        const container = document.getElementById('gallery');
+        try {
+            const response = await fetch(GAS_URL);
+            const data = await response.json();
+            
+            if (data.length === 0) {
+                container.innerHTML = '<div style="grid-column: 1/-1; padding: 50px;">現在、展示中の作品はありません。</div>';
+                return;
+            }
+
+            container.innerHTML = '';
+            data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'photo-card';
+                // Googleドライブの画像を表示するURL形式
+                const imgSrc = item.imgId ? `https://drive.google.com/uc?export=view&id=${item.imgId}` : 'img/no-image.jpg';
+                
+                card.innerHTML = `
+                    <img src="${imgSrc}" alt="${item.title}" loading="lazy">
+                    <div class="photo-title">${item.title}</div>
+                    <div class="photo-author">撮影：${item.name} 様</div>
+                    <div class="photo-episode">${item.episode}</div>
+                `;
+                container.appendChild(card);
+            });
+        } catch (e) {
+            container.innerHTML = '<div style="padding: 50px;">作品の読み込みに失敗しました。承認済みの作品があるか確認してください。</div>';
+        }
+    }
+    loadGallery();
+</script>
 </body>
 </html>
