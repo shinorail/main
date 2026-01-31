@@ -1,227 +1,67 @@
 <!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>デジタル硬券作成パネル</title>
-<style>
-  /* 全体レイアウト */
-  body {
-    background-color: #333;
-    color: white;
-    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", sans-serif;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 20px;
-  }
 
-  h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
+<html lang="ja"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>フルカスタム・デジタル硬券作成パネル</title> <style> body { background-color: #333; color: white; font-family: "Helvetica Neue", Arial, sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; padding: 20px; }
 
-  /* 入力パネル */
-  .control-panel {
-    background-color: #444;
-    padding: 20px 40px;
-    border-radius: 15px;
-    display: flex;
-    gap: 15px;
-    align-items: center;
-    margin-bottom: 40px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  }
+.control-panel { background-color: #444; padding: 20px; border-radius: 15px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 30px; width: 900px; }
 
-  input {
-    padding: 12px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    font-size: 16px;
-    width: 220px;
-  }
+.input-group { display: flex; flex-direction: column; gap: 5px; }
 
-  .btn-preview {
-    background-color: #c5a059;
-    color: #222;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 4px;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background 0.2s;
-  }
+label { font-size: 12px; color: #ccc; }
 
-  .btn-preview:hover {
-    background-color: #b08d48;
-  }
+input, select { padding: 8px; border-radius: 4px; border: none; font-size: 14px; }
 
-  /* プレビューエリア */
-  .preview-container {
-    width: 800px;
-    height: 400px;
-    background-color: #222;
-    border: 2px solid #000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+.button-area { grid-column: span 3; display: flex; justify-content: center; gap: 20px; margin-top: 10px; }
 
-  /* 硬券のデザイン（前回のスタイルを統合） */
-  .ticket {
-    width: 480px;
-    height: 180px;
-    background-color: #cfbc9b;
-    position: relative;
-    padding: 10px;
-    box-sizing: border-box;
-    color: #222;
-    font-family: "Sawarabi Mincho", serif;
-  }
+.btn { padding: 10px 30px; border-radius: 4px; font-weight: bold; cursor: pointer; border: none; }
 
-  .red-bar {
-    position: absolute;
-    top: 48%;
-    left: 0;
-    width: 100%;
-    height: 16px;
-    background-color: rgba(180, 40, 40, 0.6);
-    z-index: 1;
-  }
+.btn-preview { background-color: #c5a059; color: #222; } .btn-download { background-color: #4CAF50; color: white; }
 
-  .date {
-    position: absolute;
-    left: 8px;
-    top: 50%;
-    transform: translateY(-50%) rotate(-90deg);
-    font-size: 28px;
-    font-weight: bold;
-  }
+/* プレビューエリア */ .preview-container { width: 800px; height: 350px; background-color: #222; display: flex; justify-content: center; align-items: center; border: 2px solid #000; }
 
-  .main-content {
-    margin-left: 65px;
-    margin-right: 50px;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    border-right: 1.5px solid #444;
-  }
+/* 硬券スタイル */ .ticket { width: 480px; height: 180px; background-color: #cfbc9b; position: relative; padding: 10px; box-sizing: border-box; color: #222; font-family: "Sawarabi Mincho", serif; overflow: hidden; }
 
-  #display-title {
-    font-size: 48px;
-    font-weight: 900;
-    text-align: center;
-    border-bottom: 2px solid #222;
-    margin-top: 5px;
-    padding-bottom: 5px;
-    letter-spacing: 8px;
-    white-space: nowrap;
-    overflow: hidden;
-  }
+.red-bar { position: absolute; top: 48%; left: 0; width: 100%; height: 16px; background-color: rgba(180, 40, 40, 0.5); z-index: 1; }
 
-  .ticket-type {
-    display: flex;
-    justify-content: space-between;
-    font-size: 24px;
-    font-weight: bold;
-    padding: 0 15px;
-    z-index: 5;
-    position: relative;
-  }
+.date-side { position: absolute; left: 5px; top: 0; height: 100%; width: 60px; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5; }
 
-  .footer-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 16px;
-    padding: 0 10px 5px 15px;
-  }
+.main-content { margin-left: 65px; margin-right: 50px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; border-right: 1.2px solid #555; }
 
-  .right-section {
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 55px;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 0;
-  }
+#display-title { font-size: 44px; font-weight: 900; text-align: center; border-bottom: 2px solid #222; padding-bottom: 2px; letter-spacing: 4px; }
 
-  .punch-hole {
-    width: 14px;
-    height: 14px;
-    background-color: #222;
-    border-radius: 50%;
-  }
+.type-price { display: flex; justify-content: space-between; font-size: 22px; font-weight: bold; padding: 0 10px; z-index: 5; }
 
-  .vertical-text {
-    writing-mode: vertical-rl;
-    font-size: 14px;
-  }
-</style>
-</head>
-<body>
+.footer { display: flex; justify-content: space-between; font-size: 14px; padding: 0 10px 5px; font-weight: bold; }
 
-  <h1>デジタル硬券 作成パネル</h1>
+.right-side { position: absolute; right: 0; top: 0; width: 50px; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 10px 0; }
 
-  <div class="control-panel">
-    <input type="text" placeholder="応募者名（例：篠ノ井 太郎）">
-    <input type="email" placeholder="送信先メールアドレス">
-    <input type="text" id="input-title" placeholder="作品タイトル">
-    <button class="btn-preview" onclick="updatePreview()">硬券をプレビュー</button>
-  </div>
+.red-stamp { position: absolute; top: 35%; left: 45%; display: none; gap: 15px; z-index: 10; } .oval { width: 22px; height: 60px; border: 3px solid rgba(180, 40, 40, 0.7); border-radius: 50%; } </style>
 
-  <div class="preview-container">
-    <div class="ticket" id="ticket-element">
-      <div class="red-bar"></div>
-      <div class="date">2026.01.31</div>
-      <div class="main-content">
-        <div id="display-title">作品タイトル</div>
-        <div class="ticket-type">
-          <span>参加賞</span>
-          <span>100P</span>
-        </div>
-        <div style="font-size:14px; margin-left:15px;">※デジタル発行の記念券です。</div>
-        <div class="footer-row">
-          <span>発売当日限り有効</span>
-          <span>(改) (N)</span>
-        </div>
-      </div>
-      <div class="right-section">
-        <div class="punch-hole"></div>
-        <div class="vertical-text">入 記録</div>
-        <div style="font-weight:bold;">一般</div>
-      </div>
-    </div>
-  </div>
+</head> <body>
 
-  <script>
-    function updatePreview() {
-      // 入力値を取得
-      const inputVal = document.getElementById('input-title').value;
-      const displayElem = document.getElementById('display-title');
-      
-      if(inputVal.trim() !== "") {
-        displayElem.innerText = inputVal;
-        
-        // 文字数が多い場合にフォントサイズを自動調整
-        if(inputVal.length > 5) {
-          displayElem.style.fontSize = "32px";
-          displayElem.style.letterSpacing = "2px";
-        } else {
-          displayElem.style.fontSize = "48px";
-          displayElem.style.letterSpacing = "8px";
-        }
-      } else {
-        alert("作品タイトルを入力してください");
-      }
-    }
-  </script>
+<h1>デジタル硬券 フルカスタムパネル</h1>
 
-</body>
-</html>
+<div class="control-panel"> <div class="input-group"> <label>応募者名</label> <input type="text" id="in-name" value="篠ノ井 太郎"> </div> <div class="input-group"> <label>作品タイトル（中央駅名）</label> <input type="text" id="in-title" value="東京駅"> </div> <div class="input-group"> <label>券種名称</label> <input type="text" id="in-type" value="完走記念券"> </div> <div class="input-group"> <label>ポイント/金額</label> <input type="text" id="in-price" value="100P"> </div> <div class="input-group"> <label>日付 (YY.MM.DD)</label> <input type="text" id="in-date" value="26.01.31"> </div> <div class="input-group"> <label>有効期限文言</label> <input type="text" id="in-valid" value="発券日1回限り有効"> </div> <div class="input-group"> <label>区分</label> <select id="in-cat"> <option value="一般">一般</option> <option value="小">小児（スタンプ付）</option> </select> </div> <div class="input-group"> <label>右側表記（縦）</label> <input type="text" id="in-right" value="入 記録"> </div> <div class="input-group"> <label>注意書き</label> <input type="text" id="in-note" value="旅客車内に立ち入ることはできません。"> </div>
+
+<div class="button-area">
+  <button class="btn btn-preview" onclick="update()">プレビュー更新</button>
+</div>
+</div>
+
+<div class="preview-container"> <div class="ticket" id="ticket"> <div class="red-bar"></div> <div class="red-stamp" id="stamp-layer"> <div class="oval"></div> <div class="oval" style="height:75px; margin-top:-7px;"></div> <div class="oval"></div> </div> <div class="date-side"> <div id="out-name" style="writing-mode:vertical-rl; font-size:11px; margin-bottom:5px;"></div> <div id="out-date" style="writing-mode:vertical-rl; font-size:24px; font-weight:bold;"></div> </div> <div class="main-content"> <div id="out-title"></div> <div class="type-price"> <span id="out-type"></span> <span id="out-price"></span> </div> <div id="out-note" style="font-size:11px; margin-left:10px; font-weight:bold;"></div> <div class="footer"> <span id="out-valid"></span> <span>(改) (N)</span> </div> </div> <div class="right-side"> <div style="width:14px; height:14px; background:#222; border-radius:50%;"></div> <div id="out-right" style="writing-mode:vertical-rl; font-size:14px; font-weight:bold;"></div> <div id="out-cat" style="font-size:20px; font-weight:bold;"></div> </div> </div> </div>
+
+<script> function update() { const fields = ['name','title','type','price','date','valid','cat','right','note']; fields.forEach(f => { const val = document.getElementById('in-' + f).value; const out = document.getElementById('out-' + f); if(out) out.innerText = val; });
+
+  // タイトルサイズ調整
+  const t = document.getElementById(&#39;out-title&#39;);
+  t.style.fontSize = t.innerText.length &gt; 5 ? &quot;28px&quot; : &quot;44px&quot;;
+
+  // 小児スタンプ判定
+  const isChild = document.getElementById(&#39;in-cat&#39;).value === &#39;小&#39;;
+  document.getElementById(&#39;stamp-layer&#39;).style.display = isChild ? &#39;flex&#39; : &#39;none&#39;;
+}
+
+// 初期化実行
+update();
+</script>
+
+</body> </html>
