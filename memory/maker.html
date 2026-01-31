@@ -1,79 +1,227 @@
 <!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>デジタル硬券作成パネル</title>
+<style>
+  /* 全体レイアウト */
+  body {
+    background-color: #333;
+    color: white;
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", sans-serif;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+  }
 
-<html lang="ja"> <head> <meta charset="UTF-8"> <title>硬券作成・送信システム - 運営用</title> <style> body { background: #333; color: #fff; font-family: sans-serif; text-align: center; } .setup-area { background: #444; padding: 20px; margin: 20px auto; width: 80%; border-radius: 8px; } canvas { border: 2px solid #000; margin-top: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); } .input-box { margin: 10px; padding: 10px; width: 250px; } .btn { padding: 15px 30px; cursor: pointer; font-weight: bold; background: #c5a059; color: #000; border: none; } .send-btn { background: #28a745; color: white; margin-top: 20px; display: none; } </style> </head> <body>
+  h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
 
-<h2>デジタル硬券 作成パネル</h2>
+  /* 入力パネル */
+  .control-panel {
+    background-color: #444;
+    padding: 20px 40px;
+    border-radius: 15px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  }
 
-<div class="setup-area"> <input type="text" id="vName" class="input-box" placeholder="応募者名（例：篠ノ井 太郎）"> <input type="text" id="vEmail" class="input-box" placeholder="送信先メールアドレス"> <input type="text" id="vTitle" class="input-box" placeholder="作品タイトル">
+  input {
+    padding: 12px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    width: 220px;
+  }
 
+  .btn-preview {
+    background-color: #c5a059;
+    color: #222;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.2s;
+  }
 
-<button class="btn" onclick="generateTicket()">硬券をプレビュー</button> </div>
+  .btn-preview:hover {
+    background-color: #b08d48;
+  }
 
-<canvas id="ticketCanvas" width="600" height="300"></canvas>
+  /* プレビューエリア */
+  .preview-container {
+    width: 800px;
+    height: 400px;
+    background-color: #222;
+    border: 2px solid #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
-<script> const canvas = document.getElementById('ticketCanvas'); const ctx = canvas.getContext('2d');
+  /* 硬券のデザイン（前回のスタイルを統合） */
+  .ticket {
+    width: 480px;
+    height: 180px;
+    background-color: #cfbc9b;
+    position: relative;
+    padding: 10px;
+    box-sizing: border-box;
+    color: #222;
+    font-family: "Sawarabi Mincho", serif;
+  }
 
-function generateTicket() {
-    const name = document.getElementById(&#39;vName&#39;).value || &quot;乗車 太郎&quot;;
-    const date = new Date().toLocaleDateString(&#39;ja-JP&#39;, {year:&#39;numeric&#39;, month:&#39;2-digit&#39;, day:&#39;2-digit&#39;}).replace(/\//g, &#39;.&#39;);
+  .red-bar {
+    position: absolute;
+    top: 48%;
+    left: 0;
+    width: 100%;
+    height: 16px;
+    background-color: rgba(180, 40, 40, 0.6);
+    z-index: 1;
+  }
 
-    // 背景（硬券の厚紙色）
-    ctx.fillStyle = &quot;#e0d6c3&quot;;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  .date {
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%) rotate(-90deg);
+    font-size: 28px;
+    font-weight: bold;
+  }
 
-    // 枠線
-    ctx.strokeStyle = &quot;#333&quot;;
-    ctx.lineWidth = 4;
-    ctx.strokeRect(10, 10, 580, 280);
+  .main-content {
+    margin-left: 65px;
+    margin-right: 50px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-right: 1.5px solid #444;
+  }
 
-    // テキスト描画
-    ctx.fillStyle = &quot;#222&quot;;
-    
-    // 日付（左端）
-    ctx.font = &quot;bold 20px serif&quot;;
-    ctx.fillText(date, 30, 50);
+  #display-title {
+    font-size: 48px;
+    font-weight: 900;
+    text-align: center;
+    border-bottom: 2px solid #222;
+    margin-top: 5px;
+    padding-bottom: 5px;
+    letter-spacing: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+  }
 
-    // タイトル
-    ctx.font = &quot;24px sans-serif&quot;;
-    ctx.textAlign = &quot;center&quot;;
-    ctx.fillText(&quot;全日本 鉄路の記憶 参加記念&quot;, 300, 80);
+  .ticket-type {
+    display: flex;
+    justify-content: space-between;
+    font-size: 24px;
+    font-weight: bold;
+    padding: 0 15px;
+    z-index: 5;
+    position: relative;
+  }
 
-    // 区間風（名前）
-    ctx.font = &quot;bold 45px serif&quot;;
-    ctx.fillText(name + &quot; 殿&quot;, 300, 180);
+  .footer-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    padding: 0 10px 5px 15px;
+  }
 
-    // 下部メッセージ
-    ctx.font = &quot;20px sans-serif&quot;;
-    ctx.fillText(&quot;篠ノ井乗務区発行 / 有効期間満了まで記憶に有効&quot;, 300, 260);
+  .right-section {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 55px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+  }
 
-    // 入鋏風の印
-    ctx.beginPath();
-    ctx.arc(580, 150, 20, 0, Math.PI * 2);
-    ctx.fillStyle = &quot;#333&quot;;
-    ctx.fill();
+  .punch-hole {
+    width: 14px;
+    height: 14px;
+    background-color: #222;
+    border-radius: 50%;
+  }
 
-    document.getElementById(&#39;sendBtn&#39;).style.display = &quot;inline-block&quot;;
-}
+  .vertical-text {
+    writing-mode: vertical-rl;
+    font-size: 14px;
+  }
+</style>
+</head>
+<body>
 
-function sendTicketData() {
-    const email = document.getElementById(&#39;vEmail&#39;).value;
-    const name = document.getElementById(&#39;vName&#39;).value;
-    const imgData = canvas.toDataURL(&#39;image/png&#39;); // 画像をBase64変換
+  <h1>デジタル硬券 作成パネル</h1>
 
-    if(!email) { alert(&quot;送信先アドレスが必要です&quot;); return; }
+  <div class="control-panel">
+    <input type="text" placeholder="応募者名（例：篠ノ井 太郎）">
+    <input type="email" placeholder="送信先メールアドレス">
+    <input type="text" id="input-title" placeholder="作品タイトル">
+    <button class="btn-preview" onclick="updatePreview()">硬券をプレビュー</button>
+  </div>
 
-    const gasUrl = &quot;あなたのGASのウェブアプリURL&quot;;
+  <div class="preview-container">
+    <div class="ticket" id="ticket-element">
+      <div class="red-bar"></div>
+      <div class="date">2026.01.31</div>
+      <div class="main-content">
+        <div id="display-title">作品タイトル</div>
+        <div class="ticket-type">
+          <span>参加賞</span>
+          <span>100P</span>
+        </div>
+        <div style="font-size:14px; margin-left:15px;">※デジタル発行の記念券です。</div>
+        <div class="footer-row">
+          <span>発売当日限り有効</span>
+          <span>(改) (N)</span>
+        </div>
+      </div>
+      <div class="right-section">
+        <div class="punch-hole"></div>
+        <div class="vertical-text">入 記録</div>
+        <div style="font-weight:bold;">一般</div>
+      </div>
+    </div>
+  </div>
 
-    fetch(gasUrl, {
-        method: &quot;POST&quot;,
-        body: JSON.stringify({
-            email: email,
-            name: name,
-            image: imgData
-        })
-    }).then(res =&gt; alert(&quot;送信リクエストを完了しました&quot;));
-}
-</script>
+  <script>
+    function updatePreview() {
+      // 入力値を取得
+      const inputVal = document.getElementById('input-title').value;
+      const displayElem = document.getElementById('display-title');
+      
+      if(inputVal.trim() !== "") {
+        displayElem.innerText = inputVal;
+        
+        // 文字数が多い場合にフォントサイズを自動調整
+        if(inputVal.length > 5) {
+          displayElem.style.fontSize = "32px";
+          displayElem.style.letterSpacing = "2px";
+        } else {
+          displayElem.style.fontSize = "48px";
+          displayElem.style.letterSpacing = "8px";
+        }
+      } else {
+        alert("作品タイトルを入力してください");
+      }
+    }
+  </script>
 
-</body> </html>
-
+</body>
+</html>
