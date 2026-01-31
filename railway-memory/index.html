@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<link rel="icon" href="../favicon.ico">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>全日本 鉄路の記憶 フォトプロジェクト</title>
+
+<link rel="stylesheet" href="../style.css">
+<script src="../menu.js" defer></script>
+
+<style>
+    :root { 
+        --rail-gold: #c5a059; 
+        --deep-blue: #0d123e; 
+        --silver: #e0e0e0;
+        --accent-pink: #d81b60;
+    }
+    body { 
+        background-color: #111; 
+        margin: 0; padding: 0; 
+        font-family: "BIZ UDPGothic", serif; 
+        color: var(--silver);
+        text-align: center;
+    }
+    
+    /* ヘッダー */
+    .project-hero {
+        background: linear-gradient(to bottom, var(--deep-blue), #000);
+        padding: 60px 20px;
+        text-align: center;
+        border-bottom: 1px solid var(--rail-gold);
+    }
+    .year-label {
+        font-family: serif;
+        font-size: 0.9rem;
+        letter-spacing: 0.5em;
+        color: var(--rail-gold);
+        display: block;
+        margin-bottom: 10px;
+    }
+    .main-title {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #fff;
+        margin: 0;
+        text-shadow: 0 0 10px rgba(197, 160, 89, 0.5);
+    }
+
+    /* 告知板 */
+    .infoboard {
+        background: #222;
+        border: 2px solid #444;
+        margin: 30px 20px;
+        padding: 20px;
+        border-radius: 4px;
+        text-align: left;
+    }
+    .infoboard-header {
+        color: var(--rail-gold);
+        font-size: 0.8rem;
+        border-bottom: 1px solid #444;
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+        font-weight: bold;
+    }
+
+    /* 特急券風カード */
+    .express-ticket {
+        background: #fdfdfd;
+        color: #333;
+        margin: 20px;
+        padding: 30px 20px;
+        border-radius: 2px;
+        position: relative;
+        box-shadow: 0 10px 0 #999;
+        text-align: left;
+    }
+    .ticket-stamp {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        border: 2px solid var(--accent-pink);
+        color: var(--accent-pink);
+        padding: 5px;
+        font-size: 0.7rem;
+        border-radius: 50%;
+        transform: rotate(15deg);
+        font-weight: bold;
+    }
+
+    /* ハッシュタグコピー機能 */
+    .hashtag-container {
+        margin: 20px 0;
+        text-align: center;
+    }
+    .copy-btn {
+        display: inline-block;
+        background: #f0f2ff;
+        border: 2px dashed var(--rail-gold);
+        padding: 12px 20px;
+        border-radius: 8px;
+        color: var(--deep-blue);
+        font-weight: bold;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: 0.2s;
+        position: relative;
+    }
+    .copy-btn:active { transform: scale(0.95); }
+    #copy-message {
+        position: absolute;
+        top: -35px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--rail-gold);
+        color: var(--deep-blue);
+        padding: 4px 12px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        display: none;
+        white-space: nowrap;
+    }
+    .x-search-link {
+        display: inline-block;
+        margin-top: 15px;
+        font-size: 0.8rem;
+        color: var(--rail-gold);
+        text-decoration: none;
+        border-bottom: 1px solid var(--rail-gold);
+    }
+
+    /* 運行開始ボタン */
+    .launch-btn {
+        display: block;
+        background: #333;
+        color: #fff !important;
+        text-align: center;
+        padding: 20px;
+        margin: 40px 20px;
+        text-decoration: none;
+        font-weight: bold;
+        border: 1px solid var(--rail-gold);
+        pointer-events: none;
+    }
+    .active-launch {
+        background: var(--rail-gold) !important;
+        color: var(--deep-blue) !important;
+        pointer-events: auto !important;
+        box-shadow: 0 0 20px rgba(197, 160, 89, 0.4);
+    }
+</style>
+</head>
+<body>
+
+<button class="menu-trigger">MENU</button>
+<nav id="mobile-nav">
+    <a href="../index.html" class="nav-link">メインポータル</a>
+    <a href="../links.html" class="nav-link">公式リンク集</a>
+</nav>
+
+<div class="project-hero">
+    <span class="year-label">- MMXXVI -</span>
+    <h1 class="main-title">全日本 鉄路の記憶</h1>
+    <p style="font-size: 0.75rem; margin-top: 10px; opacity: 0.7;">ALL JAPAN RAILWAY MEMORY PROJECT</p>
+</div>
+
+<div class="infoboard">
+    <div class="infoboard-header">PROLOGUE</div>
+    <p style="font-size: 0.85rem; line-height: 1.8; margin: 0;">
+        線路は続く、どこまでも。<br>
+        2周年の節目に、篠ノ井乗務区は全国の車窓を繋ぎます。<br>
+        あなたが目撃した「一瞬の情景」を、歴史に刻んでください。
+    </p>
+</div>
+
+<div class="express-ticket">
+    <div class="ticket-stamp">3月始発</div>
+    <div style="font-family: monospace; font-size: 0.8rem; margin-bottom: 20px; border-bottom: 1px solid #ddd;">
+        2026.03.01 &gt;&gt;&gt; 2026.03.31
+    </div>
+    
+    <div class="hashtag-container">
+        <div class="copy-btn" onclick="copyHashtag()">
+            <span id="copy-message">コピーしました！</span>
+            #全国鉄道フォトコン2026
+        </div>
+        <br>
+        <a href="https://x.com/search?q=%23%E5%85%A8%E5%9B%BD%E9%89%84%E9%81%93%E3%83%95%E3%82%A9%E3%83%88%E3%82%B3%E3%83%B32026&src=typed_query" target="_blank" class="x-search-link">
+            Xで現在の投稿をチェック ↗
+        </a>
+    </div>
+
+    <p style="font-size: 0.8rem; color: #666; margin-top: 10px;">
+        対象：日本国内の鉄道を愛するすべての方<br>
+        応募：SNSにてハッシュタグを付けて投稿
+    </p>
+</div>
+
+<a href="#" class="launch-btn" id="contest-entry">3月1日 運行開始</a>
+
+<footer style="text-align: center; padding: 40px 20px; font-size: 0.7rem; opacity: 0.5;">
+    &copy; 篠ノ井乗務区 | Railway Memory Project
+</footer>
+
+<script>
+// ハッシュタグのコピー機能
+function copyHashtag() {
+    const tagName = "#全国鉄道フォトコン2026";
+    navigator.clipboard.writeText(tagName).then(() => {
+        const msg = document.getElementById('copy-message');
+        msg.style.display = 'block';
+        setTimeout(() => { msg.style.display = 'none'; }, 2000);
+    });
+}
+
+// 3月1日になったらボタンを有効化する処理（menu.jsと併用）
+document.addEventListener('DOMContentLoaded', () => {
+    const startDate = new Date("2026-03-01T00:00:00+09:00").getTime();
+    const now = new Date().getTime();
+    const entryBtn = document.getElementById('contest-entry');
+
+    if (entryBtn && now >= startDate) {
+        entryBtn.classList.add('active-launch');
+        entryBtn.innerText = "写真を投稿して参加する";
+        entryBtn.href = "https://twitter.com/intent/tweet?hashtags=全国鉄道フォトコン2026";
+    }
+});
+</script>
+
+</body>
+</html>
