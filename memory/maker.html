@@ -77,11 +77,3 @@ function sendTicketData() {
 
 </body> </html>
 
-2. GAS側：画像を受け取ってメールする全コード (POST対応)
-これをApps Scriptに追加してください。画像データを受け取って直接メール添付します。
-
-function doPost(e) { const data = JSON.parse(e.postData.contents); const email = data.email; const name = data.name; const base64Img = data.image.split(',')[1]; const decodedImg = Utilities.base64Decode(base64Img); const blob = Utilities.newBlob(decodedImg, 'image/png', 'digital-ticket.png');
-
-MailApp.sendEmail({ to: email, subject: "【鉄路の記憶】デジタル硬券をお届けします", body: name + " 様\n\nご参加ありがとうございます。作成したデジタル硬券を添付いたしました。", name: "鉄路の記憶 事務局", attachments: [blob] });
-
-return ContentService.createTextOutput("Success"); }
