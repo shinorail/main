@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>作品投稿 - 鉄路の記憶</title>
+<link rel="stylesheet" href="../style.css">
+<style>
+    body { background: #111; color: #eee; font-family: "BIZ UDPGothic", sans-serif; text-align: center; }
+    .post-container { max-width: 500px; margin: 30px auto; padding: 20px; background: #222; border-radius: 8px; border: 1px solid #c5a059; }
+    input, textarea { width: 100%; padding: 12px; margin: 10px 0; background: #333; color: #fff; border: 1px solid #444; border-radius: 4px; box-sizing: border-box; }
+    .submit-btn { background: #c5a059; color: #0d123e; font-weight: bold; padding: 15px; width: 100%; border: none; cursor: pointer; border-radius: 4px; transition: 0.3s; }
+    .submit-btn:disabled { background: #666; cursor: not-allowed; }
+    #preview { width: 100%; margin: 10px 0; display: none; border-radius: 4px; border: 1px solid #c5a059; }
+    .status { font-size: 0.8rem; margin-top: 15px; color: #c5a059; }
+</style>
+</head>
+<body>
+
+<div class="post-container">
+    <h2 style="color:#c5a059; margin-top:0;">作品提出フォーム</h2>
+    <p style="font-size:0.75rem; opacity:0.8;">鉄道の魅力を伝える一枚を、こちらからアップロードしてください。</p>
+    
+    <form id="post-form">
+        <input type="text" id="photo-title" placeholder="作品のタイトル（必須）" required>
+        <textarea id="photo-desc" placeholder="撮影時の思い出やエピソードがあれば入力してください（任意）" rows="4"></textarea>
+        
+        <label style="display:block; text-align:left; font-size:0.8rem; margin:10px 0 5px;">写真ファイルを選択：</label>
+        <input type="file" id="photo-file" accept="image/*" required onchange="previewImage(this)">
+        <img id="preview">
+
+        <button type="submit" class="submit-btn" id="sub-btn">出発進行（アップロード）</button>
+    </form>
+    <div id="upload-status" class="status"></div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+  import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-storage.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBukPN3ZgMfBbtlMjZpYREhlZMtqUT4d38",
+    authDomain: "railway-memory.firebaseapp.com",
+    projectId: "railway-memory",
+    storageBucket: "railway-memory.firebasestorage.app",
+    messagingSenderId: "859129585420",
+    appId: "1:859129585420:web:e3e01423b1f8c8a4467329"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth();
+  const storage = getStorage();
+  const db = getFirestore();
+
+  let currentUser = null;
+
+  onAuthStateChanged(auth, (user) => {
+    if (!user) { location.href = "index.html"; }
+    else { currentUser = user; }
+  });
+
+  window.previewImage = (obj) => {
+    const fileReader = new FileReader();
+    fileReader.onload = () => {
+        const preview = document.getElementById('preview');
+        preview.src = fileReader.result;
+        preview.style.display = "block";
+    };
+    fileReader.readAsDataURL(obj.files[0]);
+  };
+
+  document.getElementById('post-form').onsubmit = async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('sub-btn');
+    const status = document.getElementById('upload-status');
+    const file = document.getElementById('photo-file').files[0];
+
+    if (file.size > 5 * 1024 * 1024) { alert("5MB以内の画像を選択してください。"); return; }
+
+    btn.disabled = true;
+    status.innerText = "写真を送信中... 信号確認...";
+
+    try {
+        const storageRef = ref(storage, `entries/${Date.now()}_${currentUser.uid}`);
+        const snapshot = await uploadBytes(storageRef, file);
+        const url = await getDownloadURL(snapshot.ref);
+
+        await addDoc(collection(db, "entries"), {
+            uid: currentUser.uid,
+            userName: currentUser.displayName,
+            title: document.getElementById('photo-title').value,
+            description: document.getElementById('photo-desc').value,
+            imageUrl: url,
+            timestamp: serverTimestamp()
+        });
+
+        status.innerText = "投稿完了！マイページに戻ります。";
+        setTimeout(() => { location.href = "index.html"; }, 2000);
+    } catch (err) {
+        console.error(err);
+        status.innerText = "エラーが発生しました。通信環境を確認してください。";
+        btn.disabled = false;
+    }
+  };
+</script>
+</body>
+</html>
