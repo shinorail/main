@@ -1,192 +1,193 @@
 <!DOCTYPE html>
+<html lang="ja">
+<head>
+<link rel="icon" href="../favicon.ico">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>公式募集要項 - 鉄路の記憶</title>
+<link rel="stylesheet" href="../style.css">
+<style>
+    :root { 
+        --rail-gold: #8b6b23; 
+        --deep-blue: #0d123e; 
+        --text-main: #000000; 
+        --bg-white: #ffffff; 
+    }
+    body { 
+        background: var(--bg-white); 
+        color: var(--text-main); 
+        font-family: "BIZ UDPGothic", "Hiragino Sans", "Meiryo", sans-serif; 
+        line-height: 1.8; 
+        margin: 0; 
+    }
+    .header-bar { 
+        background: var(--deep-blue); 
+        padding: 30px 20px; 
+        border-bottom: 5px solid #c5a059; 
+        text-align: center;
+    }
+    .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+    .flex-layout { display: flex; flex-wrap: wrap; gap: 40px; }
+    .text-side { flex: 1; min-width: 320px; }
+    .viewer-side { flex: 1.2; min-width: 320px; }
+    h1 { color: #c5a059; font-size: 1.8rem; margin: 0; letter-spacing: 0.1em; font-weight: bold; }
+    h2 { 
+        color: var(--deep-blue); 
+        border-left: 5px solid var(--rail-gold); 
+        padding-left: 15px;
+        margin-top: 40px; 
+        font-size: 1.4rem;
+        font-weight: bold;
+    }
+    .status-badge { 
+        display: inline-block; 
+        padding: 5px 15px; 
+        background: #f0f0f0; 
+        border: 1px solid #ccc; 
+        color: #333; 
+        border-radius: 4px; 
+        font-size: 0.8rem; 
+        margin-bottom: 20px; 
+        font-weight: bold;
+    }
+    .pdf-frame { 
+        width: 100%; 
+        height: 800px; 
+        border: 1px solid #999; 
+        border-radius: 4px; 
+        background: #fff; 
+    }
+    .agree-area {
+        background: #f4f4f4;
+        padding: 25px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        margin-top: 40px;
+    }
+    .check-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 15px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: bold;
+        color: #000;
+    }
+    .check-item input { width: 24px; height: 24px; cursor: pointer; }
+    .btn-group { margin-top: 30px; display: flex; flex-direction: column; gap: 20px; align-items: center; }
+    
+    /* ボタンの初期状態 */
+    .btn-primary { 
+        width: 100%;
+        max-width: 450px;
+        padding: 20px; 
+        background: #999999 !important; 
+        color: #ffffff !important; 
+        text-decoration: none; 
+        font-weight: bold; 
+        border-radius: 6px; 
+        text-align: center;
+        font-size: 1.2rem;
+        display: block;
+        opacity: 0.5;
+        cursor: not-allowed;
+        pointer-events: none;
+        transition: 0.3s;
+    }
 
-<html lang="ja"> <head> <link rel="icon" href="../favicon.ico"> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>公式募集要項 - 鉄路の記憶</title> <link rel="stylesheet" href="../style.css"> <style> :root { --rail-gold: #8b6b23; --deep-blue: #0d123e; --text-main: #000000; --text-sub: #333333; --bg-white: #ffffff; }
+    /* 有効化された時のボタン */
+    .btn-active {
+        background: var(--deep-blue) !important;
+        opacity: 1 !important;
+        cursor: pointer !important;
+        pointer-events: auto !important;
+        box-shadow: 0 4px 15px rgba(13, 18, 62, 0.3);
+    }
 
-body { 
-    background: var(--bg-white); 
-    color: var(--text-main); 
-    font-family: "BIZ UDPGothic", "Hiragino Sans", "Meiryo", sans-serif; 
-    line-height: 1.8; 
-    margin: 0; 
-}
-
-.header-bar { 
-    background: var(--deep-blue); 
-    padding: 30px 20px; 
-    border-bottom: 5px solid #c5a059; 
-    text-align: center;
-}
-
-.container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
-
-.flex-layout { display: flex; flex-wrap: wrap; gap: 40px; }
-.text-side { flex: 1; min-width: 320px; }
-.viewer-side { flex: 1.2; min-width: 320px; }
-
-h1 { color: #c5a059; font-size: 1.8rem; margin: 0; letter-spacing: 0.1em; font-weight: bold; }
-
-h2 { 
-    color: var(--deep-blue); 
-    border-left: 5px solid var(--rail-gold); 
-    padding-left: 15px;
-    margin-top: 40px; 
-    font-size: 1.4rem;
-    font-weight: bold;
-}
-
-.status-badge { 
-    display: inline-block; 
-    padding: 5px 15px; 
-    background: #f0f0f0; 
-    border: 1px solid #ccc; 
-    color: #333; 
-    border-radius: 4px; 
-    font-size: 0.8rem; 
-    margin-bottom: 20px; 
-    font-weight: bold;
-}
-
-.pdf-frame { 
-    width: 100%; 
-    height: 800px; 
-    border: 1px solid #999; 
-    border-radius: 4px; 
-    background: #fff; 
-}
-
-.agree-area {
-    background: #f4f4f4;
-    padding: 25px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    margin-top: 40px;
-}
-
-.check-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 15px;
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: bold;
-    color: #000;
-}
-
-.check-item input { width: 24px; height: 24px; cursor: pointer; }
-
-.btn-group { margin-top: 30px; display: flex; flex-direction: column; gap: 20px; align-items: center; }
-
-.btn-primary { 
-    width: 100%;
-    max-width: 450px;
-    padding: 20px; 
-    background: #999; 
-    color: #fff; 
-    text-decoration: none; 
-    font-weight: bold; 
-    border-radius: 6px; 
-    text-align: center;
-    font-size: 1.2rem;
-    pointer-events: none; 
-    transition: 0.3s;
-}
-
-.btn-secondary { 
-    width: 100%;
-    max-width: 450px;
-    padding: 15px; 
-    border: 2px solid var(--deep-blue); 
-    color: var(--deep-blue); 
-    text-decoration: none; 
-    font-weight: bold;
-    border-radius: 4px; 
-    text-align: center; 
-}
-
-.safety-info { font-size: 0.85rem; color: #444; margin-top: 10px; font-weight: bold; }
-
-strong { color: #000; font-weight: 900; }
-
-@media (max-width: 768px) {
-    .viewer-side { display: none; }
-    .text-side { min-width: 100%; }
-}
-</style> </head> <body>
-
-<div class="header-bar"> <h1>全日本 鉄路の記憶</h1> </div>
-
-<div class="container"> <div class="flex-layout">
-
-    <div class="text-side">
-        <div class="status-badge">OFFICIAL GUIDELINES</div>
-        <p style="color: #000; font-weight: bold; font-size: 1.1rem; margin-bottom: 30px;">
-            本コンテストの実施規定および安全に関する重要事項を掲載しています。応募前に必ず一読をお願いいたします。
-        </p>
-
-        <h2>賞とデジタル特典</h2>
-        <p>
-            <strong>● 最優秀賞：</strong>デジタル名誉区員証<br>
-            <strong>● 優秀作品賞：</strong>特製デジタル賞状・限定壁紙<br>
-            <strong>● 参加特典：</strong>デジタル硬券参加証（全員配布）
-        </p>
-
-        <h2>応募のきまり</h2>
-        <ul style="font-size: 1.1rem; padding-left: 20px; color: #000; font-weight: bold;">
-            <li>形式：JPG / PNG / PDF（10MB以内）</li>
-            <li>点数：お一人様5点まで一括送信可能</li>
-            <li><span style="color: #d93025;">※線路内等の危険場所での撮影作品は失格</span></li>
-        </ul>
-
-        <div class="agree-area">
-            <label class="check-item">
-                <input type="checkbox" class="agree-input" id="check-guideline">
-                <span>募集要項をすべて確認しました。</span>
-            </label>
-            
-            <label class="check-item">
-                <input type="checkbox" class="agree-input" id="check-terms">
-                <span><a href="terms.html" target="_blank" style="color:var(--deep-blue); text-decoration: underline;">利用規約</a>に同意し、掲載を承諾します。</span>
-            </label>
-
-            <div class="btn-group">
-                <a href="[https://forms.gle/af1K29houfZsHVB29](https://forms.gle/af1K29houfZsHVB29)" target="_blank" class="btn-primary" id="submit-btn">作品提出フォームを開く</a>
-                
-                <div style="width:100%; text-align:center;">
-                    <a href="PDF/railway-memory-guidelines.pdf" download class="btn-secondary">募集要項(PDF)をダウンロード</a>
-                    <p class="safety-info">
-                        ※公式ウイルスチェック済み。安全に閲覧いただけます。
-                    </p>
+    .btn-secondary { 
+        width: 100%;
+        max-width: 450px;
+        padding: 15px; 
+        border: 2px solid var(--deep-blue); 
+        color: var(--deep-blue); 
+        text-decoration: none; 
+        font-weight: bold;
+        border-radius: 4px; 
+        text-align: center; 
+    }
+    .safety-info { font-size: 0.85rem; color: #444; margin-top: 10px; font-weight: bold; }
+    strong { color: #000; font-weight: 900; }
+    @media (max-width: 768px) {
+        .viewer-side { display: none; }
+        .text-side { min-width: 100%; }
+    }
+</style>
+</head>
+<body>
+<div class="header-bar"><h1>全日本 鉄路の記憶</h1></div>
+<div class="container">
+    <div class="flex-layout">
+        <div class="text-side">
+            <div class="status-badge">OFFICIAL GUIDELINES</div>
+            <p style="color: #000; font-weight: bold; font-size: 1.1rem; margin-bottom: 30px;">
+                本コンテストの実施規定および安全に関する重要事項を掲載しています。応募前に必ず一読をお願いいたします。
+            </p>
+            <h2>賞とデジタル特典</h2>
+            <p>
+                <strong>● 最優秀賞：</strong>デジタル名誉区員証<br>
+                <strong>● 優秀作品賞：</strong>特製デジタル賞状・限定壁紙<br>
+                <strong>● 参加特典：</strong>デジタル硬券参加証（全員配布）
+            </p>
+            <h2>応募のきまり</h2>
+            <ul style="font-size: 1.1rem; padding-left: 20px; color: #000; font-weight: bold;">
+                <li>形式：JPG / PNG / PDF（10MB以内）</li>
+                <li>点数：お一人様5点まで一括送信可能</li>
+                <li><span style="color: #d93025;">※線路内等の危険場所での撮影作品は失格</span></li>
+            </ul>
+            <div class="agree-area">
+                <label class="check-item">
+                    <input type="checkbox" class="agree-input" id="check-guideline">
+                    <span>募集要項をすべて確認しました。</span>
+                </label>
+                <label class="check-item">
+                    <input type="checkbox" class="agree-input" id="check-terms">
+                    <span><a href="terms.html" target="_blank" style="color:var(--deep-blue); text-decoration: underline;">利用規約</a>に同意し、掲載を承諾します。</span>
+                </label>
+                <div class="btn-group">
+                    <a href="https://forms.gle/af1K29houfZsHVB29" target="_blank" class="btn-primary" id="submit-btn">作品提出フォームを開く</a>
+                    <div style="width:100%; text-align:center;">
+                        <a href="PDF/railway-memory-guidelines.pdf" download class="btn-secondary">募集要項(PDF)をダウンロード</a>
+                        <p class="safety-info">※公式ウイルスチェック済み。安全に閲覧いただけます。</p>
+                    </div>
                 </div>
             </div>
         </div>
+        <div class="viewer-side">
+            <iframe src="PDF/railway-memory-guidelines.pdf#view=FitH&toolbar=0" class="pdf-frame"></iframe>
+        </div>
     </div>
-
-    <div class="viewer-side">
-        <iframe src="PDF/railway-memory-guidelines.pdf#view=FitH&toolbar=0" class="pdf-frame"></iframe>
-    </div>
-
-</div>
 </div>
 
-<script> const checks = document.querySelectorAll('.agree-input'); const btn = document.getElementById('submit-btn');
+<script src="memory-menu.js"></script>
 
-function updateButtonState() {
-    const allChecked = Array.from(checks).every(c =&gt; c.checked);
-    if (allChecked) {
-        btn.style.background = &quot;#0d123e&quot;;
-        btn.style.pointerEvents = &quot;auto&quot;;
-        btn.style.boxShadow = &quot;0 4px 15px rgba(13, 18, 62, 0.3)&quot;;
-    } else {
-        btn.style.background = &quot;#999999&quot;;
-        btn.style.pointerEvents = &quot;none&quot;;
-        btn.style.boxShadow = &quot;none&quot;;
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const checkG = document.getElementById('check-guideline');
+    const checkT = document.getElementById('check-terms');
+    const btn = document.getElementById('submit-btn');
+
+    function updateBtn() {
+        if (checkG.checked && checkT.checked) {
+            btn.classList.add('btn-active');
+        } else {
+            btn.classList.remove('btn-active');
+        }
     }
-}
 
-checks.forEach(check =&gt; {
-    check.addEventListener(&#39;change&#39;, updateButtonState);
+    checkG.addEventListener('change', updateBtn);
+    checkT.addEventListener('change', updateBtn);
 });
 </script>
-
-</body> </html>
+</body>
+</html>
