@@ -77,7 +77,6 @@
     .check-item input { width: 24px; height: 24px; cursor: pointer; }
     .btn-group { margin-top: 30px; display: flex; flex-direction: column; gap: 20px; align-items: center; }
     
-    /* ボタンの初期状態 */
     .btn-primary { 
         width: 100%;
         max-width: 450px;
@@ -96,7 +95,6 @@
         transition: 0.3s;
     }
 
-    /* 有効化された時のボタン */
     .btn-active {
         background: var(--deep-blue) !important;
         opacity: 1 !important;
@@ -118,6 +116,17 @@
     }
     .safety-info { font-size: 0.85rem; color: #444; margin-top: 10px; font-weight: bold; }
     strong { color: #000; font-weight: 900; }
+    
+    /* 審査に関する注釈 */
+    .judge-note {
+        font-size: 0.85rem;
+        color: #555;
+        background: #fff;
+        border: 1px solid #ddd;
+        padding: 15px;
+        margin-top: 20px;
+    }
+
     @media (max-width: 768px) {
         .viewer-side { display: none; }
         .text-side { min-width: 100%; }
@@ -145,6 +154,14 @@
                 <li>点数：お一人様3点まで一括送信可能</li>
                 <li><span style="color: #d93025;">※線路内等の危険場所での撮影作品は失格</span></li>
             </ul>
+
+            <h2>選考・掲載について</h2>
+            <div class="judge-note">
+                ・応募作品は事務局にて内容を確認後、順次掲載いたします。<br>
+                ・<strong>選考基準、掲載の可否、および落選理由については一切お答えいたしかねます。</strong><br>
+                ・事務局が不適切と判断した作品（公序良俗に反するもの、危険行為を含むもの等）は、予告なく掲載を見送る場合があります。
+            </div>
+
             <div class="agree-area">
                 <label class="check-item">
                     <input type="checkbox" class="agree-input" id="check-guideline">
