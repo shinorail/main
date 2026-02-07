@@ -31,6 +31,7 @@
   border-radius:5px;
   text-decoration:none;
   font-weight:bold;
+  display:inline-block;
 }
 
 .sns-info{
@@ -164,7 +165,7 @@
 <section style="margin-top:40px">
   <h3>最新のお知らせ</h3>
   <p id="news-loading">読み込み中...</p>
-  <ul id="top-news-list"></ul>
+  <ul id="top-news-list" class="notranslate"></ul>
   <div style="text-align:right;font-size:13px">
     <a href="news.html">お知らせ一覧へ</a>
   </div>
@@ -224,18 +225,25 @@ function googleTranslateElementInit() {
 <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 <script>
+/* ===== 定数・設定 ===== */
 const scriptUrl = "https://script.google.com/macros/s/AKfycbwbUTBxVeTkRlAJ1dnBlgcmpGaWI9B0SeMwkwKSwAJYjRDAtVcX67QwA5FcNGaJE9Cq/exec";
 
-/* ===== お知らせ読み込み ===== */
+/* ===== お知らせ読み込み機能 ===== */
 async function loadTopNews() {
+    const list = document.getElementById('top-news-list');
+    const loading = document.getElementById('news-loading');
     try {
         const res = await fetch(scriptUrl + "?sheet=お知らせ");
         const data = await res.json();
         
-        document.getElementById('news-loading').style.display = 'none';
-        const list = document.getElementById('top-news-list');
+        if (loading) loading.style.display = 'none';
+        list.innerHTML = "";
         
-        // 最新の3件だけ表示
+        if (!data || data.length === 0 || data.error) {
+            list.innerHTML = "<li>現在お知らせはありません。</li>";
+            return;
+        }
+
         data.reverse().slice(0, 3).forEach(item => {
             const li = document.createElement('li');
             li.className = 'top-news-item';
@@ -252,11 +260,11 @@ async function loadTopNews() {
             list.appendChild(li);
         });
     } catch(e) {
-        document.getElementById('news-loading').innerText = "お知らせの読み込みに失敗しました。";
+        if (loading) loading.innerText = "お知らせの読み込みに失敗しました。";
     }
 }
 
-/* ===== アンケート送信 ===== */
+/* ===== アンケート送信機能 ===== */
 document.getElementById('survey-form').onsubmit = async (e) => {
     e.preventDefault();
     const btn = document.getElementById('survey-btn');
@@ -267,15 +275,15 @@ document.getElementById('survey-form').onsubmit = async (e) => {
     const msg = document.getElementById('msg').value;
     const name = localStorage.getItem("userName") || "ゲスト";
 
-    const data = {
-        action: "postSurvey", // GAS側のelseルートでアンケートシートへ
+    const payload = {
+        action: "postSurvey",
         name: name,
         rating: rate,
         message: msg
     };
 
     try {
-        await fetch(scriptUrl, { method: 'POST', body: JSON.stringify(data) });
+        await fetch(scriptUrl, { method: 'POST', body: JSON.stringify(payload) });
         document.getElementById('survey-form').style.display = 'none';
         document.getElementById('survey-thanks').style.display = 'block';
         setTimeout(() => toggleSurvey(), 3000);
@@ -286,24 +294,25 @@ document.getElementById('survey-form').onsubmit = async (e) => {
     }
 };
 
-/* ===== アンケート表示切替 ===== */
+/* ===== UI制御機能（アンケート・オフライン） ===== */
 function toggleSurvey(){
   const s=document.getElementById('survey-container');
   s.style.display=s.style.display==='flex'?'none':'flex';
 }
 
 function surveyVisibility(){
-  document.getElementById('survey-toggle').style.display =
-    navigator.onLine ? 'block' : 'none';
+  const btn = document.getElementById('survey-toggle');
+  if(btn) btn.style.display = navigator.onLine ? 'block' : 'none';
 }
 window.addEventListener('online',surveyVisibility);
 window.addEventListener('offline',surveyVisibility);
 surveyVisibility();
 
-/* ===== PWA / Service Worker ===== */
+/* ===== PWA・Service Worker関連 ===== */
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./service-worker.js').then(reg => {
+      console.log('PWA Ready');
       reg.addEventListener('updatefound', () => {
         const nw = reg.installing;
         nw.addEventListener('statechange', () => {
@@ -319,14 +328,14 @@ if ('serviceWorker' in navigator) {
 function showUpdate(waitingSW){
   if(window.innerWidth >= 768) return;
   const t = document.getElementById('update-toast');
-  t.style.display = 'block';
+  if(t) t.style.display = 'block';
   setTimeout(() => {
     if(waitingSW) waitingSW.postMessage({action: 'skipWaiting'});
     location.reload();
   }, 2000);
 }
 
-// 初期実行
+/* ===== 実行 ===== */
 loadTopNews();
 </script>
 
