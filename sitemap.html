@@ -1,59 +1,147 @@
 <!DOCTYPE html>
 
-<html lang="ja"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>サイトマップ - Shinorail</title> <style> body { font-family: sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; background-color: #f9f9f9; } h1 { border-bottom: 3px solid #007bff; padding-bottom: 10px; color: #007bff; } .container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); } h2 { font-size: 1.1rem; color: #555; border-left: 4px solid #007bff; padding-left: 10px; margin-top: 20px; } ul { list-style: none; padding-left: 0; } li { margin-bottom: 8px; } a { color: #0056b3; text-decoration: none; } a:hover { text-decoration: underline; } footer { margin-top: 30px; text-align: center; font-size: 0.9rem; } </style> </head> <body>
+<html lang="ja"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>サイトマップ - Shinorail</title> <style> body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; background-color: #f9f9f9; } h1 { border-bottom: 3px solid #4a4a4a; padding-bottom: 10px; color: #333; }
+
+    /* サイト稼働ステータス */
+    .status-container {
+        background: #fff;
+        padding: 12px 20px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        border: 1px solid #eee;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .status-indicator {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        display: inline-block;
+    }
+    .bg-ok { background-color: #2ecc71; box-shadow: 0 0 8px #2ecc71; }
+    .bg-maintenance { background-color: #e74c3c; box-shadow: 0 0 8px #e74c3c; }
+    .status-label { font-weight: bold; font-size: 0.95rem; }
+
+    /* コンテンツ配置 */
+    .container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    h2 {
+        font-size: 1.1rem;
+        color: #444;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 8px;
+        margin-top: 0;
+    }
+    ul {
+        list-style: none;
+        padding-left: 0;
+        margin: 0;
+    }
+    li {
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    a {
+        color: #0066cc;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+    a:hover {
+        color: #ff9900;
+        text-decoration: underline;
+    }
+
+    /* RSSボタン */
+    .rss-badge {
+        background-color: #f26522;
+        color: white !important;
+        font-size: 0.7rem;
+        font-weight: bold;
+        padding: 2px 6px;
+        border-radius: 4px;
+        text-decoration: none !important;
+        margin-left: 8px;
+    }
+
+    footer {
+        margin-top: 40px;
+        text-align: center;
+        font-size: 0.85rem;
+        color: #888;
+    }
+</style>
+</head> <body>
 
 <h1>サイトマップ</h1>
 
-<div class="container">
-    <div>
-        <h2>基本情報</h2>
-        <ul>
-            <li><a href="index.html">トップページ</a></li>
-            <li><a href="history.html">沿革・歴史</a></li>
-            <li><a href="mission.html">ミッション</a></li>
-            <li><a href="policy.html">プライバシーポリシー</a></li>
-            <li><a href="operator-info.html">運営者情報</a></li>
-        </ul>
-    </div>
+<div class="status-container" id="status-area"> <span id="status-dot" class="status-indicator"></span> <span class="status-label" id="status-msg">確認中...</span> </div>
 
-    <div>
-        <h2>ニュース・お知らせ</h2>
-        <ul>
-            <li><a href="news.html">ニュース一覧</a></li>
-            <li><a href="general-news.html">一般ニュース</a></li>
-            <li><a href="train-news.html">鉄道ニュース</a></li>
-            <li><a href="notice.html">お知らせ</a></li>
-            <li><a href="kousintyu.html">更新中コンテンツ</a></li>
-        </ul>
-    </div>
+<div class="container"> <div> <h2>最新情報</h2> <ul> <li> <a href="news.html">更新履歴・ニュース</a> <a href="feed.xml" class="rss-badge">RSS配信</a> </li> <li><a href="general-news.html">一般トピックス</a></li> <li><a href="kousintyu.html">制作中のコンテンツ</a></li> </ul> </div>
 
-    <div>
-        <h2>ユーザー機能</h2>
-        <ul>
-            <li><a href="register.html">新規登録</a></li>
-            <li><a href="login.html">ログイン</a></li>
-            <li><a href="mypage.html">マイページ</a></li>
-            <li><a href="forgot.html">パスワードを忘れた方</a></li>
-            <li><a href="reset.html">パスワードリセット</a></li>
-            <li><a href="stamp.html">スタンプ</a></li>
-        </ul>
-    </div>
-
-    <div>
-        <h2>サポート・その他</h2>
-        <ul>
-            <li><a href="faq.html">よくある質問</a></li>
-            <li><a href="contact.html">お問い合わせ</a></li>
-            <li><a href="install方法.html">インストール方法</a></li>
-            <li><a href="links.html">リンク集</a></li>
-            <li><a href="maintenance.html">メンテナンス情報</a></li>
-            <li><a href="offline.html">オフラインページ</a></li>
-        </ul>
-    </div>
+<div>
+    <h2>基本情報</h2>
+    <ul>
+        <li><a href="index.html">トップページ</a></li>
+        <li><a href="history.html">サイトの歩み</a></li>
+        <li><a href="mission.html">目的・ビジョン</a></li>
+        <li><a href="policy.html">プライバシーポリシー</a></li>
+        <li><a href="operator-info.html">運営者情報</a></li>
+    </ul>
 </div>
 
-<footer>
-    <p><a href="index.html">トップページへ戻る</a></p>
-    <p>&copy; Shinorail</p>
-</footer>
+<div>
+    <h2>サービス・機能</h2>
+    <ul>
+        <li><a href="register.html">新規会員登録</a></li>
+        <li><a href="login.html">ログイン</a></li>
+        <li><a href="mypage.html">マイページ</a></li>
+        <li><a href="stamp.html">スタンプ機能</a></li>
+    </ul>
+</div>
+
+<div>
+    <h2>ヘルプ・その他</h2>
+    <ul>
+        <li><a href="faq.html">よくあるご質問</a></li>
+        <li><a href="contact.html">お問い合わせ</a></li>
+        <li><a href="links.html">関連リンク</a></li>
+        <li><a href="maintenance.html">メンテナンス状況</a></li>
+        <li><a href="offline.html">オフラインページ</a></li>
+    </ul>
+</div>
+</div>
+
+<footer> <p>&copy; Shinorail | <a href="index.html" style="color: #888;">ホームへ戻る</a></p> </footer>
+
+<script> async function updateStatus() { try { const res = await fetch('status.md'); if (!res.ok) throw new Error(); const txt = await res.text();
+
+        const isMaint = txt.includes(&#39;status: maintenance&#39;);
+        const dot = document.getElementById(&#39;status-dot&#39;);
+        const msg = document.getElementById(&#39;status-msg&#39;);
+
+        if (isMaint) {
+            dot.className = &quot;status-indicator bg-maintenance&quot;;
+            msg.innerText = &quot;現在メンテナンス中です&quot;;
+        } else {
+            dot.className = &quot;status-indicator bg-ok&quot;;
+            msg.innerText = &quot;サイトは正常に稼働しています&quot;;
+        }
+    } catch (e) {
+        document.getElementById(&#39;status-area&#39;).style.display = &#39;none&#39;;
+    }
+}
+updateStatus();
+</script>
+
 </body> </html>
