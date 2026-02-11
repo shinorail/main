@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【限定号】篠ノ井新聞 - 技術深層レポート</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=BIZ+UDP+Gothic:wght@400;700&family=Shippori+Mincho:wght@400;700&display=swap');
+
+        .newspaper-body {
+            background-color: #1a1a1a;
+            font-family: 'BIZ UDPGothic', sans-serif;
+            padding: 10px;
+            margin: 0;
+            color: #333;
+        }
+
+        .newspaper-container {
+            max-width: 950px;
+            margin: 10px auto;
+            background: #ffffff;
+            padding: 40px 30px;
+            border: 8px double #d4af37;
+            box-shadow: 0 0 30px rgba(212,175,55,0.3);
+            position: relative;
+        }
+
+        .exclusive-tag {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #d4af37;
+            color: #fff;
+            padding: 5px 20px;
+            font-size: 0.8em;
+            letter-spacing: 0.3em;
+            font-weight: bold;
+        }
+
+        .newspaper-header {
+            border-bottom: 2px solid #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .masthead {
+            font-family: 'Shippori Mincho', serif;
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            font-weight: bold;
+            letter-spacing: 0.2em;
+        }
+
+        .article-main {
+            display: flex;
+            gap: 20px;
+        }
+
+        .main-title {
+            writing-mode: vertical-rl;
+            font-family: 'Shippori Mincho', serif;
+            font-size: clamp(1.8rem, 4vw, 3.2rem);
+            font-weight: bold;
+            line-height: 1.1;
+            padding: 15px 10px;
+            background: #15172a;
+            color: #fff;
+            margin: 0;
+            flex-shrink: 0;
+        }
+
+        .newspaper-content {
+            writing-mode: vertical-rl;
+            text-align: justify;
+            font-size: 1.1em;
+            line-height: 2.2;
+            height: 550px;
+            column-count: 2;
+            column-gap: 40px;
+            column-rule: 1px dotted #aaa;
+            flex-grow: 1;
+        }
+
+        .newspaper-content p {
+            margin: 0 0 1em 0;
+            text-indent: 1em;
+        }
+
+        .roadmap-box {
+            background: #f4f4f2;
+            border: 1px solid #d4af37;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .roadmap-item {
+            background: #fff;
+            padding: 12px;
+            border-left: 4px solid #15172a;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .article-main { flex-direction: column; }
+            .main-title { writing-mode: horizontal-tb; width: 100%; text-align: center; }
+            .newspaper-content { writing-mode: horizontal-tb; height: auto; column-count: 1; padding-top: 20px; }
+        }
+    </style>
+</head>
+<body class="newspaper-body">
+<div class="newspaper-container">
+    <div class="exclusive-tag">特別寄稿：設計思想の深淵</div>
+    <div class="newspaper-header">
+        <div class="masthead">篠ノ井新聞 プレミアム</div>
+        <div style="text-align: right; font-size: 0.8em;">2026年 2月11日<br>限定公開版</div>
+    </div>
+    <div class="article-main">
+        <h1 class="main-title">「機能こそが装飾」<br>次世代指針を提示</h1>
+        <div class="newspaper-content">
+            <p>篠ノ井乗務区は十一日、公開二周年を迎えた「Multi-X Utility」の最新開発指針を明らかにした。本指針の核心は「五感の活用」にあり、視覚情報の整理に留まらず、触覚や聴覚をインターフェースの一部として取り込む野心的な試みが盛り込まれている。</p>
+            <p>特に注目すべきは、今回全編に採用された「BIZ UDPゴシック」である。一分一秒を争う現場において、数字や記号の誤読を防止するこのUDフォントは、もはや不可欠な装備と言える。さらに、周囲の明るさに応じて色彩を変化させる「自動カラーセット」の実装により、昼夜を問わず最適な判読性を維持することが可能となった。デザインとは、いかなる状況下でも機能し続けるための「設計」そのものであるという同会の哲学が、ここにある。</p>
+        </div>
+    </div>
+    <div class="roadmap-box">
+        <div class="roadmap-item"><strong>完全オフライン対応</strong>：地下や山間部でも全機能を解放。</div>
+        <div class="roadmap-item"><strong>自動照度適応機能</strong>：環境光に応じたカラーセット切り替え。</div>
+        <div class="roadmap-item"><strong>音声・触覚UIの導入</strong>：音声案内と振動による確実な操作感。</div>
+    </div>
+</div>
+</body>
+</html>
