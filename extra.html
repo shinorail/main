@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>号外 - 篠ノ井新聞</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;700&display=swap');
+
+        .newspaper-body {
+            background-color: #f4f4f2;
+            font-family: 'Shippori Mincho', serif;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .newspaper-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .newspaper-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px double #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+        }
+
+        .newspaper-header .masthead {
+            font-size: 2.5em;
+            font-weight: bold;
+            letter-spacing: 0.2em;
+        }
+
+        .newspaper-info {
+            text-align: right;
+            font-size: 0.85em;
+            line-height: 1.6;
+        }
+
+        .article-title-area {
+            display: flex;
+            border-bottom: 1px solid #333;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+        }
+
+        .main-title {
+            writing-mode: vertical-rl;
+            font-size: 3.2em;
+            font-weight: bold;
+            line-height: 1.1;
+            padding: 10px;
+            border-left: 2px solid #333;
+            margin-left: 20px;
+            letter-spacing: 0.1em;
+        }
+
+        .sub-title {
+            writing-mode: vertical-rl;
+            font-size: 1.3em;
+            color: #333;
+            padding-top: 10px;
+            font-weight: bold;
+        }
+
+        .newspaper-content {
+            writing-mode: vertical-rl;
+            text-align: justify;
+            font-size: 1.1em;
+            line-height: 2.3;
+            height: 580px;
+            column-count: 3;
+            column-gap: 40px;
+            column-rule: 1px dotted #ccc;
+        }
+
+        .newspaper-content p {
+            margin: 0 0 1em 0;
+            text-indent: 1em;
+        }
+
+        .highlight-box {
+            border: 2px solid #15172a;
+            padding: 15px;
+            margin-top: 20px;
+            writing-mode: horizontal-tb;
+            background: #f9f9fb;
+        }
+
+        .highlight-box strong {
+            display: block;
+            color: #15172a;
+            font-size: 1.1em;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #15172a;
+        }
+
+        .sns-links {
+            writing-mode: horizontal-tb;
+            margin-top: 15px;
+            font-family: sans-serif;
+            font-size: 0.9em;
+        }
+
+        .sns-links a {
+            color: #0044cc;
+            text-decoration: none;
+            margin-right: 15px;
+        }
+
+        .footer-nav {
+            margin-top: 30px;
+            display: flex;
+            gap: 10px;
+            writing-mode: horizontal-tb;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            color: #fff;
+            text-decoration: none;
+            font-family: sans-serif;
+            font-size: 0.9em;
+            border-radius: 4px;
+        }
+
+        .btn-main { background: #15172a; }
+        .btn-sub { background: #555; }
+
+        @media (max-width: 768px) {
+            .newspaper-content {
+                writing-mode: horizontal-tb;
+                height: auto;
+                column-count: 1;
+            }
+            .article-title-area { display: block; }
+            .main-title, .sub-title { writing-mode: horizontal-tb; border: none; margin: 0; padding: 0; }
+            .main-title { font-size: 1.8em; margin-bottom: 10px; }
+        }
+    </style>
+</head>
+<body class="newspaper-body">
+
+<div class="newspaper-container">
+    <div class="newspaper-header">
+        <div class="masthead">篠ノ井新聞</div>
+        <div class="newspaper-info">
+            2026年（令和8年）2月11日（水曜日）<br>
+            号外・広報版 第20260211号
+        </div>
+    </div>
+
+    <div class="article-title-area">
+        <div class="sub-title">デジタル広報体制を大幅拡充</div>
+        <h1 class="main-title">二周年記念版を公開<br>ＳＮＳ連携も本格化</h1>
+    </div>
+
+    <div class="newspaper-content">
+        <p>【長野】篠ノ井乗務区は十一日、基幹コンテンツ「Multi-X Utility」の公開二周年を記念し、システムアップデートを実施。これに合わせ、Instagramの二大アカウント（@shino_rail_info、@shinorail.official）を通じた多角的な広報展開を開始した。</p>
+        
+        <p>今回の改修では、現場の声から生まれたユニバーサルデザイン（ＵＤ）を追求。視認性の高いＢＩＺ ＵＤＰゴシックを全面的に採用し、計器や数値の誤読防止を徹底した。ブラウザからホーム画面に登録できるＰＷＡ形式を軸に、アプリ同等の機動力を実現している。</p>
+
+        <p>また、公式サイト「shinorail.github.io/main/」も情報ハブとしての機能を強化。最新のお知らせを号外形式で速報し、ＳＮＳと相互に補完し合う「篠ノ井ネットワーク」の構築を加速させる構えだ。</p>
+
+        <p>代表は「フォント一つ、ボタン一つにも理由がある。精密な日常を支えるツールとして、今後も改善の手を緩めない」と抱負を語った。二周年を機に、篠ノ井乗務区のデジタル展開は新たなステージへ突入する。</p>
+    </div>
+
+    <div class="highlight-box">
+        <strong>【公式アクセス情報】</strong>
+        ● Multi-X Utility：https://shinorail.github.io/multi-x-utility/ <br>
+        ● 篠ノ井乗務区 公式サイト：https://shinorail.github.io/main/ <br>
+        ● Instagram：<a href="https://www.instagram.com/shino_rail_info/?hl=ja">@shino_rail_info</a> / <a href="https://www.instagram.com/shinorail.official/?hl=ja">@shinorail.official</a>
+    </div>
+
+    <div class="footer-nav">
+        <a href="https://shinorail.github.io/multi-x-utility/" class="btn btn-main">Multi-X 起動</a>
+        <a href="https://shinorail.github.io/main/" class="btn btn-sub">公式サイト</a>
+    </div>
+</div>
+
+</body>
+</html>
