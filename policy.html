@@ -1,79 +1,160 @@
 <!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>詳細規約・ポリシー - 篠ノ井乗務区</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* 全体：PC・SP共通 */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f1f5f9;
+            font-family: "BIZ UDPGothic", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+            color: #222;
+        }
 
-<html lang="ja"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>詳細規約・ポリシー - 篠ノ井乗務区</title> <link rel="stylesheet" href="style.css"> <style> .policy-container { background: #fff; padding: 50px; border-radius: 12px; line-height: 2.2; color: #222; max-width: 1000px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.08); } .policy-nav { background: #f1f5f9; padding: 30px; border-radius: 8px; margin-bottom: 50px; border-left: 10px solid #004da0; } .policy-nav ul { list-style: none; padding: 0; margin: 0; } .policy-nav li { margin: 12px 0; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px; } .policy-nav a { color: #004da0; text-decoration: none; font-weight: bold; font-size: 1.1em; }
+        .container {
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
 
-section { margin-bottom: 150px; scroll-margin-top: 30px; } h2 { border-bottom: 4px solid #004da0; color: #004da0; padding-bottom: 15px; margin-top: 0; font-size: 1.9em; letter-spacing: 0.05em; } h3 { color: #fff; background: #004da0; padding: 12px 25px; border-radius: 4px; margin: 50px 0 25px; font-size: 1.4em; }
+        .policy-container {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.1);
+            margin: 40px auto;
+            max-width: 1000px;
+            box-sizing: border-box;
+        }
 
-.alert-banner { font-size: 1.1em; background: #fff1f2; padding: 45px; border: 5px double #e11d48; border-radius: 10px; margin-bottom: 70px; color: #9f1239; line-height: 1.8; } .contact-panel { background: #f8fafc; padding: 50px; border-radius: 20px; border: 2px solid #004da0; margin: 60px 0; text-align: center; } .btn-link { display: inline-block; background: #004da0; color: #fff !important; padding: 20px 60px; text-decoration: none; border-radius: 60px; font-weight: bold; font-size: 1.2em; transition: 0.3s; } .btn-link:hover { background: #003366; transform: scale(1.05); }
+        /* --- PCレイアウト (デフォルト) --- */
+        .policy-container {
+            padding: 60px 80px; /* PCはゆったり */
+            line-height: 2.2;
+        }
 
-.ad-space-wide { text-align: center; margin: 80px 0; min-height: 100px; } .ad-space-rect { text-align: center; margin: 80px 0; min-height: 260px; }
+        h1 { font-size: 2.2rem; text-align: center; color: #004da0; margin-bottom: 50px; }
+        h2 { border-bottom: 4px solid #004da0; color: #004da0; padding-bottom: 15px; font-size: 1.8rem; }
+        h3 { color: #fff; background: #004da0; padding: 12px 25px; border-radius: 4px; margin-top: 50px; }
 
-.important-txt { color: #e11d48; font-weight: bold; text-decoration: underline; background: #fff1f2; padding: 0 4px; } footer { margin-top: 150px; padding: 60px 0; border-top: 2px solid #004da0; text-align: center; background: #f1f5f9; color: #555; }
+        .policy-nav { background: #f8fafc; padding: 30px; border-radius: 8px; border-left: 10px solid #004da0; margin-bottom: 60px; }
+        .alert-banner { background: #fff1f2; padding: 40px; border: 3px double #e11d48; color: #9f1239; margin-bottom: 70px; }
 
-.clause-list { padding-left: 20px; } .clause-list li { margin-bottom: 20px; } </style>
+        /* --- SPレイアウト (画面幅が狭い時) --- */
+        @media (max-width: 768px) {
+            .container { padding: 10px; }
+            .policy-container {
+                padding: 30px 20px; /* スマホは余白を詰める */
+                margin: 15px auto;
+                line-height: 1.8;
+            }
+            h1 { font-size: 1.5rem; margin-bottom: 30px; }
+            h2 { font-size: 1.3rem; padding-bottom: 10px; }
+            h3 { font-size: 1.1rem; padding: 10px 15px; }
+            .policy-nav { padding: 20px; font-size: 0.9rem; }
+            .alert-banner { padding: 25px; font-size: 0.85rem; }
+            
+            /* スマホで広告がはみ出さないように調整 */
+            .ad-space-wide, .ad-space-rect {
+                overflow: hidden;
+                transform: scale(0.9);
+                margin: 30px 0;
+            }
+        }
 
-</head> <body>
+        /* 共通装飾 */
+        .contact-panel { background: #f8fafc; padding: 40px; border: 2px solid #004da0; border-radius: 20px; text-align: center; margin: 50px 0; }
+        .btn-link { display: inline-block; background: #004da0; color: #fff !important; padding: 18px 50px; border-radius: 50px; text-decoration: none; font-weight: bold; }
+        .important-txt { color: #e11d48; font-weight: bold; background: #fff1f2; }
+        section { margin-bottom: 100px; scroll-margin-top: 50px; }
+        footer { margin-top: 100px; padding: 60px 0; background: #f1f5f9; text-align: center; border-top: 2px solid #004da0; }
+    </style>
+</head>
+<body>
 
-<header></header> <nav></nav>
+<header></header>
+<nav></nav>
 
-<div class="container"> <div class="policy-container"> <h1>篠ノ井乗務区 総合利用規約・詳細ポリシー</h1>
+<div class="container">
+    <div class="policy-container">
+        <h1>篠ノ井乗務区 総合利用規約・詳細ポリシー</h1>
 
-<div class="ad-space-wide"> <script src="https://adm.shinobi.jp/s/c7ad42cb47e9c4896a30298280add186"></script> </div>
+        <div class="ad-space-wide">
+            <script src="https://adm.shinobi.jp/s/c7ad42cb47e9c4896a30298280add186"></script>
+        </div>
 
-<div class="alert-banner"> <strong>【最重要：鉄道事業者等への問い合わせ厳禁】</strong>
+        <div class="alert-banner">
+            <strong>【最重要：鉄道事業者等への問い合わせ厳禁】</strong><br>
+            当サイトは個人による非公式ファンサイトです。掲載内容について鉄道事業者等へ直接問い合わせる行為は、相手方の業務を妨害する迷惑行為となります。確認された場合、即座に利用停止（BAN）措置を講じます。
+        </div>
 
+        <div class="policy-nav">
+            <p><strong>目次</strong></p>
+            <ul>
+                <li><a href="#privacy">第1章：プライバシーポリシー</a></li>
+                <li><a href="#membership">第2章：会員登録制度・限定号厳秘義務</a></li>
+                <li><a href="#comments">第3章：コメント投稿基準</a></li>
+                <li><a href="#response">第4章：運営レスポンス方針</a></li>
+                <li><a href="#account-delete">第5章：アカウント削除（退会）手続き</a></li>
+                <li><a href="#ads-policy">第6章：広告配信サービスへの同意</a></li>
+                <li><a href="#copyright">第7章：知的財産権・転載禁止</a></li>
+                <li><a href="#disclaimer">第8章：免責事項</a></li>
+            </ul>
+        </div>
 
-当サイト「篠ノ井乗務区」は個人による非公式ファンサイトです。掲載内容（特に限定号の情報）について、JR各社、しなの鉄道、長野電鉄等の鉄道事業者や、自治体・公共機関へ直接問い合わせる行為は、相手方の業務を妨害する重大な迷惑行為となります。このような行為が確認された場合、事前の警告なく即座に当該ユーザーの利用を停止（BAN）し、再登録を永続的に拒否します。 </div>
+        <section id="privacy">
+            <h2>第1章：プライバシーポリシー</h2>
+            <h3>第1条（収集情報の種類）</h3>
+            <p>ユーザー名、メールアドレス、生年月日を収集します。</p>
+            <h3>第2条（情報の安全性）</h3>
+            <p>SSL通信により保護し、パスワードは暗号化して保存します。</p>
+        </section>
 
-<div class="policy-nav"> <p><strong>目次（内容を必ずご確認ください）</strong></p> <ul> <li><a href="#privacy">第1章：プライバシーポリシー（個人情報の厳重管理）</a></li> <li><a href="#membership">第2章：会員登録制度・限定号コンテンツの厳秘義務</a></li> <li><a href="#comments">第3章：コメント投稿基準（完全承認制・管理者査定）</a></li> <li><a href="#response">第4章：運営レスポンス・お問い合わせ対応方針</a></li> <li><a href="#account-delete">第5章：アカウント削除（退会）の厳格な本人照合手続き</a></li> <li><a href="#ads-policy">第6章：広告配信サービスへの同意と運用目的</a></li> <li><a href="#copyright">第7章：知的財産権・無断転載禁止・法的措置について</a></li> <li><a href="#disclaimer">第8章：免責事項および本規約の改訂方針</a></li> </ul> </div>
+        <div class="ad-space-rect">
+            <script src="https://adm.shinobi.jp/s/9b7ba88cacde1619c31b839b2a95c8d3"></script>
+        </div>
 
-<section id="privacy"> <h2>第1章：プライバシーポリシー</h2> <p>本サイトは、会員の個人情報を以下の通り取り扱い、適切に保護することをお約束します。</p> <h3>第1条（収集する情報の種類）</h3> <ul class="clause-list"> <li><strong>ユーザー名：</strong> サイト内の識別およびコメント表示に使用します。</li> <li><strong>メールアドレス：</strong> ログインID、緊急通知、および本人確認に使用します。</li> <li><strong>生年月日：</strong> アカウント削除（退会）時の本人照合、および年齢確認に使用します。</li> </ul> <h3>第2条（情報の安全性）</h3> <p>パスワードはソルト付ハッシュ化処理により不可逆的に暗号化されます。運営側でも元のパスワードを知ることはできません。また、SSL通信により情報の送受信を保護し、外部からの不正アクセスを防止します。</p> </section>
+        <section id="membership">
+            <h2>第2章：会員登録制度・限定号厳秘義務</h2>
+            <p><span class="important-txt">会員専用情報のSNS転載、スクリーンショット公開は一切禁止です。</span>発見次第、法的措置を含めた対応を行います。</p>
+        </section>
 
-<div class="ad-space-rect"> <script src="https://adm.shinobi.jp/s/9b7ba88cacde1619c31b839b2a95c8d3"></script> </div>
+        <section id="comments">
+            <h2>第3章：コメント投稿基準</h2>
+            <p>完全承認制です。誹謗中傷やマナー違反は管理者の判断で掲載拒否・削除します。</p>
+        </section>
 
-<section id="membership"> <h2>第2章：会員登録制度・限定号コンテンツの厳秘義務</h2> <h3>第1条（限定情報の取扱い）</h3> <p>会員専用ページ「限定号」等に掲載される写真、図面、音声、および記事内容は、本サイト会員のみが享受できる特別な特典です。<span class="important-txt">これらの情報をSNS（X、Instagram、Threads、TikTok等）へ転載する行為、スクリーンショットのアップロード、第三者への開示は一切禁止します。</span></p> <h3>第2条（アカウントの管理責任）</h3> <p>アカウントの貸与、譲渡、複数人での共有は禁止です。不自然なログイン状況が検知された場合、事前の通告なくアカウントを停止する場合があります。ログイン情報は会員自身が責任を持って管理してください。</p> </section>
+        <section id="account-delete">
+            <h2>第5章：アカウント削除（退会）手続き</h2>
+            <div class="contact-panel">
+                <p>下記3点を正確に明記して申請してください。<br><strong>1. ユーザー名 / 2. メールアドレス / 3. 生年月日</strong></p>
+                <a href="https://shinorail.github.io/main/contact.html" class="btn-link" target="_blank">退会申請フォーム</a>
+            </div>
+        </section>
 
-<section id="comments"> <h2>第3章：コメント投稿基準（完全承認制・管理者査定）</h2> <p>当サイトのコメント欄は、健全なコミュニティ維持のため、管理者が投稿内容を事前に確認するシステムを採用しています。</p> <h3>第1条（掲載拒否および削除の基準）</h3> <p>投稿されたコメントは全て管理者が目を通します。管理者が「掲載不可」と判断した投稿は掲載（公開）されません（バツ）。
+        <section id="ads-policy">
+            <h2>第6章：広告配信サービスへの同意</h2>
+            <p>サーバー維持費等のため忍者AdMaxを表示しています。利用者はこれに同意したものとみなします。</p>
+        </section>
 
+        <div class="ad-space-wide">
+            <script src="https://adm.shinobi.jp/s/c7ad42cb47e9c4896a30298280add186"></script>
+        </div>
 
-以下の内容を含むコメントは、予告なく消去いたします。
+        <p style="text-align: right; margin-top: 100px; font-weight: bold;">
+            制定：2025年7月20日<br>
+            最終改訂：2026年2月11日
+        </p>
+    </div>
+</div>
 
-
-・他者への攻撃、誹謗中傷、不快感を与える言葉遣い、マナー違反
-
-
-・鉄道事業者、駅係員、乗務員等のプライバシーや安全を侵害する恐れのある記述
-
-
-・記事の内容と著しく乖離した投稿、宣伝活動、スパム行為、同一内容の繰り返し
-
-
-・その他、管理者が本サイトの運営に不適切であると判断したもの。
-
-
-※掲載されなかった場合の理由説明や再審査の要望には一切応じません。</p> </section>
-
-<div class="ad-space-rect"> <script src="https://adm.shinobi.jp/s/9b7ba88cacde1619c31b839b2a95c8d3"></script> </div>
-
-<section id="response"> <h2>第4章：運営レスポンス・お問い合わせ対応方針</h2> <p>本サイトは個人運営のプロジェクトです。お問い合わせフォームやSNS等で寄せられた全てのご連絡に対して返答を保証するものではありません。特に、不適切な内容、過度な要求、繰り返しの同一質問には一切回答いたしません。また、返信には多大な時間を要する場合があります。</p> </section>
-
-<section id="account-delete"> <h2>第5章：アカウント削除（退会）の厳格な本人照合手続き</h2> <p>第三者による「なりすまし削除」を防ぎ、会員のデータを確実に保護するため、退会には以下の厳格な照合を行います。</p> <div class="contact-panel"> <p>アカウントの完全削除を希望される方は、以下の3点を正確に明記して申請してください。</p> <p><strong>1. ユーザー名 / 2. メールアドレス / 3. 生年月日</strong></p> <a href="https://shinorail.github.io/main/contact.html" class="btn-link" target="_blank">退会申請（お問い合わせフォーム）</a> </div> <p>登録情報と完全に一致した場合のみ、運営側で手動削除を行います。削除後は限定号の閲覧権限が失われ、データの復元は一切不可能です。</p> </section>
-
-<section id="ads-policy"> <h2>第6章：広告配信サービスへの同意と運用目的</h2> <p>本サイトの運営・サーバー維持・ドメイン管理・資料収集の費用を賄うため、ページ内に忍者AdMaxによる広告を表示しています。利用者は、本サイトを継続的に利用するにあたり、広告が表示されることに同意するものとします。表示される広告内容は配信プラットフォームのアルゴリズムに基づき、運営側で個別に制御するものではありません。</p> </section>
-
-<div class="ad-space-wide"> <script src="https://adm.shinobi.jp/s/c7ad42cb47e9c4896a30298280add186"></script> </div>
-
-<section id="copyright"> <h2>第7章：知的財産権・無断転載禁止・法的措置について</h2> <p>掲載されている写真、文章、データ等の知的財産権は「篠ノ井乗務区」に帰属します。著作権法で認められた引用の範囲を超えた無断転載・再配布などの侵害行為が確認された場合、プロバイダ責任制限法に基づく情報開示請求、および損害賠償請求を含む法的措置を講じます。</p> </section>
-
-<section id="disclaimer"> <h2>第8章：免責事項および本規約の改訂方針</h2> <p>本サイトの利用により生じた直接的・間接的なトラブルや損害について、運営者は一切の責任を負いません。本規約は、運営者の判断により、利用者の個別の承諾なくいつでも改訂できるものとします。改訂された規約は本ページに掲載された時点より適用されます。</p> </section>
-
-<p style="text-align: right; margin-top: 100px; font-weight: bold; font-size: 1.2em;"> 制定：2025年7月20日
-
-
-最終改訂：2026年2月11日 </p> </div> </div>
-
-<footer> <p>&copy; 篠ノ井乗務区 All Rights Reserved.</p> <p style="font-size: 0.8em; margin-top: 10px;">当サイトは一個人の趣味サイトであり、鉄道事業者や公的機関とは無関係です。</p> </footer>
+<footer>
+    <p>&copy; 篠ノ井乗務区 All Rights Reserved.</p>
+</footer>
 
 <script src="menu.js"></script>
-
-</body> </html>
+</body>
+</html>
