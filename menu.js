@@ -106,6 +106,19 @@ function startEffect(char, isComplete) {
         setTimeout(() => { if(f && f.parentNode) f.remove(); }, duration * 1000);
     }, isComplete ? 400 : 800);
 }
+// SNSアプリ内ブラウザ判定と自動転送
+(function() {
+    const ua = navigator.userAgent.toLowerCase();
+    // Instagram, LINE, Facebook, Twitter(X) のアプリ内ブラウザを判定
+    const isSNS = /instagram|fbav|line|twitter|twttr/.test(ua);
+
+    // SNSブラウザであり、かつ現在のファイル名が bridge.html ではない場合に転送
+    if (isSNS && !window.location.pathname.includes('bridge.html')) {
+        window.location.href = 'bridge.html';
+    }
+})();
+
+// ここから下に画像にある async function loadNews(container) { ... が続くようにしてください
 
 async function loadNews(container) {
     const url = "https://script.google.com/macros/s/AKfycbwbUTBxVeTkRlAJ1dnBlgcmpGaWI9B0SeMwkwKSwAJYjRDAtVcX67QwA5FcNGaJE9Cq/exec";
