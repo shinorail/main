@@ -1,129 +1,153 @@
 <!DOCTYPE html>
-
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>お問い合わせメンテナンス - 篠ノ井乗務区</title>
-<link rel="stylesheet" href="style.css">
-<style>
-.maintenance-container {
-background: #fff;
-padding: 40px 20px;
-border-radius: 12px;
-box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-max-width: 600px;
-margin: 40px auto;
-text-align: center;
-border-top: 6px solid #004da0;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Contact | Shinorail-Group</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --p: #d4af37;
+            --bg: #0f172a;
+            --card: #1e293b;
+            --txt: #f8fafc;
+            --sub: #94a3b8;
+        }
+        body {
+            font-family: -apple-system, "BIZ UDPGothic", sans-serif;
+            background-color: var(--bg);
+            color: var(--txt);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container { width: 100%; max-width: 500px; animation: fadeIn 0.6s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-    .work-display {
-        font-size: 50px;
-        margin-bottom: 20px;
-    }
-    .worker-emoji {
-        display: inline-block;
-        animation: bounce 1s infinite alternate;
-    }
-    .tool-emoji {
-        display: inline-block;
-        animation: hammer 0.5s infinite alternate;
-    }
-    @keyframes bounce {
-        from { transform: translateY(0); }
-        to { transform: translateY(-10px); }
-    }
-    @keyframes hammer {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(-40deg); }
-    }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { color: var(--p); font-size: 1.8rem; margin: 0; letter-spacing: 2px; }
+        
+        .form-card {
+            background: var(--card);
+            padding: 30px;
+            border-radius: 24px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
 
-    .m-title {
-        color: #333;
-        font-size: 1.4em;
-        font-weight: bold;
-        margin-bottom: 15px;
-    }
+        .form-group { margin-bottom: 25px; }
+        label {
+            display: block;
+            color: var(--p);
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
 
-    .schedule-tag {
-        background: #e3f2fd;
-        color: #004da0;
-        padding: 5px 15px;
-        border-radius: 20px;
-        display: inline-block;
-        font-weight: bold;
-        margin-bottom: 20px;
-    }
+        input, textarea {
+            width: 100%;
+            padding: 14px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1.5px solid #334155;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: 0.3s;
+        }
 
-    .m-text {
-        color: #555;
-        line-height: 1.8;
-        margin-bottom: 30px;
-    }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--p);
+            background: rgba(15, 23, 42, 0.9);
+        }
 
-    .x-btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        background: #000;
-        color: #fff;
-        text-decoration: none;
-        padding: 12px 25px;
-        border-radius: 30px;
-        font-weight: bold;
-        transition: 0.3s;
-        width: 80%;
-        max-width: 300px;
-    }
-    .x-btn:hover {
-        opacity: 0.8;
-        transform: scale(1.02);
-    }
+        .btn-submit {
+            width: 100%;
+            background: var(--p);
+            color: #000;
+            border: none;
+            padding: 16px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
 
-    @media (max-width: 600px) {
-        .maintenance-container { margin: 20px; padding: 30px 15px; }
-        .m-title { font-size: 1.2em; }
-        .m-text { font-size: 0.9em; }
-    }
-</style>
+        .btn-submit:hover {
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+        }
+
+        /* 広告エリアのスタイル */
+        .ad-area {
+            margin-top: 35px;
+            padding-top: 25px;
+            border-top: 1px solid rgba(148, 163, 184, 0.1);
+            text-align: center;
+        }
+        .ad-label {
+            font-size: 10px;
+            color: var(--sub);
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            color: var(--sub);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .back-link:hover { color: var(--p); }
+    </style>
 </head>
 <body>
 
-<header></header>
-<nav></nav>
-
 <div class="container">
-<div class="maintenance-container">
-<div class="work-display">
-<span class="worker-emoji">👷</span>
-<span class="tool-emoji">🔧</span>
-</div>
-
-    <div class="m-title">お問い合わせフォーム<br>メンテナンスのお知らせ</div>
-
-    <div class="schedule-tag">
-        再開予定：2026年3月上旬
+    <div class="header">
+        <h1>Contact</h1>
+        <p style="color:var(--sub); font-size:0.9rem;">お問い合わせを受け付けます</p>
     </div>
 
-    <div class="m-text">
-        システム改修のため、現在お問い合わせの受付を停止しております。<br>
-        修正が完了次第、ただちに反映し、受付を再開いたします。
+    <div class="form-card">
+        <form action="https://formspree.io/f/mdawoqqg" method="POST">
+            
+            <div class="form-group">
+                <label>Your email:</label>
+                <input type="email" name="email" placeholder="example@mail.com" required>
+            </div>
+
+            <div class="form-group">
+                <label>Your message:</label>
+                <textarea name="message" rows="5" placeholder="ご自由に入力してください" required></textarea>
+            </div>
+
+            <input type="hidden" name="_next" value="https://shinorail.github.io/main/links.html">
+
+            <button type="submit" class="btn-submit">
+                <i class="fa-solid fa-paper-plane"></i> Send
+            </button>
+        </form>
+
+        <div class="ad-area">
+            <div class="ad-label">ADVERTISEMENT</div>
+            <script src="https://adm.shinobi.jp/o/2791c03bc086135607731d2a0eb484fd"></script>
+        </div>
     </div>
 
-    <a href="https://x.com/Shino_Rail" target="_blank" rel="noopener noreferrer" class="x-btn">
-        最新情報はX（@Shino_Rail）で確認
-    </a>
-
-    <p style="margin-top: 25px; font-size: 0.8em; color: #999;">
-        ご不便をおかけしますが、再開まで今しばらくお待ちください。
-    </p>
+    <a href="links.html" class="back-link">← 戻る</a>
 </div>
-</div>
-
-<footer></footer>
-
-<script src="menu.js"></script>
 
 </body>
 </html>
