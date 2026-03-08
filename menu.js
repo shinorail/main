@@ -48,7 +48,7 @@ function renderParts() {
                 <li><a href="train-news.html">Train-News</a></li>
                 <li><a href="ad.html" style="color: #2e7d32; font-weight: bold;">手作り広告</a></li>
                 <li><a href="mission.html#2026">活動理念</a></li>
-                <li><a href="photo.html">写真記録</a></li>
+                <li><a href="portfolio.html">写真記録</a></li>
                 <li><a href="stamp.html" style="color: #e63946; font-weight: bold;">乗車印帳</a></li>
                 <li><a href="contact.html">お問い合わせ</a></li>
                 <li><a href="faq.html">よくある質問</a></li>
