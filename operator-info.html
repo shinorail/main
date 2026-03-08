@@ -2,85 +2,112 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>運営者情報 | Shinorail 公式ホームページ</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>About | Shinorail</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --p: #d4af37; --bg: #0f172a; --card: #1e293b; --txt: #f8fafc; --sub: #94a3b8; }
+        body { font-family: -apple-system, "BIZ UDPGothic", sans-serif; background: var(--bg); color: var(--txt); margin: 0; padding: 20px; display: flex; justify-content: center; min-height: 100vh; }
+        .container { width: 100%; max-width: 650px; padding: 20px 0 60px; }
+        .card { background: var(--card); padding: 30px; border-radius: 24px; border: 1px solid rgba(212, 175, 55, 0.2); box-shadow: 0 15px 35px rgba(0,0,0,0.4); margin-bottom: 20px; }
+        h1 { color: var(--p); text-align: center; font-size: 1.8rem; margin-bottom: 10px; }
+        h2 { color: var(--p); font-size: 1.2rem; border-left: 4px solid var(--p); padding-left: 15px; margin: 30px 0 15px; }
+        p { color: var(--sub); font-size: 0.95rem; line-height: 1.7; }
+        
+        .info-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .info-table th, .info-table td { padding: 12px; border-bottom: 1px solid rgba(148, 163, 184, 0.1); text-align: left; }
+        .info-table th { color: var(--p); width: 30%; font-size: 0.85rem; }
+        .info-table td { color: var(--txt); font-size: 0.9rem; }
+
+        .message-box { background: rgba(15, 23, 42, 0.5); padding: 20px; border-radius: 15px; border: 1px dashed var(--sub); margin-top: 10px; }
+        .rep-name { color: var(--p); font-weight: bold; margin-bottom: 5px; display: block; }
+
+        .footer-nav { display: flex; justify-content: center; gap: 20px; margin-top: 30px; }
+        .back-link { color: var(--sub); text-decoration: none; font-size: 0.85rem; transition: 0.3s; }
+        .back-link:hover { color: var(--p); }
+        
+        .ad-area { margin-top: 40px; text-align: center; border-top: 1px solid rgba(148, 163, 184, 0.1); padding-top: 25px; }
+    </style>
 </head>
 <body>
 
-    <header>
-        <h1>運営者情報</h1>
-    </header>
+<div class="container">
+    <div class="card">
+        <h1 id="t-title">About Shinorail</h1>
+        <p id="t-intro">「Shinorail」は、代表者一人によるクリエイティブ・プロジェクトです。Web制作や動画制作などの創作活動を通じて、楽しんでいただけるコンテンツ作りを目指しています。</p>
 
-    <main>
-        <section class="card info-section">
-            <h2>📜 Shinorail（シノレール）について</h2>
-            
-            <p>
-                「Shinorail」は、2025年1月1日に設立された代表者一人によるクリエイティブ・プロジェクトです。
-            </p>
-            <p>
-                Webサイト制作や動画制作、情報発信などの創作活動を通じて、多くの方に楽しんでいただけるコンテンツ作りを目指しています。
-            </p>
-            
-            <table class="operator-table">
-                <tr>
-                    <th>名称</th>
-                    <td>Shinorail (シノレール)</td>
-                </tr>
-                <tr>
-                    <th>設立日</th>
-                    <td>2024年6月</td>
-                </tr>
-                <tr>
-                    <th>所在地</th>
-                    <td>長野県 (オンライン活動が中心)</td>
-                </tr>
-                <tr>
-                    <th>主な活動</th>
-                    <td>
-                        <ul>
-                            <li>Webサイトの運営・管理</li>
-                            <li>デジタルコンテンツの制作・公開</li>
-                            <li>SNSでの情報発信・コミュニティ運営</li>
-                        </ul>
-                    </td>
-                </tr>
-            </table>
-        </section>
+        <h2 id="t-h1">基本情報</h2>
+        <table class="info-table">
+            <tr><th id="t-l1">名称</th><td>Shinorail (シノレール)</td></tr>
+            <tr><th id="t-l2">設立</th><td id="t-v2">2024年6月 (プロジェクト開始)</td></tr>
+            <tr><th id="t-l3">所在地</th><td id="t-v3">長野県 (オンライン活動中心)</td></tr>
+            <tr><th id="t-l4">活動内容</th><td id="t-v4">Web運営・デジタルコンテンツ制作</td></tr>
+        </table>
 
-        <section class="card info-section">
-            <h2>📢 代表者からのメッセージ</h2>
-            <article class="member-card">
-                <h3>代表：しなの</h3>
-                <p>
-                    「日常に少しのワクワクを」をモットーに活動しています。このサイトが、皆様にとって新しい発見や楽しみのきっかけになれば嬉しいです！
-                </p>
-            </article>
-        </section>
+        <h2 id="t-h2">代表者メッセージ</h2>
+        <div class="message-box">
+            <span class="rep-name" id="t-rep">代表：しなの</span>
+            <p id="t-msg">「日常に少しのワクワクを」をモットーに活動しています。このサイトが、皆様にとって新しい発見や楽しみのきっかけになれば嬉しいです！</p>
+        </div>
 
-        <section class="card info-section">
-            <h2>🔒 プライバシーポリシー</h2>
-            <p>
-                当サイトでは、利用者の皆様の個人情報の取り扱いについて、適切に管理・保護を行っております。
-            </p>
-            <div style="margin-top: 15px;">
-                <a href="policy.html" style="color: #0066cc; text-decoration: underline; font-weight: bold;">プライバシーポリシーの詳細を見る</a>
-            </div>
-        </section>
-        
-        <section class="card contact-note">
-             <h2>サポート・案内</h2>
-             <p>
-                 ご不明な点やご意見がございましたら、お気軽にお問い合わせください。
-             </p>
-             <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
-                 <a href="contact.html" style="display: inline-block; padding: 10px 20px; background-color: #3b887a; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">お問い合わせ</a>
-                 <a href="sitemap.html" style="display: inline-block; padding: 10px 20px; background-color: #eee; color: #333; text-decoration: none; border-radius: 5px; font-weight: bold; border: 1px solid #ccc;">サイトマップ</a>
-             </div>
-        </section>
-    </main>
+        <h2 id="t-h3">サポート & 案内</h2>
+        <p id="t-support">ご不明な点やご意見がございましたら、お気軽にお問い合わせください。</p>
+        <div class="footer-nav" style="margin-top:15px;">
+            <a href="contact.html" class="back-link" style="color:var(--p)"><i class="fa-solid fa-envelope"></i> Contact</a>
+            <a href="privacy.html" class="back-link"><i class="fa-solid fa-shield"></i> Privacy Policy</a>
+        </div>
 
-    <script src="menu.js"></script>
+        <div class="ad-area">
+            <div style="font-size: 10px; color: var(--sub); margin-bottom: 10px;">ADVERTISEMENT</div>
+            <script src="https://adm.shinobi.jp/o/2791c03bc086135607731d2a0eb484fd"></script>
+        </div>
+    </div>
+
+    <div class="footer-nav">
+        <a href="links.html" id="t-back" class="back-link">← 戻る</a>
+    </div>
+</div>
+
+<script>
+    const lang = navigator.language || navigator.userLanguage;
+    const isJP = lang.includes('ja');
+
+    const texts = {
+        title: "About Shinorail",
+        intro: isJP ? "「Shinorail」は、代表者一人によるクリエイティブ・プロジェクトです。Web制作や動画制作などの創作活動を通じて、楽しんでいただけるコンテンツ作りを目指しています。" : "Shinorail is a solo creative project focusing on web and video production to create engaging digital content.",
+        h1: isJP ? "基本情報" : "Information",
+        l1: isJP ? "名称" : "Name",
+        l2: isJP ? "設立" : "Established",
+        v2: isJP ? "2024年6月 (プロジェクト開始)" : "June 2024",
+        l3: isJP ? "所在地" : "Location",
+        v3: isJP ? "長野県 (オンライン)" : "Nagano, JP (Online)",
+        l4: isJP ? "活動内容" : "Activities",
+        v4: isJP ? "Web運営・コンテンツ制作" : "Web Management / Digital Content",
+        h2: isJP ? "代表者メッセージ" : "Message",
+        rep: isJP ? "代表：しなの" : "Founder: Shinano",
+        msg: isJP ? "「日常に少しのワクワクを」をモットーに活動しています。このサイトが、皆様にとって新しい発見や楽しみのきっかけになれば嬉しいです！" : "Our motto is 'A little excitement in everyday life.' I hope this site brings you new discoveries and joy!",
+        h3: isJP ? "サポート & 案内" : "Support",
+        support: isJP ? "ご不明な点やご意見は、お気軽にお問い合わせください。" : "If you have any questions or feedback, please feel free to contact us.",
+        back: isJP ? "← 戻る" : "← Back"
+    };
+
+    document.getElementById('t-title').innerText = texts.title;
+    document.getElementById('t-intro').innerText = texts.intro;
+    document.getElementById('t-h1').innerText = texts.h1;
+    document.getElementById('t-l1').innerText = texts.l1;
+    document.getElementById('t-l2').innerText = texts.l2;
+    document.getElementById('t-v2').innerText = texts.v2;
+    document.getElementById('t-l3').innerText = texts.l3;
+    document.getElementById('t-v3').innerText = texts.v3;
+    document.getElementById('t-l4').innerText = texts.l4;
+    document.getElementById('t-v4').innerText = texts.v4;
+    document.getElementById('t-h2').innerText = texts.h2;
+    document.getElementById('t-rep').innerText = texts.rep;
+    document.getElementById('t-msg').innerText = texts.msg;
+    document.getElementById('t-h3').innerText = texts.h3;
+    document.getElementById('t-support').innerText = texts.support;
+    document.getElementById('t-back').innerText = texts.back;
+</script>
+
 </body>
 </html>
