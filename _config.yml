@@ -1,1 +1,2 @@
-error_404: maintenance.html
+theme: jekyll-theme-slate
+permalink: /:path.html
