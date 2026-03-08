@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Portfolio | Shinorail</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --p: #d4af37; --bg: #0f172a; --card: #1e293b; --txt: #f8fafc; --sub: #94a3b8; }
+        body { font-family: -apple-system, "BIZ UDPGothic", sans-serif; background: var(--bg); color: var(--txt); margin: 0; padding: 20px; display: flex; justify-content: center; min-height: 100vh; }
+        .container { width: 100%; max-width: 700px; padding: 40px 0; }
+        .card { background: var(--card); padding: 30px; border-radius: 24px; border: 1px solid rgba(212, 175, 55, 0.2); line-height: 1.8; box-shadow: 0 15px 35px rgba(0,0,0,0.4); }
+        h1 { color: var(--p); text-align: center; font-size: 1.8rem; margin-bottom: 30px; border-bottom: 2px solid var(--p); padding-bottom: 10px; }
+        h2 { color: var(--p); font-size: 1.3rem; border-left: 4px solid var(--p); padding-left: 15px; margin-top: 40px; }
+        h3 { color: var(--p); font-size: 1.1rem; margin-top: 20px; }
+        p, li { color: var(--sub); font-size: 0.95rem; }
+        .work-box { background: rgba(15, 23, 42, 0.5); padding: 20px; border-radius: 15px; border: 1px dashed var(--sub); margin-top: 15px; }
+        .back-link { display: block; text-align: center; margin-top: 30px; color: var(--sub); text-decoration: none; }
+        .back-link:hover { color: var(--p); }
+        .ad-area { margin-top: 40px; text-align: center; border-top: 1px solid rgba(148, 163, 184, 0.1); padding-top: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <h1 id="t-title">Portfolio</h1>
+        <p id="t-intro">Shinorail（シノレール）の制作実績ギャラリーです。動画制作やWeb制作などの活動をまとめています。</p>
+
+        <section>
+            <h2 id="t-h1">制作物の紹介</h2>
+            <div class="work-box">
+                <h3 id="t-w1-title">準備中</h3>
+                <p id="t-w1-desc">現在、掲載する作品を準備しています。最新の活動についてはSNS等をご確認ください。</p>
+            </div>
+        </section>
+
+        <section>
+            <h2 id="t-h2">主な活動内容</h2>
+            <ul id="t-list">
+                <li>Webサイトの運営・管理</li>
+                <li>デジタルコンテンツの制作・公開</li>
+                <li>SNSでの情報発信</li>
+            </ul>
+        </section>
+
+        <div class="ad-area">
+            <div style="font-size: 10px; color: var(--sub); margin-bottom: 10px;">ADVERTISEMENT</div>
+            <script src="https://adm.shinobi.jp/o/2791c03bc086135607731d2a0eb484fd"></script>
+        </div>
+    </div>
+
+    <a href="links.html" id="t-back" class="back-link">← 戻る</a>
+</div>
+
+<script>
+    const lang = navigator.language || navigator.userLanguage;
+    const isJP = lang.includes('ja');
+
+    const texts = {
+        title: "Portfolio",
+        intro: isJP ? "Shinorail（シノレール）の制作実績ギャラリーです。" : "This is the production achievement gallery of Shinorail.",
+        h1: isJP ? "制作物の紹介" : "Works",
+        w1Title: isJP ? "準備中" : "Coming Soon",
+        w1Desc: isJP ? "現在、掲載する作品を準備しています。" : "Currently preparing works to be posted.",
+        h2: isJP ? "主な活動内容" : "Main Activities",
+        back: isJP ? "← 戻る" : "← Back"
+    };
+
+    document.getElementById('t-title').innerText = texts.title;
+    document.getElementById('t-intro').innerText = texts.intro;
+    document.getElementById('t-h1').innerText = texts.h1;
+    document.getElementById('t-w1-title').innerText = texts.w1Title;
+    document.getElementById('t-w1-desc').innerText = texts.w1Desc;
+    document.getElementById('t-h2').innerText = texts.h2;
+    document.getElementById('t-back').innerText = texts.back;
+</script>
+
+</body>
+</html>
