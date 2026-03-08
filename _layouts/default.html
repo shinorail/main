@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>{{ page.title }} | Shinorail</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --p: #d4af37;
+            --bg: #0f172a;
+            --card: #1e293b;
+            --txt: #f8fafc;
+            --sub: #94a3b8;
+        }
+        body {
+            font-family: -apple-system, "BIZ UDPGothic", sans-serif;
+            background-color: var(--bg);
+            color: var(--txt);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.8;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 0;
+        }
+        .content-card {
+            background: var(--card);
+            padding: 30px;
+            border-radius: 24px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+        /* Markdown要素のスタイル指定 */
+        h1 { color: var(--p); font-size: 2rem; border-bottom: 2px solid var(--p); padding-bottom: 10px; }
+        h2 { color: var(--p); font-size: 1.5rem; margin-top: 40px; }
+        h3 { color: var(--p); font-size: 1.2rem; }
+        p { color: var(--sub); }
+        a { color: var(--p); text-decoration: none; font-weight: bold; }
+        a:hover { text-decoration: underline; }
+        img { max-width: 100%; border-radius: 12px; margin: 20px 0; border: 1px solid rgba(212, 175, 55, 0.2); }
+        hr { border: 0; border-top: 1px solid rgba(148, 163, 184, 0.2); margin: 40px 0; }
+        
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 40px;
+            color: var(--sub);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .back-link:hover { color: var(--p); }
+
+        .ad-area { margin-top: 40px; text-align: center; padding-top: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="content-card">
+        {{ content }}
+
+        <div class="ad-area">
+            <div style="font-size: 10px; color: var(--sub); margin-bottom: 10px;">ADVERTISEMENT</div>
+            <script src="https://adm.shinobi.jp/o/2791c03bc086135607731d2a0eb484fd"></script>
+        </div>
+    </div>
+
+    <a href="links.html" class="back-link">← ホームへ戻る</a>
+</div>
+
+</body>
+</html>
