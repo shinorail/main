@@ -5,148 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>総合サポート - 篠ノ井乗務区</title>
     <style>
-        /* 変数定義（アクセシビリティ・ダークモード対応） */
         :root {
-            /* 画像を忠実に再現した基本配色 */
-            --bg-body: #92abcc; /* バルーンの後ろの背景色 */
-            --bg-header: #2c3e50; /* ヘッダー背景色 */
-            --msg-balloon: #ffffff; /* バルーン背景色 */
-            --msg-text: #333333; /* バルーン内文字色 */
-            --btn-list: #003366; /* 「一覧を見る」ボタン背景色 */
-            --btn-list-text: #ffffff; /* 「一覧を見る」ボタン文字色 */
-            --msg-user: #85e249; /* ユーザー発言バルーン（前回の緑） */
+            --bg-body: #92abcc; --bg-header: #2c3e50; --msg-balloon: #ffffff;
+            --msg-text: #333333; --btn-list: #003366; --msg-user: #85e249;
             --fs-base: 16px;
         }
-
-        /* ダークモード設定（アクセシビリティ） */
-        body.dark-mode {
-            --bg-body: #1a1a1a;
-            --msg-balloon: #333333;
-            --msg-text: #ffffff;
-            --btn-list: #ffffff;
-            --btn-list-text: #003366;
-        }
-
-        /* 文字大設定（アクセシビリティ） */
+        body.dark-mode { --bg-body: #1a1a1a; --msg-balloon: #333333; --msg-text: #ffffff; --btn-list: #ffffff; }
         body.large-text { --fs-base: 20px; }
+        body.biz-mode { --bg-body: #2c3e50; }
 
-        body { font-family: sans-serif; background-color: var(--bg-body); margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; font-size: var(--fs-base); color: var(--msg-text); transition: 0.3s background-color, 0.3s color; }
+        body { font-family: sans-serif; background-color: var(--bg-body); margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; font-size: var(--fs-base); color: var(--msg-text); transition: 0.3s; }
         
-        /* --- ヘッダー（画像再現） --- */
-        header { 
-            background: var(--bg-header); 
-            color: white; 
-            padding: 20px; 
-            display: flex; 
-            align-items: center; 
-            position: relative; 
-            z-index: 1000;
-        }
-        .menu-btn { 
-            font-size: 28px; 
-            cursor: pointer; 
-            background: none; 
-            border: none; 
-            color: white; 
-            padding: 0; 
-            margin-right: 20px; /* ハンバーガー☰とタイトルの間隔 */
-        }
+        header { background: var(--bg-header); color: white; padding: 18px; display: flex; align-items: center; position: relative; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        .menu-btn { font-size: 28px; cursor: pointer; background: none; border: none; color: white; margin-right: 15px; }
         
-        /* --- ハンバーガーメニュー中身 --- */
         #nav-menu { 
-            display: none; position: absolute; top: 75px; left: 0; width: 280px; 
-            background: #ffffff; box-shadow: 3px 3px 15px rgba(0,0,0,0.3); z-index: 2000; 
-            color: #333; border-radius: 0 0 15px 0;
+            display: none; position: absolute; top: 100%; left: 0; width: 280px; 
+            background: #ffffff; box-shadow: 5px 5px 20px rgba(0,0,0,0.4); z-index: 2000; border-radius: 0 0 15px 0;
         }
-        #nav-menu button { 
-            width: 100%; padding: 18px; border: none; background: none; text-align: left; 
-            border-bottom: 1px solid #eee; cursor: pointer; font-size: 1.1em; font-weight: bold; 
+        #nav-menu button, #nav-menu a { 
+            display: block; width: 100%; padding: 18px; border: none; background: none; 
+            text-align: left; border-bottom: 1px solid #eee; cursor: pointer; 
+            font-size: 1em; font-weight: bold; color: #333; text-decoration: none; box-sizing: border-box;
         }
 
-        /* --- チャットログ --- */
-        #chat-log { 
-            flex: 1; overflow-y: auto; padding: 20px; 
-            display: flex; flex-direction: column; gap: 20px; 
-            scroll-behavior: smooth;
-        }
+        #chat-log { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 20px; }
         
-        /* --- ボットの発言バルーン（画像再現） --- */
         .msg.bot { 
-            align-self: flex-start; 
-            background: var(--msg-balloon); 
-            color: var(--msg-text);
-            border-radius: 40px; /* 大きな角丸 */
-            padding: 25px 35px; /* 十分なパディング */
-            display: flex;
-            align-items: center;
-            justify-content: space-between; /* テキストとボタンを引き離す */
-            gap: 20px;
-            max-width: 90%;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            align-self: flex-start; background: var(--msg-balloon); border-radius: 40px; 
+            padding: 20px 30px; display: flex; align-items: center; justify-content: space-between; 
+            gap: 15px; max-width: 90%; box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
         }
-        .msg.bot .text-part { flex: 1; }
-        
-        /* バルーン内の「登録ワード一覧を見る」ボタン */
         .list-btn { 
-            background: var(--btn-list); 
-            color: var(--btn-list-text);
-            border: none; 
-            padding: 15px 25px; 
-            border-radius: 25px; /* 角丸ボタン */
-            cursor: pointer; 
-            font-weight: bold; 
-            font-size: 0.9em;
-            white-space: nowrap; /* 改行防止 */
-            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-            transition: 0.2s;
+            background: var(--btn-list); color: #fff; border: none; padding: 12px 20px; 
+            border-radius: 25px; cursor: pointer; font-weight: bold; font-size: 0.85em; white-space: nowrap;
         }
-        .list-btn:hover { opacity: 0.8; transform: scale(1.05); }
+        /* ユーザーバルーン（画像再現の角丸） */
+        .msg.user { align-self: flex-end; background: var(--msg-user); color: #000; border-radius: 25px 25px 2px 25px; padding: 15px 20px; max-width: 80%; box-shadow: 0 3px 8px rgba(0,0,0,0.1); }
 
-        /* --- ユーザーの発言バルーン --- */
-        .msg.user { 
-            align-self: flex-end; 
-            background: var(--msg-user); 
-            color: #000;
-            border-radius: 25px 25px 2px 25px; /* 角丸の工夫 */
-            padding: 15px 20px; 
-            max-width: 80%;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-        }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 9999; justify-content: center; align-items: center; }
+        .modal-content { background: white; width: 90%; max-width: 500px; max-height: 70vh; border-radius: 20px; padding: 25px; overflow-y: auto; color: #333; }
+        .modal-item { padding: 15px; border-bottom: 1px solid #eee; cursor: pointer; font-weight: bold; }
+        .close-modal { background: #eee; border: none; width: 100%; padding: 15px; margin-top: 15px; border-radius: 10px; cursor: pointer; font-weight: bold; }
 
-        /* タイピングアニメーション（前回の演出） */
-        .typing::after { content: "●"; animation: blink 0.8s infinite; margin-left: 8px; color: var(--line-green); }
-        @keyframes blink { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
-
-        /* --- ポップアップ（一覧表示用） --- */
-        .modal { 
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.8); z-index: 3000; justify-content: center; align-items: center; 
-        }
-        .modal-content { 
-            background: white; width: 85%; max-width: 480px; max-height: 80vh; 
-            border-radius: 20px; padding: 25px; overflow-y: auto; position: relative; color: #333;
-        }
-        .modal-item { padding: 15px; border-bottom: 1px solid #eee; cursor: pointer; font-weight: bold; transition: 0.1s; }
-        .modal-item:hover { background: #f0f4f8; color: var(--main-blue); }
-
-        /* --- 入力エリア --- */
-        .controls { background: white; padding: 15px; border-top: 1px solid #ddd; z-index: 1000; }
+        .controls { background: white; padding: 15px; border-top: 1px solid #ddd; }
         .input-group { display: flex; gap: 10px; }
-        input[type="text"] { flex: 1; border: 2px solid #ccc; padding: 15px; border-radius: 35px; font-size: var(--fs-base); outline: none; transition: 0.2s; }
-        input[type="text"]:focus { border-color: var(--btn-list); }
-        .send-btn { background: var(--line-green); color: white; border: none; padding: 10px 25px; border-radius: 30px; font-weight: bold; cursor: pointer; font-size: 1.1em; transition: 0.2s; }
-        .send-btn:hover { background: #76d03d; }
+        input[type="text"] { flex: 1; border: 2px solid #ccc; padding: 15px; border-radius: 35px; outline: none; font-size: var(--fs-base); }
+        .send-btn { background: var(--line-green); color: white; border: none; padding: 0 25px; border-radius: 35px; font-weight: bold; cursor: pointer; }
+
+        .typing::after { content: "●"; animation: blink 0.8s infinite; color: var(--line-green); margin-left: 5px; }
+        @keyframes blink { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
     </style>
 </head>
 <body>
 
 <header>
-    <button class="menu-btn" onclick="toggleMenu()" aria-label="メニュー開閉">☰</button>
-    <div style="font-size:1.2em; flex:1">篠ノ井乗務区 総合サポート</div>
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    <div style="flex:1; font-size:1.1em;">篠ノ井乗務区 総合サポート</div>
     <div id="nav-menu">
-        <button onclick="toggleDarkMode()">🌙 ダークモード切替</button>
-        <button onclick="toggleLargeText()">🅰️ 文字サイズ切替</button>
-        <button onclick="location.href='support.html?mode=business'">💼 ビジネス窓口</button>
+        <button onclick="updateSetting('darkMode')">🌙 ダークモード切替</button>
+        <button onclick="updateSetting('largeText')">🅰️ 文字サイズ切替</button>
+        <a href="https://shinorail.github.io/main/">🏠 公式HP ほーむ</a>
+        <button onclick="switchMode('business')">💼 ビジネス窓口 (仕事依頼)</button>
+        <button onclick="switchMode('general')">💬 一般窓口 (鉄道質問)</button>
+        <button onclick="openModal('policy')">📋 利用規約・プライバシー</button>
+        <button onclick="clearHistory()" style="color:red;">⚠️ 設定リセット</button>
     </div>
 </header>
 
@@ -154,8 +77,8 @@
 
 <div id="modal-overlay" class="modal" onclick="closeModal()">
     <div class="modal-content" onclick="event.stopPropagation()">
-        <h3 style="text-align:center;">登録ワード一覧</h3>
         <div id="modal-body"></div>
+        <button class="close-modal" onclick="closeModal()">閉じる</button>
     </div>
 </div>
 
@@ -167,106 +90,167 @@
 </div>
 
 <script>
-    // --- テストデータ30個（前回のデータをそのまま統合） ---
-    const testData = [
-        {q: "383系", a: "特急しなのに使用。振り子式でカーブを高速で通過します。"},
-        {q: "E127系", a: "篠ノ井線の普通列車。100番台が活躍しています。"},
-        {q: "姨捨駅", a: "日本三大車窓。スイッチバックがある全国的にも有名な駅。"},
-        // ... (省略: 前回の30個のデータがここに入ります)
-        {q: "篠ノ井乗務区", a: "本サイトの運営母体。鉄道愛を形にしています。"}
+    // 鉄道データ（全駅・車両・豆知識 30個以上）
+    const trainData = [
+        {q:"383系", a:"特急しなの用の振り子車両。カーブに強く、名古屋〜長野を結びます。"}, {q:"E127系", a:"篠ノ井線の普通列車。100番台が長野エリアで活躍中です。"},
+        {q:"211系", a:"長野の主力車両。3両または6両編成で、多くの運用をこなします。"}, {q:"姨捨駅", a:"スイッチバックと善光寺平の絶景で知られる、鉄道ファンの聖地です。"},
+        {q:"スイッチバック", a:"急勾配を登るために、一度列車を後退させる運転方式です。"}, {q:"篠ノ井駅", a:"篠ノ井線と信越本線の合流地点。全列車が停車する重要駅です。"},
+        {q:"稲荷山駅", a:"姨捨の隣駅。かつては善光寺街道の宿場町として栄えました。"}, {q:"聖高原駅", a:"特急しなのが一部停車。聖湖への玄関口です。"},
+        {q:"冠着駅", a:"標高676mに位置し、冠着トンネルの入口にある静かな駅です。"}, {q:"西条駅", a:"趣のある木造駅舎が残り、鉄道撮影の拠点にもなります。"},
+        {q:"坂北駅", a:"筑北村にある駅。周辺はのどかな農村風景が広がります。"}, {q:"明科駅", a:"安曇野市の拠点。かつては急行列車も多く停車しました。"},
+        {q:"田沢駅", a:"松本市北部の住宅街。通勤・通学客の利用が多い駅です。"}, {q:"松本駅", a:"篠ノ井線の終点。松本城や上高地方面への乗り換え駅です。"},
+        {q:"善光寺", a:"長野のシンボル。長野駅からバスで行くのが一般的です。"}, {q:"長野駅", a:"北陸新幹線も停車。信州の玄関口となるターミナルです。"},
+        {q:"塩尻駅", a:"篠ノ井線の起点。中央本線（東・西）との接続点。"}, {q:"EF64", a:"かつて篠ノ井線で重連で活躍した「山男」の愛称を持つ機関車。"},
+        {q:"EH200", a:"「ブルーサンダー」。現在の貨物列車の主役です。"}, {q:"しなの鉄道", a:"篠ノ井駅から分岐。旧信越本線を引き継いだ3セクです。"},
+        {q:"信越本線", a:"篠ノ井〜長野間は現在、篠ノ井線の列車も乗り入れます。"}, {q:"日本三大車窓", a:"姨捨駅からの眺めは、日本でもトップクラスの絶景です。"},
+        {q:"運行状況", a:"大雪や強風に備え、冬場は公式情報を確認してください。"}, {q:"時刻表", a:"普通列車は1時間に1本程度。特急は1時間に1本です。"},
+        {q:"長野総合車両センター", a:"車両の解体や全般検査を行う、鉄道の病院のような場所。"}, {q:"犀川", a:"安茂里付近で渡る川。車窓からの眺めが良いポイントです。"},
+        {q:"前面展望", a:"YouTubeで「篠ノ井線 前面展望」と調べると人気動画が出ます。"}, {q:"撮影地", a:"姨捨付近の「姨捨公園」は超定番スポットです。"},
+        {q:"Suica", a:"長野駅周辺の主要駅で利用可能。一部無人駅は注意。"}, {q:"特急あずさ", a:"松本駅から新宿へ。篠ノ井線からは松本で乗り換え。"},
+        {q:"篠ノ井乗務区", a:"運転士や車掌が所属。本サイトの名称の由来です。"}
+    ];
+    // ビジネス・スキルデータ（全31個）
+    const bizData = [
+        {q:"動画編集", a:"PowerDirector Ultimate Suiteを使用。高品質な制作が可能です。"}, {q:"Web制作", a:"GitHub PagesやFirebaseを活用したサイト制作を承ります。"},
+        {q:"料金", a:"規模によりますが、個人依頼は比較的安価に対応可能です。"}, {q:"納期", a:"通常2週間〜1ヶ月。スケジュール調整も可能です。"},
+        {q:"実績", a:"鉄道系ニュースサイトや紹介動画の制作実績が多数あります。"}, {q:"使用ソフト", a:"PowerDirector、GAS、VSCode、Photoshop等。"},
+        {q:"連絡先", a:"ビジネスモードで入力いただければ後ほどご連絡します。"}, {q:"対応時間", a:"放課後や週末がメイン。メッセージは24時間受付中。"},
+        {q:"依頼の流れ", a:"詳細ヒアリング→見積→制作→確認→納品のステップです。"}, {q:"機材", a:"Core i7 / RTX 5060 搭載PCでサクサク編集します。"},
+        {q:"デザイン", a:"鉄道風の「レトロかっこいい」デザインが得意です。"}, {q:"修正", a:"ご納得いただけるまで丁寧に対応します。"},
+        {q:"キャンセル", a:"着手前のキャンセルは無料です。お気軽にどうぞ。"}, {q:"サポート", a:"納品後の保守や更新についてもご相談ください。"},
+        {q:"素材", a:"写真・動画素材の持ち込みは大歓迎です。"}, {q:"プログラミング", a:"JavaScriptやGoogle Apps Scriptでの自動化が得意。"},
+        {q:"路線図", a:"オリジナルの路線図制作も承ります。"}, {q:"音声編集", a:"列車の走行音やナレーションの編集も可能です。"},
+        {q:"見積もり", a:"ビジネス窓口から概算を出すことができます。"}, {q:"支払い", a:"現在は銀行振込のみ対応しております。"},
+        {q:"法人", a:"法人様からの依頼も実績がございます。"}, {q:"学生", a:"学生同士のプロジェクトなら協力させていただきます。"},
+        {q:"秘密保持", a:"いただいた情報は外部に漏らさないよう厳守します。"}, {q:"打ち合わせ", a:"基本はチャットかメール。必要に応じビデオ通話。"},
+        {q:"画像加工", a:"サムネイル制作や写真のレタッチも行います。"}, {q:"YouTube", a:"公開用のアップロード代行なども相談可能です。"},
+        {q:"GAS", a:"スプレッドシートの自動化などは得意分野です。"}, {q:"SNS", a:"公式アカウントの画像制作なども承ります。"},
+        {q:"広告", a:"チラシやWebバナーの制作も可能です。"}, {q:"企画", a:"動画のシナリオ制作からお任せください。"},
+        {q:"篠ノ井駅ニュース", a:"独自で鉄道ニュースを配信する企画も行っています。"}
     ];
 
     const log = document.getElementById('chat-log');
     const input = document.getElementById('user-input');
+    
+    // ローカルストレージから設定読み込み
+    let currentMode = localStorage.getItem('mode') || 'general';
+    let bizStep = 0;
 
-    // 戻るボタン
-    window.history.pushState(null, null, null);
-    window.addEventListener('popstate', () => location.href = 'session-error.html');
+    // 時間連動の挨拶
+    function getTimeGreeting() {
+        const hour = new Date().getHours();
+        if (hour >= 5 && hour < 11) return "おはようございます！";
+        if (hour >= 11 && hour < 18) return "こんにちは！";
+        return "こんばんは！夜遅くまでお疲れ様です。";
+    }
 
-    // ハンバーガーメニュー
+    // 設定保存
+    function saveSettings() {
+        localStorage.setItem('mode', currentMode);
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        localStorage.setItem('largeText', document.body.classList.contains('large-text'));
+    }
+
     function toggleMenu() {
         const m = document.getElementById('nav-menu');
         m.style.display = (m.style.display === 'block') ? 'none' : 'block';
     }
 
-    // アクセシビリティ
-    function toggleDarkMode() { document.body.classList.toggle('dark-mode'); toggleMenu(); }
-    function toggleLargeText() { document.body.classList.toggle('large-text'); toggleMenu(); }
-
-    // ポップアップ開閉
-    function showModal() {
-        const body = document.getElementById('modal-body');
-        body.innerHTML = '';
-        testData.forEach(d => {
-            const item = document.createElement('div');
-            item.className = 'modal-item';
-            item.innerText = d.q;
-            item.onclick = () => { input.value = d.q; onSend(); closeModal(); };
-            body.appendChild(item);
-        });
-        document.getElementById('modal-overlay').style.display = 'flex';
+    function switchMode(mode) {
+        currentMode = mode;
+        bizStep = (mode === 'business') ? 1 : 0;
+        document.body.className = (mode === 'business') ? 'biz-mode' : '';
+        if(localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark-mode');
+        if(localStorage.getItem('largeText') === 'true') document.body.classList.add('large-text');
+        
+        saveSettings();
+        addBotMessage(mode === 'business' ? "【ビジネス窓口】お仕事の依頼ですね。まずはお名前を教えてください。" : "【一般窓口】篠ノ井線の質問をどうぞ。", (mode === 'general'));
+        toggleMenu();
     }
-    function closeModal() { document.getElementById('modal-overlay').style.display = 'none'; }
 
-    // タイピングアニメーション
-    async function addBotMessage(text, isFirst = false) {
+    function updateSetting(type) {
+        document.body.classList.toggle(type === 'darkMode' ? 'dark-mode' : 'large-text');
+        saveSettings();
+        toggleMenu();
+    }
+
+    function clearHistory() {
+        localStorage.clear();
+        location.reload();
+    }
+
+    async function addBotMessage(text, hasListBtn = false) {
         const div = document.createElement('div');
         div.className = 'msg bot typing';
-        
-        if (isFirst) {
-            // 画像再現: テキスト部分とボタン部分を分ける
-            div.innerHTML = `<span class="text-part">${text}</span><button class="list-btn" onclick="showModal()">登録ワード一覧を見る</button>`;
-        } else {
-            div.innerHTML = `<span class="text-part">${text}</span>`;
+        div.innerHTML = `<span class="txt"></span>`;
+        if (hasListBtn) {
+            const btn = document.createElement('button');
+            btn.className = 'list-btn';
+            btn.innerText = '一覧を見る';
+            btn.onclick = () => openModal('list');
+            div.appendChild(btn);
         }
-        
         log.appendChild(div);
-        log.scrollTop = log.scrollHeight;
         
-        // テキスト部分だけアニメーション
-        const textSpan = div.querySelector('.text-part');
-        const finalText = textSpan.innerText;
-        textSpan.innerText = '';
-        
-        let i = 0;
-        return new Promise(resolve => {
-            function type() {
-                if (i < finalText.length) {
-                    textSpan.innerText += finalText.charAt(i);
-                    i++;
-                    log.scrollTop = log.scrollHeight;
-                    setTimeout(type, 25);
-                } else {
-                    div.classList.remove('typing');
-                    resolve();
-                }
-            }
-            type();
-        });
+        const txtPart = div.querySelector('.txt');
+        for(let i=0; i<text.length; i++){
+            txtPart.innerText += text[i];
+            log.scrollTop = log.scrollHeight;
+            await new Promise(r => setTimeout(r, 20));
+        }
+        div.classList.remove('typing');
     }
 
-    function addMessage(text, role) {
-        const div = document.createElement('div');
-        div.className = `msg ${role}`;
-        div.innerText = text;
-        log.appendChild(div);
-        log.scrollTop = log.scrollHeight;
+    function openModal(type) {
+        const body = document.getElementById('modal-body');
+        body.innerHTML = '';
+        if (type === 'list') {
+            body.innerHTML = '<h3>登録ワード一覧</h3>';
+            [...trainData, ...bizData].forEach(d => {
+                const item = document.createElement('div');
+                item.className = 'modal-item';
+                item.innerText = d.q;
+                item.onclick = () => { input.value = d.q; onSend(); closeModal(); };
+                body.appendChild(item);
+            });
+        } else if (type === 'policy') {
+            body.innerHTML = '<h3>利用規約</h3><p>・入力情報は回答のみに使用します。<br>・篠ノ井乗務区は個人運営のサポートサイトです。</p>';
+        }
+        document.getElementById('modal-overlay').style.display = 'flex';
     }
 
-    async function onSend() {
-        const text = input.value.trim();
-        if (!text) return;
-        addMessage(text, 'user');
+    function closeModal() { document.getElementById('modal-overlay').style.display = 'none'; }
+
+    function onSend() {
+        const val = input.value.trim();
+        if(!val) return;
+        const msg = document.createElement('div');
+        msg.className = 'msg user';
+        msg.innerText = val;
+        log.appendChild(msg);
         input.value = '';
 
-        const hit = testData.find(d => text.includes(d.q) || d.q.includes(text));
-        await new Promise(r => setTimeout(r, 600)); // 思考してる風の間
-        await addBotMessage(hit ? hit.a : "該当なし。一覧を確認してみてください。");
+        setTimeout(async () => {
+            if (currentMode === 'business' && bizStep > 0) {
+                if(bizStep === 1) { await addBotMessage(`${val}様ですね。ご連絡先のメールアドレスを入力してください。`); bizStep = 2; }
+                else if(bizStep === 2) { await addBotMessage("ありがとうございます。具体的なご依頼内容を詳しく教えてください。"); bizStep = 3; }
+                else if(bizStep === 3) { await addBotMessage("承りました。内容を確認し、折り返しご連絡いたします。"); bizStep = 0; switchMode('general'); }
+            } else {
+                const hit = [...trainData, ...bizData].find(d => val.includes(d.q) || d.q.includes(val));
+                await addBotMessage(hit ? hit.a : "お調べしましたが該当がありませんでした。一覧を確認するか、「依頼」と入力してください。");
+            }
+        }, 400);
     }
 
     window.onload = () => {
-        // 画像を忠実に再現した最初のメッセージ
-        addBotMessage("【一般窓口】篠ノ井線の質問をどうぞ。下のボタンから一覧を確認できます。", true);
+        // 設定復元
+        if(localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark-mode');
+        if(localStorage.getItem('largeText') === 'true') document.body.classList.add('large-text');
+        if(currentMode === 'business') document.body.classList.add('biz-mode');
+
+        const greeting = getTimeGreeting();
+        addBotMessage(`${greeting} 篠ノ井乗務区サポートボットです。何でもお気軽にお聞きください。`, (currentMode === 'general'));
+        
         input.onkeypress = (e) => { if(e.key === 'Enter') onSend(); };
     };
 </script>
