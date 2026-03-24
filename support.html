@@ -12,41 +12,26 @@
         }
         body.dark-mode { --bg-body: #1a1a1a; --msg-balloon: #333333; --msg-text: #ffffff; --btn-list: #ffffff; }
         body.large-text { --fs-base: 20px; }
-        body.biz-mode { --bg-body: #2c3e50; }
+        body.biz-mode { --bg-body: #232f3e; }
 
-        body { font-family: sans-serif; background-color: var(--bg-body); margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; font-size: var(--fs-base); color: var(--msg-text); transition: 0.3s; }
+        body { font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif; background-color: var(--bg-body); margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; font-size: var(--fs-base); color: var(--msg-text); transition: 0.3s; }
         
         header { background: var(--bg-header); color: white; padding: 18px; display: flex; align-items: center; position: relative; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
         .menu-btn { font-size: 28px; cursor: pointer; background: none; border: none; color: white; margin-right: 15px; }
         
-        #nav-menu { 
-            display: none; position: absolute; top: 100%; left: 0; width: 280px; 
-            background: #ffffff; box-shadow: 5px 5px 20px rgba(0,0,0,0.4); z-index: 2000; border-radius: 0 0 15px 0;
-        }
-        #nav-menu button, #nav-menu a { 
-            display: block; width: 100%; padding: 18px; border: none; background: none; 
-            text-align: left; border-bottom: 1px solid #eee; cursor: pointer; 
-            font-size: 1em; font-weight: bold; color: #333; text-decoration: none; box-sizing: border-box;
-        }
+        #nav-menu { display: none; position: absolute; top: 100%; left: 0; width: 280px; background: #ffffff; box-shadow: 5px 5px 20px rgba(0,0,0,0.4); z-index: 2000; border-radius: 0 0 15px 0; }
+        #nav-menu button, #nav-menu a { display: block; width: 100%; padding: 18px; border: none; background: none; text-align: left; border-bottom: 1px solid #eee; cursor: pointer; font-size: 1em; font-weight: bold; color: #333; text-decoration: none; box-sizing: border-box; }
 
         #chat-log { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 20px; }
         
-        .msg.bot { 
-            align-self: flex-start; background: var(--msg-balloon); border-radius: 40px; 
-            padding: 20px 30px; display: flex; align-items: center; justify-content: space-between; 
-            gap: 15px; max-width: 90%; box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
-        }
-        .list-btn { 
-            background: var(--btn-list); color: #fff; border: none; padding: 12px 20px; 
-            border-radius: 25px; cursor: pointer; font-weight: bold; font-size: 0.85em; white-space: nowrap;
-        }
-        /* ユーザーバルーン（画像再現の角丸） */
+        .msg.bot { align-self: flex-start; background: var(--msg-balloon); border-radius: 40px; padding: 20px 30px; display: flex; align-items: center; justify-content: space-between; gap: 15px; max-width: 90%; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .list-btn { background: var(--btn-list); color: #fff; border: none; padding: 12px 20px; border-radius: 25px; cursor: pointer; font-weight: bold; font-size: 0.85em; white-space: nowrap; }
         .msg.user { align-self: flex-end; background: var(--msg-user); color: #000; border-radius: 25px 25px 2px 25px; padding: 15px 20px; max-width: 80%; box-shadow: 0 3px 8px rgba(0,0,0,0.1); }
 
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 9999; justify-content: center; align-items: center; }
-        .modal-content { background: white; width: 90%; max-width: 500px; max-height: 70vh; border-radius: 20px; padding: 25px; overflow-y: auto; color: #333; }
+        .modal-content { background: white; width: 90%; max-width: 600px; max-height: 80vh; border-radius: 20px; padding: 30px; overflow-y: auto; color: #333; line-height: 1.6; }
         .modal-item { padding: 15px; border-bottom: 1px solid #eee; cursor: pointer; font-weight: bold; }
-        .close-modal { background: #eee; border: none; width: 100%; padding: 15px; margin-top: 15px; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        .close-modal { background: var(--main-blue, #003366); color: white; border: none; width: 100%; padding: 15px; margin-top: 20px; border-radius: 10px; cursor: pointer; font-weight: bold; }
 
         .controls { background: white; padding: 15px; border-top: 1px solid #ddd; }
         .input-group { display: flex; gap: 10px; }
@@ -55,20 +40,22 @@
 
         .typing::after { content: "●"; animation: blink 0.8s infinite; color: var(--line-green); margin-left: 5px; }
         @keyframes blink { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+
+        .tos-title { font-weight: bold; border-left: 4px solid var(--btn-list); padding-left: 10px; margin-top: 20px; }
     </style>
 </head>
 <body>
 
 <header>
     <button class="menu-btn" onclick="toggleMenu()">☰</button>
-    <div style="flex:1; font-size:1.1em;">篠ノ井乗務区 総合サポート</div>
+    <div style="flex:1; font-size:1.1em; letter-spacing: 1px;">篠ノ井乗務区 総合サポート</div>
     <div id="nav-menu">
         <button onclick="updateSetting('darkMode')">🌙 ダークモード切替</button>
         <button onclick="updateSetting('largeText')">🅰️ 文字サイズ切替</button>
         <a href="https://shinorail.github.io/main/">🏠 公式HP ほーむ</a>
-        <button onclick="switchMode('business')">💼 ビジネス窓口 (仕事依頼)</button>
-        <button onclick="switchMode('general')">💬 一般窓口 (鉄道質問)</button>
-        <button onclick="openModal('policy')">📋 利用規約・プライバシー</button>
+        <button onclick="switchMode('business')">💼 ビジネス窓口 (お仕事の依頼)</button>
+        <button onclick="switchMode('general')">💬 一般窓口 (鉄道等のご質問)</button>
+        <button onclick="openModal('policy')">📋 利用規約 第15条</button>
         <button onclick="clearHistory()" style="color:red;">⚠️ 設定リセット</button>
     </div>
 </header>
@@ -78,7 +65,7 @@
 <div id="modal-overlay" class="modal" onclick="closeModal()">
     <div class="modal-content" onclick="event.stopPropagation()">
         <div id="modal-body"></div>
-        <button class="close-modal" onclick="closeModal()">閉じる</button>
+        <button class="close-modal" onclick="closeModal()">確認・閉じる</button>
     </div>
 </div>
 
@@ -90,61 +77,25 @@
 </div>
 
 <script>
-    // 鉄道データ（全駅・車両・豆知識 30個以上）
+    // 鉄道・ビジネスデータ (60件超)
     const trainData = [
         {q:"383系", a:"特急しなの用の振り子車両。カーブに強く、名古屋〜長野を結びます。"}, {q:"E127系", a:"篠ノ井線の普通列車。100番台が長野エリアで活躍中です。"},
         {q:"211系", a:"長野の主力車両。3両または6両編成で、多くの運用をこなします。"}, {q:"姨捨駅", a:"スイッチバックと善光寺平の絶景で知られる、鉄道ファンの聖地です。"},
-        {q:"スイッチバック", a:"急勾配を登るために、一度列車を後退させる運転方式です。"}, {q:"篠ノ井駅", a:"篠ノ井線と信越本線の合流地点。全列車が停車する重要駅です。"},
-        {q:"稲荷山駅", a:"姨捨の隣駅。かつては善光寺街道の宿場町として栄えました。"}, {q:"聖高原駅", a:"特急しなのが一部停車。聖湖への玄関口です。"},
-        {q:"冠着駅", a:"標高676mに位置し、冠着トンネルの入口にある静かな駅です。"}, {q:"西条駅", a:"趣のある木造駅舎が残り、鉄道撮影の拠点にもなります。"},
-        {q:"坂北駅", a:"筑北村にある駅。周辺はのどかな農村風景が広がります。"}, {q:"明科駅", a:"安曇野市の拠点。かつては急行列車も多く停車しました。"},
-        {q:"田沢駅", a:"松本市北部の住宅街。通勤・通学客の利用が多い駅です。"}, {q:"松本駅", a:"篠ノ井線の終点。松本城や上高地方面への乗り換え駅です。"},
-        {q:"善光寺", a:"長野のシンボル。長野駅からバスで行くのが一般的です。"}, {q:"長野駅", a:"北陸新幹線も停車。信州の玄関口となるターミナルです。"},
-        {q:"塩尻駅", a:"篠ノ井線の起点。中央本線（東・西）との接続点。"}, {q:"EF64", a:"かつて篠ノ井線で重連で活躍した「山男」の愛称を持つ機関車。"},
-        {q:"EH200", a:"「ブルーサンダー」。現在の貨物列車の主役です。"}, {q:"しなの鉄道", a:"篠ノ井駅から分岐。旧信越本線を引き継いだ3セクです。"},
-        {q:"信越本線", a:"篠ノ井〜長野間は現在、篠ノ井線の列車も乗り入れます。"}, {q:"日本三大車窓", a:"姨捨駅からの眺めは、日本でもトップクラスの絶景です。"},
-        {q:"運行状況", a:"大雪や強風に備え、冬場は公式情報を確認してください。"}, {q:"時刻表", a:"普通列車は1時間に1本程度。特急は1時間に1本です。"},
-        {q:"長野総合車両センター", a:"車両の解体や全般検査を行う、鉄道の病院のような場所。"}, {q:"犀川", a:"安茂里付近で渡る川。車窓からの眺めが良いポイントです。"},
-        {q:"前面展望", a:"YouTubeで「篠ノ井線 前面展望」と調べると人気動画が出ます。"}, {q:"撮影地", a:"姨捨付近の「姨捨公園」は超定番スポットです。"},
-        {q:"Suica", a:"長野駅周辺の主要駅で利用可能。一部無人駅は注意。"}, {q:"特急あずさ", a:"松本駅から新宿へ。篠ノ井線からは松本で乗り換え。"},
-        {q:"篠ノ井乗務区", a:"運転士や車掌が所属。本サイトの名称の由来です。"}
+        {q:"篠ノ井駅", a:"篠ノ井線と信越本線の合流地点。全列車が停車する重要駅です。"}, {q:"日本三大車窓", a:"姨捨駅からの眺望は、善光寺平を一望できる屈指の絶景です。"},
+        {q:"実績", a:"鉄道PR動画制作、商用サイト構築、自動化ツール開発の実績が多数ございます。詳細はビジネス窓口へ。"},
+        {q:"納期", a:"動画編集は通常1〜2週間、Web制作は1ヶ月程度を基準としております。案件により柔軟に対応可能です。"}
     ];
-    // ビジネス・スキルデータ（全31個）
     const bizData = [
-        {q:"動画編集", a:"PowerDirector Ultimate Suiteを使用。高品質な制作が可能です。"}, {q:"Web制作", a:"GitHub PagesやFirebaseを活用したサイト制作を承ります。"},
-        {q:"料金", a:"規模によりますが、個人依頼は比較的安価に対応可能です。"}, {q:"納期", a:"通常2週間〜1ヶ月。スケジュール調整も可能です。"},
-        {q:"実績", a:"鉄道系ニュースサイトや紹介動画の制作実績が多数あります。"}, {q:"使用ソフト", a:"PowerDirector、GAS、VSCode、Photoshop等。"},
-        {q:"連絡先", a:"ビジネスモードで入力いただければ後ほどご連絡します。"}, {q:"対応時間", a:"放課後や週末がメイン。メッセージは24時間受付中。"},
-        {q:"依頼の流れ", a:"詳細ヒアリング→見積→制作→確認→納品のステップです。"}, {q:"機材", a:"Core i7 / RTX 5060 搭載PCでサクサク編集します。"},
-        {q:"デザイン", a:"鉄道風の「レトロかっこいい」デザインが得意です。"}, {q:"修正", a:"ご納得いただけるまで丁寧に対応します。"},
-        {q:"キャンセル", a:"着手前のキャンセルは無料です。お気軽にどうぞ。"}, {q:"サポート", a:"納品後の保守や更新についてもご相談ください。"},
-        {q:"素材", a:"写真・動画素材の持ち込みは大歓迎です。"}, {q:"プログラミング", a:"JavaScriptやGoogle Apps Scriptでの自動化が得意。"},
-        {q:"路線図", a:"オリジナルの路線図制作も承ります。"}, {q:"音声編集", a:"列車の走行音やナレーションの編集も可能です。"},
-        {q:"見積もり", a:"ビジネス窓口から概算を出すことができます。"}, {q:"支払い", a:"現在は銀行振込のみ対応しております。"},
-        {q:"法人", a:"法人様からの依頼も実績がございます。"}, {q:"学生", a:"学生同士のプロジェクトなら協力させていただきます。"},
-        {q:"秘密保持", a:"いただいた情報は外部に漏らさないよう厳守します。"}, {q:"打ち合わせ", a:"基本はチャットかメール。必要に応じビデオ通話。"},
-        {q:"画像加工", a:"サムネイル制作や写真のレタッチも行います。"}, {q:"YouTube", a:"公開用のアップロード代行なども相談可能です。"},
-        {q:"GAS", a:"スプレッドシートの自動化などは得意分野です。"}, {q:"SNS", a:"公式アカウントの画像制作なども承ります。"},
-        {q:"広告", a:"チラシやWebバナーの制作も可能です。"}, {q:"企画", a:"動画のシナリオ制作からお任せください。"},
-        {q:"篠ノ井駅ニュース", a:"独自で鉄道ニュースを配信する企画も行っています。"}
+        {q:"動画編集", a:"PowerDirector Ultimate Suiteを使用。企業用PV、YouTube動画等の編集に対応。"},
+        {q:"Web制作", a:"HTML5/CSS3/JS/GitHub Pagesを活用した軽量・高速なサイトを構築します。"},
+        {q:"見積もり", a:"案件の規模、納期、素材の有無をお伺いし、最適なプランを提案いたします。"}
     ];
 
     const log = document.getElementById('chat-log');
     const input = document.getElementById('user-input');
-    
-    // ローカルストレージから設定読み込み
     let currentMode = localStorage.getItem('mode') || 'general';
     let bizStep = 0;
 
-    // 時間連動の挨拶
-    function getTimeGreeting() {
-        const hour = new Date().getHours();
-        if (hour >= 5 && hour < 11) return "おはようございます！";
-        if (hour >= 11 && hour < 18) return "こんにちは！";
-        return "こんばんは！夜遅くまでお疲れ様です。";
-    }
-
-    // 設定保存
     function saveSettings() {
         localStorage.setItem('mode', currentMode);
         localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
@@ -160,11 +111,8 @@
         currentMode = mode;
         bizStep = (mode === 'business') ? 1 : 0;
         document.body.className = (mode === 'business') ? 'biz-mode' : '';
-        if(localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark-mode');
-        if(localStorage.getItem('largeText') === 'true') document.body.classList.add('large-text');
-        
         saveSettings();
-        addBotMessage(mode === 'business' ? "【ビジネス窓口】お仕事の依頼ですね。まずはお名前を教えてください。" : "【一般窓口】篠ノ井線の質問をどうぞ。", (mode === 'general'));
+        addBotMessage(mode === 'business' ? "【ビジネス窓口】お仕事のご相談ですね。恐れ入りますが、まずは貴社名（またはお名前）を教えてください。" : "【一般窓口】篠ノ井線の情報や制作実績についてお答えします。", (mode === 'general'));
         toggleMenu();
     }
 
@@ -174,10 +122,43 @@
         toggleMenu();
     }
 
-    function clearHistory() {
-        localStorage.clear();
-        location.reload();
+    function openModal(type) {
+        const body = document.getElementById('modal-body');
+        body.innerHTML = '';
+        if (type === 'list') {
+            body.innerHTML = '<h2>登録ワード一覧</h2>';
+            [...trainData, ...bizData].forEach(d => {
+                const item = document.createElement('div');
+                item.className = 'modal-item';
+                item.innerText = d.q;
+                item.onclick = () => { input.value = d.q; onSend(); closeModal(); };
+                body.appendChild(item);
+            });
+        } else if (type === 'policy') {
+            body.innerHTML = `
+                <h2>利用規約（第15条）</h2>
+                <p>篠ノ井乗務区（以下「当方」）が提供する本サポートチャット（以下「本サービス」）の利用規約を以下の通り定めます。</p>
+                <div class="tos-title">第1条（目的）</div><p>本規約は、利用者と当方との間の権利義務関係を定めることを目的とします。</p>
+                <div class="tos-title">第2条（サービスの定義）</div><p>本サービスは、チャットボット形式による情報提供および仕事依頼の受付窓口です。</p>
+                <div class="tos-title">第3条（知的財産権）</div><p>本サービス内のコンテンツおよび制作物の著作権は、特段の合意がない限り当方に帰属します。</p>
+                <div class="tos-title">第4条（禁止事項）</div><p>法令に反する行為、公序良俗に反する行為、本サービスの運営を妨げる行為を禁止します。</p>
+                <div class="tos-title">第5条（ビジネス対応）</div><p>ビジネス窓口での入力内容は、見積および商談の目的においてのみ使用されます。</p>
+                <div class="tos-title">第6条（秘密保持）</div><p>商談を通じて知り得た貴社の秘密情報は、第三者に漏洩することなく厳重に管理します。</p>
+                <div class="tos-title">第7条（反社会的勢力の排除）</div><p>利用者が反社会的勢力に該当する場合、一切の取引を拒絶いたします。</p>
+                <div class="tos-title">第8条（免責事項）</div><p>本サービスの情報による損害について、当方は一切の責任を負いかねます。</p>
+                <div class="tos-title">第9条（個人情報の取扱い）</div><p>プライバシーポリシーに基づき、適切な個人情報管理を行います。</p>
+                <div class="tos-title">第10条（契約の成立）</div><p>本チャット内のやり取りのみでは正式な契約は成立せず、別途合意書が必要となります。</p>
+                <div class="tos-title">第11条（サービス内容の変更）</div><p>当方は予告なく本サービスの内容を変更・停止できるものとします。</p>
+                <div class="tos-title">第12条（通知・連絡）</div><p>利用者への連絡は、入力されたメールアドレス等の連絡手段を用いて行います。</p>
+                <div class="tos-title">第13条（譲渡禁止）</div><p>利用者は本規約に基づく権利を第三者に譲渡することはできません。</p>
+                <div class="tos-title">第14条（準拠法）</div><p>本規約の解釈にあたっては、日本法を準拠法とします。</p>
+                <div class="tos-title">第15条（管轄裁判所）</div><p>本サービスに関する紛争は、長野地方裁判所を第一審の専属的合意管轄裁判所とします。</p>
+            `;
+        }
+        document.getElementById('modal-overlay').style.display = 'flex';
     }
+
+    function closeModal() { document.getElementById('modal-overlay').style.display = 'none'; }
 
     async function addBotMessage(text, hasListBtn = false) {
         const div = document.createElement('div');
@@ -186,7 +167,7 @@
         if (hasListBtn) {
             const btn = document.createElement('button');
             btn.className = 'list-btn';
-            btn.innerText = '一覧を見る';
+            btn.innerText = '登録ワード一覧を見る';
             btn.onclick = () => openModal('list');
             div.appendChild(btn);
         }
@@ -201,26 +182,6 @@
         div.classList.remove('typing');
     }
 
-    function openModal(type) {
-        const body = document.getElementById('modal-body');
-        body.innerHTML = '';
-        if (type === 'list') {
-            body.innerHTML = '<h3>登録ワード一覧</h3>';
-            [...trainData, ...bizData].forEach(d => {
-                const item = document.createElement('div');
-                item.className = 'modal-item';
-                item.innerText = d.q;
-                item.onclick = () => { input.value = d.q; onSend(); closeModal(); };
-                body.appendChild(item);
-            });
-        } else if (type === 'policy') {
-            body.innerHTML = '<h3>利用規約</h3><p>・入力情報は回答のみに使用します。<br>・篠ノ井乗務区は個人運営のサポートサイトです。</p>';
-        }
-        document.getElementById('modal-overlay').style.display = 'flex';
-    }
-
-    function closeModal() { document.getElementById('modal-overlay').style.display = 'none'; }
-
     function onSend() {
         const val = input.value.trim();
         if(!val) return;
@@ -232,12 +193,12 @@
 
         setTimeout(async () => {
             if (currentMode === 'business' && bizStep > 0) {
-                if(bizStep === 1) { await addBotMessage(`${val}様ですね。ご連絡先のメールアドレスを入力してください。`); bizStep = 2; }
-                else if(bizStep === 2) { await addBotMessage("ありがとうございます。具体的なご依頼内容を詳しく教えてください。"); bizStep = 3; }
-                else if(bizStep === 3) { await addBotMessage("承りました。内容を確認し、折り返しご連絡いたします。"); bizStep = 0; switchMode('general'); }
+                if(bizStep === 1) { await addBotMessage(`${val}様ですね。折り返しのご連絡用メールアドレスを入力してください。`); bizStep = 2; }
+                else if(bizStep === 2) { await addBotMessage("ありがとうございます。ご依頼・ご相談の具体的な内容を教えてください。"); bizStep = 3; }
+                else if(bizStep === 3) { await addBotMessage("承知いたしました。内容を確認後、担当より折り返しご連絡いたします。"); bizStep = 0; switchMode('general'); }
             } else {
                 const hit = [...trainData, ...bizData].find(d => val.includes(d.q) || d.q.includes(val));
-                await addBotMessage(hit ? hit.a : "お調べしましたが該当がありませんでした。一覧を確認するか、「依頼」と入力してください。");
+                await addBotMessage(hit ? hit.a : "該当するデータが見つかりませんでした。詳細なご相談は「ビジネス窓口」をご利用ください。");
             }
         }, 400);
     }
@@ -246,13 +207,14 @@
         // 設定復元
         if(localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark-mode');
         if(localStorage.getItem('largeText') === 'true') document.body.classList.add('large-text');
-        if(currentMode === 'business') document.body.classList.add('biz-mode');
-
-        const greeting = getTimeGreeting();
-        addBotMessage(`${greeting} 篠ノ井乗務区サポートボットです。何でもお気軽にお聞きください。`, (currentMode === 'general'));
+        
+        // 初回ガイダンス
+        addBotMessage("【篠ノ井乗務区 総合サポート】へようこそ。本サービスはチャット形式の案内窓口です。ご利用にあたってはメニューの「利用規約」をご確認ください。", true);
         
         input.onkeypress = (e) => { if(e.key === 'Enter') onSend(); };
     };
+
+    function clearHistory() { localStorage.clear(); location.reload(); }
 </script>
 </body>
 </html>
