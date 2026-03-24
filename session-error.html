@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>セッションエラー - 篠ノ井乗務区 総合窓口</title>
+    <style>
+        /* ベーススタイル */
+        :root {
+            --primary-color: #003366; /* 信頼の紺色 */
+            --accent-color: #d9534f;  /* 警告の赤 */
+            --text-color: #333333;
+            --bg-color: #f4f7f8;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* 画面中央に配置 */
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* エラーカード（メインコンテナ） */
+        .error-container {
+            background-color: var(--card-bg);
+            width: 90%; /* スマホ用の基本幅 */
+            max-width: 600px; /* PCでの最大幅 */
+            padding: 40px 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); /* 軽い浮き上がり */
+            border-top: 6px solid var(--accent-color); /* 上部に警告色 */
+            text-align: center;
+            box-sizing: border-box;
+            transition: transform 0.3s ease;
+        }
+
+        /* ホバー時の視覚フィードバック（アクセシビリティ） */
+        .error-container:hover {
+            transform: translateY(-5px);
+        }
+
+        /* アイコンエリア */
+        .error-icon {
+            font-size: 60px;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+        }
+
+        /* タイトル */
+        h1 {
+            font-size: 24px;
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        /* エラー詳細テキスト */
+        .error-message {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 30px;
+            text-align: left; /* 読みやすさのため左寄せ */
+            display: inline-block; /* 中央揃えの中での左寄せ */
+            max-width: 100%;
+        }
+
+        .error-message p {
+            margin: 0 0 10px 0;
+        }
+
+        .error-code {
+            font-size: 12px;
+            color: #aaa;
+            margin-top: 20px;
+            font-family: monospace;
+        }
+
+        /* アクションボタン */
+        .return-button {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 18px 35px;
+            border-radius: 35px;
+            font-weight: bold;
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 100%; /* スマホでは全幅 */
+            box-sizing: border-box;
+        }
+
+        .return-button:hover, .return-button:focus {
+            background-color: #002244;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            outline: 3px solid #ffcc00; /* キーボード操作時のフォーカス枠 */
+            outline-offset: 2px;
+        }
+
+        /* レスポンシブ対応（タブレット・PC向け） */
+        @media (min-width: 600px) {
+            .error-container {
+                padding: 60px 50px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .error-message {
+                font-size: 17px;
+            }
+
+            .return-button {
+                width: auto; /* PCではコンテンツ幅に */
+                padding: 18px 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="error-container" role="alert" aria-labelledby="error-title" aria-describedby="error-desc">
+        <div class="error-icon" aria-hidden="true">⚠️</div>
+
+        <h1 id="error-title">セッションエラー</h1>
+
+        <div id="error-desc" class="error-message">
+            <p>データの安全な送信と重複防止のため、ブラウザの「戻る」ボタンによる操作は制限されています。</p>
+            <p>誠に恐れ入りますが、最初からやり直してください。</p>
+        </div>
+
+        <button class="return-button" onclick="location.href='support.html'" aria-label="総合窓口のトップページへ戻る">
+            トップページへ戻る
+        </button>
+
+        <div class="error-code">Error Code: SEC_SESSION_BACK_DENIED</div>
+    </div>
+
+</body>
+</html>
