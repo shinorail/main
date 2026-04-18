@@ -1,10 +1,17 @@
+貼り付けてエラーが出る主な原因は、HTMLタグの囲み記号（ < と > ）が抜けていることや、一部の記述が不完全なためです。
+
+そのままコピーして ad.html として保存すれば動く「完全なコード」を、記号も含めて作成しました。アスタリスクなどの装飾記号は使わず、txt形式のプレーンなコードのみを記述します。
+
+ad.html
+
 <!DOCTYPE html>
-html lang="ja"
-head
-meta charset="UTF-8"
-meta name="viewport" content="width=device-width, initial-scale=1.0"
-title 手作り広告 - 篠ノ井乗務区 /title
-style
+
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>手作り広告 - 篠ノ井乗務区</title>
+<style>
 body { background: #e0e0e0; margin: 0; padding: 0; font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif; }
 
     nav {
@@ -40,9 +47,7 @@ body { background: #e0e0e0; margin: 0; padding: 0; font-family: "Helvetica Neue"
     }
     
     .nav-list li { margin-left: 20px; }
-    
     .nav-list a { color: #fff; text-decoration: none; font-size: 0.95em; transition: opacity 0.3s; }
-    
     .nav-list a:hover { opacity: 0.7; }
     
     .ad-board {
@@ -126,86 +131,90 @@ body { background: #e0e0e0; margin: 0; padding: 0; font-family: "Helvetica Neue"
         .catchphrase { font-size: 1.2em; border-bottom-width: 3px; }
         .description { font-size: 0.9em; padding: 10px; }
     }
-/style
-/head
-body
-header /header
-nav
-div class="nav-logo" 篠ノ井乗務区 /div
-button class="menu-btn" id="menuBtn" ☰ /button
-ul class="nav-list" id="navList"
-li a href="#" ホーム /a /li
-li a href="#" 活動内容 /a /li
-li a href="#" 鉄道マナー /a /li
-li a href="#" お問い合わせ /a /li
-/ul
-/nav
+</style>
+</head>
+<body>
 
-main
-div class="ad-board"
-div class="poster-frame"
-div class="poster-header"
-h1 啓発ポスター /h1
-/div
-div class="poster-content"
-div class="main-visual" 📸 /div
-div class="catchphrase" その一枚に、思いやりを。 /div
-div class="description"
-鉄道ファンの皆さまへ。安全な運行を支えるのは、皆さまお一人お一人のマナーです。 br
-● 撮影時は黄色い点字ブロックの内側へ br
-● フラッシュ撮影は運転士の視界を妨げるため厳禁です br
+<nav>
+<div class="nav-logo">篠ノ井乗務区</div>
+<button class="menu-btn" id="menuBtn">☰</button>
+<ul class="nav-list" id="navList">
+<li><a href="#">ホーム</a></li>
+<li><a href="#">活動内容</a></li>
+<li><a href="#">鉄道マナー</a></li>
+<li><a href="#">お問い合わせ</a></li>
+</ul>
+</nav>
+
+<main>
+<div class="ad-board">
+<div class="poster-frame">
+<div class="poster-header">
+<h1>啓発ポスター</h1>
+</div>
+<div class="poster-content">
+<div class="main-visual">📸</div>
+<div class="catchphrase">その一枚に、思いやりを。</div>
+<div class="description">
+鉄道ファンの皆さまへ。安全な運行を支えるのは、皆さまお一人お一人のマナーです。
+
+
+● 撮影時は黄色い点字ブロックの内側へ
+
+
+● フラッシュ撮影は運転士の視界を妨げるため厳禁です
+
+
 ● 一般のお客様の通行を妨げないよう配慮しましょう
-/div
-/div
-/div
+</div>
+</div>
+</div>
 
-    div class="share-section"
-        p この啓発活動を広める（SNS共有） /p
-        div class="ninja_onebutton"
-            script type="text/javascript"
+    <div class="share-section">
+        <p>この啓発活動を広める（SNS共有）</p>
+        <div class="ninja_onebutton">
+            <script type="text/javascript">
             (function(d){
             if(typeof(window.NINJA_CO_JP_ONETAG_BUTTON_a0b8a0081843ebcdaad4109ef1c3f9b8)=='undefined'){
-                document.write("script type='text/javascript' src='//omt.shinobi.jp/b/a0b8a0081843ebcdaad4109ef1c3f9b8' /script");
+                document.write("<script type='text/javascript' src='//omt.shinobi.jp/b/a0b8a0081843ebcdaad4109ef1c3f9b8'><\/script>");
             }else{
                 window.NINJA_CO_JP_ONETAG_BUTTON_a0b8a0081843ebcdaad4109ef1c3f9b8.ONETAGButton_Load();}
             })(document);
-            /script
-            span class="ninja_onebutton_hidden" style="display:none;" /span
-            span style="display:none;" class="ninja_onebutton_hidden" /span
-        /div
-    /div
-/div
-/main
+            </script>
+            <span class="ninja_onebutton_hidden" style="display:none;"></span>
+            <span style="display:none;" class="ninja_onebutton_hidden"></span>
+        </div>
+    </div>
+</div>
+</main>
 
-footer /footer
-
-script
+<script>
 document.addEventListener('DOMContentLoaded', function() {
 const menuBtn = document.getElementById('menuBtn');
 const navList = document.getElementById('navList');
 
-if (menuBtn && navList) {
-    menuBtn.addEventListener('click', function(e) {
+if (menuBtn &amp;&amp; navList) {
+    menuBtn.addEventListener(&#39;click&#39;, function(e) {
         e.stopPropagation();
-        navList.classList.toggle('active');
+        navList.classList.toggle(&#39;active&#39;);
     });
 
-    document.addEventListener('click', function(event) {
+    document.addEventListener(&#39;click&#39;, function(event) {
         const isClickInside = menuBtn.contains(event.target) || navList.contains(event.target);
         if (!isClickInside) {
-            navList.classList.remove('active');
+            navList.classList.remove(&#39;active&#39;);
         }
     });
 
-    const navLinks = navList.querySelectorAll('a');
-    navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            navList.classList.remove('active');
+    const navLinks = navList.querySelectorAll(&#39;a&#39;);
+    navLinks.forEach(link =&gt; {
+        link.addEventListener(&#39;click&#39;, () =&gt; {
+            navList.classList.remove(&#39;active&#39;);
         });
     });
 }
 });
-/script
+</script>
 
-/body
-/html
+</body>
+</html>
