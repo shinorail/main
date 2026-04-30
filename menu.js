@@ -21,24 +21,6 @@ document.addEventListener("DOMContentLoaded", function() {
     // 3. 共通パーツの生成
     renderParts();
 
-    // --- ハンバーガーメニューの制御ロジック ---
-    const hamburger = document.getElementById('hamburger');
-    const nav = document.querySelector('nav');
-    if (hamburger && nav) {
-        hamburger.addEventListener('click', function() {
-            hamburger.classList.toggle('active');
-            nav.classList.toggle('active');
-        });
-
-        // メニュー内リンククリックで閉じる
-        nav.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                nav.classList.remove('active');
-            });
-        });
-    }
-
     // 4. エフェクトの開始
     startEffect(effectChar, isComplete);
 
@@ -47,15 +29,58 @@ document.addEventListener("DOMContentLoaded", function() {
     if (newsBox) {
         loadNews(newsBox);
     }
+
+    // --- ハンバーガーメニューの動作制御 ---
+    const hamburger = document.getElementById('hamburger');
+    const nav = document.querySelector('nav');
+    if (hamburger && nav) {
+        hamburger.addEventListener('click', function() {
+            hamburger.classList.toggle('active');
+            nav.classList.toggle('active');
+        });
+        nav.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                nav.classList.remove('active');
+            });
+        });
+    }
+
+    // --- 1. スクロール時にヘッダーを固定・小型化 & 2. ページ上部へ戻るボタン ---
+    const header = document.querySelector('header');
+    const topBtn = document.createElement('div');
+    topBtn.innerHTML = '▲';
+    // 戻るボタンのスタイル
+    topBtn.style.cssText = 'position:fixed;bottom:20px;right:20px;width:45px;height:45px;background:#004da0;color:#fff;display:none;align-items:center;justify-content:center;border-radius:50%;cursor:pointer;z-index:10001;font-weight:bold;box-shadow:0 3px 10px rgba(0,0,0,0.3);transition:0.3s;';
+    document.body.appendChild(topBtn);
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 150) {
+            // スクロール時のヘッダー小型化
+            header.style.padding = '5px 0';
+            header.style.boxShadow = '0 2px 10px rgba(0,0,0,0.3)';
+            topBtn.style.display = 'flex';
+        } else {
+            // 通常時のヘッダー
+            header.style.padding = '15px 0';
+            header.style.boxShadow = 'none';
+            topBtn.style.display = 'none';
+        }
+    });
+
+    topBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
 });
 
 function renderParts() {
-    // ヘッダー生成（ハンバーガーボタンを追加）
     const header = document.querySelector('header');
     if (header) {
+        // ヘッダーを上部固定に設定
+        header.style.cssText = "position:fixed;top:0;left:0;width:100%;z-index:10000;background:#004da0;transition:all 0.3s ease;padding:15px 0;";
         header.innerHTML = `
-            <div class="header-inner">
-                <h1>篠ノ井乗務区 公式サイト</h1>
+            <div class="header-inner" style="max-width:1000px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:0 20px;">
+                <h1 style="margin:0;font-size:1.1em;color:white;letter-spacing:1px;">篠ノ井乗務区 公式サイト</h1>
                 <div class="hamburger" id="hamburger">
                     <span></span>
                     <span></span>
@@ -64,13 +89,14 @@ function renderParts() {
             </div>`;
     }
 
-    // ナビゲーション生成（クラス付与用のIDや構造は維持）
     const nav = document.querySelector('nav');
     if (nav) {
+        // --- 3. 「運用情報」へのショートカット通知（バッジ） ---
+        // メニュー項目の「Train-News」や「お知らせ」に更新マークを付与
         nav.innerHTML = `
             <ul>
                 <li><a href="index.html">ホーム</a></li>
-                <li><a href="news.html">お知らせ</a></li>
+                <li><a href="news.html">お知らせ <span style="display:inline-block;width:8px;height:8px;background:#ff3b30;border-radius:50%;margin-left:5px;vertical-align:middle;"></span></a></li>
                 <li><a href="train-news.html">Train-News</a></li>
                 <li><a href="ad.html" style="color: #2e7d32; font-weight: bold;">手作り広告</a></li>
                 <li><a href="mission.html#2026">活動理念</a></li>
@@ -83,7 +109,6 @@ function renderParts() {
             </ul>`;
     }
 
-    // フッター
     const footer = document.querySelector('footer');
     if (footer) {
         const adContainer = document.createElement('div');
