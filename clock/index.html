@@ -1,3 +1,66 @@
 <!DOCTYPE html>
-<html lang="ja"><head><meta charset="UTF-8"></head><body><script src="script.js"></script></body></html>
-　
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>篠ノ井乗務区 総合ポータル</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="bg-overlay"></div>
+
+    <button id="menuBtn" class="menu-btn" aria-label="設定メニューを開く">
+        <span></span><span></span><span></span>
+    </button>
+
+    <aside id="sidePanel" class="side-panel">
+        <h2>SYSTEM SETTINGS</h2>
+        <div class="setting-item">
+            <label for="sizeSlider">文字サイズ調整</label>
+            <input type="range" id="sizeSlider" min="14" max="32" value="16">
+            <span id="sizeValue">16px</span>
+        </div>
+        <div class="setting-item">
+            <label>視覚サポート</label>
+            <button id="contrastBtn" class="ui-btn">ハイコントラスト切替</button>
+        </div>
+        <hr>
+        <p class="storage-notice">設定は自動的に保存されます</p>
+    </aside>
+
+    <main class="container">
+        <header class="clock-section">
+            <div id="date" class="date-display">2026/05/12 (TUE)</div>
+            <div id="clock" class="clock-display">00:00:00</div>
+        </header>
+
+        <section class="pr-section">
+            <h1 class="unit-name">篠ノ井乗務区</h1>
+            <p class="catchphrase">信州の鼓動を、正確な時とともに。</p>
+        </section>
+
+        <nav class="nav-links">
+            <a href="https://shinorail.github.io/" class="nav-card">
+                <span class="label">PORTAL</span>
+                <span class="title">総合トップ</span>
+            </a>
+            <a href="https://shinorail.github.io/links.html" class="nav-card">
+                <span class="label">RESOURCES</span>
+                <span class="title">公式リンク集</span>
+            </a>
+            <a href="https://shinorail.github.io/main/" class="nav-card">
+                <span class="label">RECORDS</span>
+                <span class="title">活動記録</span>
+            </a>
+        </nav>
+
+        <div class="status-badge">COMING SOON: 新システム開発中</div>
+    </main>
+
+    <footer class="footer">
+        SHINONOI RAILWAY BUREAU | Ver 6.0.0 "Professional"
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
