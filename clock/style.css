@@ -1,0 +1,116 @@
+/* 基本変数 */
+:root {
+    --bg-color: #0b111a;
+    --text-color: #e0e1dd;
+    --accent-color: #00d4ff;
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --font-size: 16px;
+}
+
+/* ハイコントラスト（アクセシビリティ） */
+body.high-contrast {
+    --bg-color: #000000;
+    --text-color: #ffff00;
+    --accent-color: #ffff00;
+    --card-bg: #000000;
+}
+
+body {
+    margin: 0; padding: 0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", sans-serif;
+    font-size: var(--font-size);
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    transition: background 0.3s, color 0.3s;
+    overflow-x: hidden;
+}
+
+/* レイアウト */
+.container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 10;
+}
+
+/* 時計：スマホで最大化 */
+.clock-section { text-align: center; width: 100%; margin-bottom: 30px; }
+.date-display { font-size: 1.2rem; opacity: 0.7; margin-bottom: 5px; }
+.clock-display {
+    font-size: clamp(4.5rem, 25vw, 12rem); /* スマホで巨大、PCで適正 */
+    font-weight: 800;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.05em;
+}
+
+/* PRエリア */
+.unit-name { font-size: 1rem; letter-spacing: 0.5em; color: var(--accent-color); margin-bottom: 10px; }
+.catchphrase { font-size: 1.2rem; font-weight: 300; }
+
+/* ナビゲーション */
+.nav-links {
+    display: grid;
+    gap: 15px;
+    width: 100%;
+    max-width: 900px;
+    grid-template-columns: 1fr; /* スマホ用1列 */
+}
+
+@media (min-width: 768px) {
+    .nav-links { grid-template-columns: repeat(3, 1fr); } /* PC用3列 */
+}
+
+.nav-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 15px;
+    padding: 25px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    transition: 0.2s;
+}
+
+body.high-contrast .nav-card { border: 2px solid #ffff00; }
+.nav-card:hover { transform: translateY(-5px); border-color: var(--accent-color); }
+.nav-card .label { font-size: 0.7rem; color: var(--accent-color); font-weight: bold; }
+.nav-card .title { font-size: 1.2rem; font-weight: bold; margin-top: 5px; }
+
+/* メニューボタン */
+.menu-btn {
+    position: fixed; top: 20px; right: 20px; z-index: 1000;
+    width: 50px; height: 50px; background: rgba(0,0,0,0.5);
+    border: 1px solid var(--accent-color); border-radius: 10px; cursor: pointer;
+    display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px;
+}
+.menu-btn span { width: 25px; height: 3px; background: var(--accent-color); border-radius: 2px; }
+
+/* 設定パネル */
+.side-panel {
+    position: fixed; top: 0; right: -320px; width: 300px; height: 100%;
+    background: #1a1e26; padding: 80px 20px; z-index: 999;
+    transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+}
+.side-panel.open { right: 0; }
+.setting-item { margin-bottom: 25px; }
+.setting-item label { display: block; font-size: 0.8rem; margin-bottom: 10px; color: var(--accent-color); }
+
+.ui-btn {
+    width: 100%; padding: 12px; background: var(--accent-color); color: #000;
+    border: none; border-radius: 8px; font-weight: bold; cursor: pointer;
+}
+
+.status-badge {
+    margin-top: 40px; padding: 10px 20px; border: 1px dashed var(--accent-color);
+    border-radius: 10px; font-size: 0.8rem; color: var(--accent-color);
+}
+
+.footer { padding: 20px; text-align: center; font-size: 0.7rem; color: #555; }
