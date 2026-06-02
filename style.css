@@ -1,7 +1,7 @@
 @charset "utf-8";
 
 /* ==========================================================================
-   1. 全体の基本設定 & 共通スタイル (Global Base Styles)
+   1. 全体の基本設定 (Global Base Styles)
    ========================================================================== */
 body {
     font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
@@ -9,33 +9,32 @@ body {
     color: #333333;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4; /* 通常ページの背景色 */
+    background-color: #f4f4f4; /* 通常背景 */
 }
 
-/* 広告ボードや特定ページ向けの背景バリエーション */
+/* 広告ページなどで背景をグレーにする場合用 */
 body.ad-page-bg {
-    background: #e0e0e0;
+    background-color: #e0e0e0;
 }
 
 /* ==========================================================================
-   2. ヘッダー・レイアウト設定 (Header & Title Layout)
+   2. ヘッダー設定 (Header Layout)
    ========================================================================== */
 header {
-    background-color: #004da0; /* 画像のメインカラーに近い青（篠ノ井ブルー等） */
+    background-color: #004da0; /* メインの青色 */
     color: #ffffff;
-    padding: 30px 20px; /* 各ブロックの最大パディング値を採用 */
+    padding: 30px 20px;
     text-align: center;
     position: relative;
 }
 
-/* ヘッダー内のレスポンシブ・レイアウト用インナーコンテナ */
 .header-inner {
+    max-width: 900px;
+    margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: relative;
-    max-width: 900px;
-    margin: 0 auto;
 }
 
 header h1 {
@@ -45,117 +44,68 @@ header h1 {
 }
 
 /* ==========================================================================
-   3. ナビゲーション：基本・PC版共通設定 (Navigation - Base & PC Desktop)
+   3. ナビゲーション (Navigation - PC版デフォルト)
    ========================================================================== */
-/* 通常のナビゲーションバー（スティッキー固定機能付き） */
 nav {
-    background-color: #002b5b; /* 画像下部の濃い紺色を採用 */
+    background-color: #002b5b; /* 濃い紺色 */
     padding: 12px 0;
-    text-align: center;
     position: sticky;
     top: 0;
     z-index: 1000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    overflow-x: auto; /* 横にはみ出した時のスクロール対応 */
-    -webkit-overflow-scrolling: touch; /* iOS用スムーズスクロール */
     transition: all 0.4s ease;
 }
 
-/* ナビゲーション内の標準リスト構造 */
+/* PC用：横並びメニュー */
 nav ul {
     list-style: none;
     margin: 0;
-    padding: 5px 10px;
+    padding: 0;
     display: flex;
-    justify-content: center; /* パソコン環境では中央寄せ */
+    justify-content: center;
     gap: 20px;
-    white-space: nowrap; /* 文字を改行させない */
-    flex-wrap: wrap; /* 項目が増えた場合の折り返し許可設定 */
 }
 
 nav li {
     margin: 0;
 }
 
-/* ナビゲーション内リンクの標準デザイン */
 nav a {
     color: #ffffff;
     text-decoration: none;
-    margin: 0 15px;
     font-weight: bold;
     font-size: 14px;
-    padding: 5px 10px;
+    padding: 8px 16px;
     border-radius: 4px;
     transition: background-color 0.3s, opacity 0.3s;
-    display: inline-block;
+    display: block;
 }
 
-/* ホバー時およびアクティブ状態のエフェクト */
 nav a:hover, 
 nav a.active {
-    text-decoration: underline;
     background-color: rgba(255, 255, 255, 0.2);
+    text-decoration: underline;
 }
 
-/* ==========================================================================
-   4. ナビゲーション：パターンB（.nav-list / .nav-logo / .menu-btn 系列用）
-   ========================================================================== */
+/* ロゴや別パーツ用の予備スタイル */
 .nav-logo {
     font-weight: bold;
     font-size: 1.2em;
     color: #ffffff;
 }
 
-.menu-btn {
-    display: none; /* PC環境ではデフォルト非表示 */
-    background: none;
-    border: none;
-    color: #ffffff;
-    font-size: 28px;
-    cursor: pointer;
-    padding: 5px;
-    line-height: 1;
-}
-
-.nav-list {
-    list-style: none;
-    display: flex;
-    margin: 0;
-    padding: 0;
-}
-
-.nav-list li {
-    margin-left: 20px;
-}
-
-.nav-list a {
-    color: #ffffff;
-    text-decoration: none;
-    font-size: 0.95em;
-    transition: opacity 0.3s;
-}
-
-.nav-list a:hover {
-    opacity: 0.7;
-}
-
 /* ==========================================================================
-   5. 改良型ハンバーガーボタン & スライドインドロワー (Hamburger Animation)
+   4. 改良型ハンバーガーボタン (Hamburger Button)
    ========================================================================== */
-/* ハンバーガーアイコン本体（スマホ環境でJavaScriptと連動） */
 .hamburger {
     display: none; /* PC環境では非表示 */
     width: 30px;
     height: 25px;
     position: relative;
     cursor: pointer;
-    z-index: 10000; /* 最前面に維持 */
+    z-index: 10000; /* メニューより手前に配置 */
 }
 
-/* 三本線の共通デザイン */
+/* 三本線の線の見た目 */
 .hamburger span {
     display: block;
     position: absolute;
@@ -166,39 +116,18 @@ nav a.active {
     transition: all 0.3s ease;
 }
 
-/* 三本線の初期配置（デフォルト状態） */
+/* 三本線の初期位置 */
 .hamburger span:nth-child(1) { top: 0; }
 .hamburger span:nth-child(2) { top: 11px; }
 .hamburger span:nth-child(3) { top: 22px; }
 
-/* ボタンが active になった時の「×」アニメーション形状 */
+/* ボタンが active になった時の「×」アニメーション */
 .hamburger.active span:nth-child(1) { transform: translateY(11px) rotate(-45deg); }
 .hamburger.active span:nth-child(2) { opacity: 0; }
 .hamburger.active span:nth-child(3) { transform: translateY(-11px) rotate(45deg); }
 
-/* 右からスライドインするスマホ専用メニューの基本形設定 */
-nav.drawer-nav {
-    position: fixed;
-    top: 0;
-    right: -100%; /* 初期状態は画面の右外に完全隠蔽 */
-    width: 100%;
-    height: 100vh;
-    background: rgba(0, 77, 160, 0.95); /* 篠ノ井ブルー透過背景 */
-    z-index: 9998;
-    transition: all 0.4s ease;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-/* active クラス付与時に画面内へ滑らかに進出 */
-nav.drawer-nav.active {
-    right: 0;
-}
-
 /* ==========================================================================
-   6. メインコンテンツエリア & 基本見出し (Main Container & Headings)
+   5. メインコンテンツエリア (Container)
    ========================================================================== */
 .container {
     max-width: 900px;
@@ -210,12 +139,6 @@ nav.drawer-nav.active {
     min-height: 60vh;
 }
 
-/* 見出しのデザイン */
-h1 {
-    margin: 0;
-    font-size: 24px;
-}
-
 h2 {
     border-left: 5px solid #004da0;
     padding-left: 10px;
@@ -223,7 +146,7 @@ h2 {
     font-size: 20px;
 }
 
-/* ホーム用のリンクカードグリッド配置 */
+/* リンクカードグリッド */
 .link-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -232,19 +155,17 @@ h2 {
 }
 
 /* ==========================================================================
-   7. 鉄道アニメーション演出 (Railway & Train Loading Styles)
+   6. 鉄道アニメーション (Railway Animation)
    ========================================================================== */
-/* 鉄道アニメーションのコンテナ（線路） */
 .loading-rail {
     position: relative;
     width: 100%;
     height: 40px;
-    border-bottom: 2px solid #666666;
+    border-bottom: 2px solid #666666; /* 線路 */
     margin: 20px 0;
     overflow: hidden;
 }
 
-/* 電車のアイコン（簡易的な形状表現） */
 .train-icon {
     position: absolute;
     bottom: 2px;
@@ -253,27 +174,21 @@ h2 {
     height: 20px;
     background-color: #004da0;
     border-radius: 3px 10px 3px 3px;
-    border-top: 4px solid #ffffff; /* 白い窓線 */
+    border-top: 4px solid #ffffff; /* 窓 */
 }
 
-/* 走るループアニメーションのキーフレーム定義 */
 @keyframes train-run {
     0% { left: -100px; }
     100% { left: 100%; }
 }
 
 /* アニメーション活性化クラス */
-.train-active {
-    animation: train-run 1.5s linear infinite;
-}
-
-/* 常時ループ用（アイコン自体に直接付与されるケースへの対応） */
-.train-icon-animated {
+.train-active, .train-icon {
     animation: train-run 1.5s linear infinite;
 }
 
 /* ==========================================================================
-   8. ニュース更新リスト表示演出 (Update Information List)
+   7. ニュース更新リスト演出 (Update List)
    ========================================================================== */
 .update-list {
     list-style: none;
@@ -281,7 +196,6 @@ h2 {
     margin: 0;
 }
 
-/* ニュースが下からフェードインしてくる初期状態設定 */
 .update-list li {
     opacity: 0;
     transform: translateY(10px);
@@ -292,20 +206,17 @@ h2 {
     align-items: center;
 }
 
-/* JavaScript連動用の表示確定クラス */
 .update-list li.show {
     opacity: 1;
     transform: translateY(0);
 }
 
-/* ニュース用日付ラベル */
 .update-date {
     font-weight: bold;
     margin-right: 15px;
     color: #666666;
 }
 
-/* カテゴリ・ニュース用バッジラベル */
 .badge {
     padding: 2px 8px;
     border-radius: 4px;
@@ -317,9 +228,8 @@ h2 {
 }
 
 /* ==========================================================================
-   9. 広告ボード & 特製ポスターフレーム (Ad Board & Poster Styles)
+   8. 広告ボード & ポスターフレーム (Ad Board & Poster)
    ========================================================================== */
-/* 外側広告掲示板枠 */
 .ad-board {
     max-width: 800px;
     margin: 40px auto;
@@ -329,7 +239,6 @@ h2 {
     padding: 30px;
 }
 
-/* ポスターフレーム枠線 */
 .poster-frame {
     border: 10px solid #004da0;
     background: #ffffff;
@@ -337,7 +246,6 @@ h2 {
     margin-bottom: 30px;
 }
 
-/* ポスター上部ヘッダー（赤色アクセント板） */
 .poster-header {
     background: #e63946;
     color: #ffffff;
@@ -351,19 +259,16 @@ h2 {
     letter-spacing: 0.1em;
 }
 
-/* ポスター内部メインコンテンツ領域 */
 .poster-content {
     padding: 30px;
     text-align: center;
 }
 
-/* 特大メインビジュアル（絵文字や画像テキスト用） */
 .main-visual {
     font-size: 5em;
     margin-bottom: 10px;
 }
 
-/* ポスター用キャッチフレーズ */
 .catchphrase {
     font-size: 1.8em;
     font-weight: bold;
@@ -373,7 +278,6 @@ h2 {
     margin-bottom: 15px;
 }
 
-/* ポスター用詳細説明文テキストボックス */
 .description {
     font-size: 1.1em;
     line-height: 1.6;
@@ -384,7 +288,6 @@ h2 {
     border-radius: 8px;
 }
 
-/* SNS等のシェアセクション表示 */
 .share-section {
     margin-top: 30px;
     padding-top: 20px;
@@ -399,7 +302,7 @@ h2 {
 }
 
 /* ==========================================================================
-   10. フッター設定 (Footer Style)
+   9. フッター設定 (Footer)
    ========================================================================== */
 footer {
     text-align: center;
@@ -411,46 +314,34 @@ footer {
 }
 
 /* ==========================================================================
-   11. レスポンシブ対応：画面幅 768px 以下 (Tablet & Large Smartphone)
+   10. スマホ・タブレット用レスポンシブ設定 (Responsive - Mobile & Drawer)
    ========================================================================== */
 @media (max-width: 768px) {
-    /* ナビゲーションリストを4列のグリッド配置へと変更 */
-    nav ul {
-        justify-content: flex-start; /* 左詰めに変更 */
-        display: grid;
-        grid-template-columns: repeat(4, 1fr); /* 正確に4列に並べる */
-        gap: 5px;
-        white-space: normal; /* セル内でのテキスト改行を明示的に許可 */
-        padding: 5px 10px;
+    header {
+        padding: 1.5rem 1rem;
     }
 
-    nav li {
-        margin: 0;
+    header h1 {
+        font-size: 20px;
     }
 
-    nav a {
-        display: block;
-        font-size: 0.75em; /* 文字サイズを適度に縮小 */
-        padding: 8px 2px;
-        text-align: center;
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 4px;
-        margin: 0;
-    }
-
-    /* 固定式ハンバーガー用ナビゲーション構造を活性化 */
+    /* ハンバーガーボタンをヘッダーの右側に配置 */
     .hamburger {
-        display: block; /* 三本線ボタンを出現させる */
+        display: block;
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
     }
 
-    /* ナビゲーションを全画面隠蔽型ドロワーにシフトする場合の調整 */
-    nav.responsive-drawer {
+    /* 【重要】ナビゲーションを横並びから右側隠蔽のドロワーに完全変化 */
+    nav {
         position: fixed;
         top: 0;
-        right: -100%;
+        right: -100%; /* 初期状態は画面外に完全に隠す（競合排除） */
         width: 100%;
         height: 100vh;
-        background: rgba(0, 43, 91, 0.98);
+        background: rgba(0, 43, 91, 0.98); /* 濃い紺色の透過背景 */
         z-index: 9998;
         display: flex;
         flex-direction: column;
@@ -459,118 +350,64 @@ footer {
         padding: 0;
     }
 
-    nav.responsive-drawer.active {
-        right: 0;
+    /* JavaScript連動：開いたときのスタイル */
+    nav.active {
+        right: 0; /* 画面内にスライドイン */
     }
 
-    nav.responsive-drawer ul {
-        display: flex;
+    /* メニューリストを縦一列にきれいに並べる（グリッド競合の排除） */
+    nav ul {
         flex-direction: column;
-        grid-template-columns: none;
-        gap: 20px;
+        align-items: center;
+        gap: 25px;
         width: 100%;
-    }
-
-    nav.responsive-drawer a {
-        font-size: 1.2rem;
-        width: 80%;
-        margin: 0 auto;
-        padding: 12px 0;
-    }
-}
-
-/* ==========================================================================
-   12. レスポンシブ対応：画面幅 600px 以下 (Standard Smartphone)
-   ========================================================================== */
-@media (max-width: 600px) {
-    header {
-        padding: 1rem 0;
-    }
-
-    h1 {
-        font-size: 18px; /* タイトルサイズを最適化 */
-    }
-
-    /* メニュー項目が入り切らない場合に柔軟に折り返す設定 */
-    nav {
-        flex-wrap: wrap;
-        gap: 5px;
-        padding: 8px;
+        padding: 0;
     }
 
     nav a {
-        font-size: 12px;
-        padding: 4px 8px;
-        flex: 1 1 30%; /* 3列換算で綺麗に並べる */
+        font-size: 1.3rem; /* スマホで押しやすいサイズ */
+        padding: 12px 0;
+        width: 80%;
         text-align: center;
-    }
-
-    /* .menu-btn 系列を使用する別パターンナビのスマホ対応挙動 */
-    .menu-btn {
-        display: block; /* メニュー展開ボタンを表示 */
-    }
-
-    .nav-list {
-        display: none; /* 初期状態は非表示 */
-        flex-direction: column;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        background: #333333;
-        padding: 0;
-        border-top: 1px solid #555555;
-        z-index: 2000;
-    }
-
-    .nav-list.active {
-        display: flex; /* アクティブ時に縦並びで展開 */
-    }
-
-    .nav-list li {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 6px;
         margin: 0;
-        text-align: center;
-        border-bottom: 1px solid #444444;
     }
 
-    .nav-list li a {
-        display: block;
-        padding: 15px;
-    }
-
-    /* メインコンテナの余白をなくし画面を広く使う調整 */
+    /* メインコンテンツエリアのスマホ調整 */
     .container {
         margin: 10px;
         padding: 15px;
-        border-radius: 0; /* 角丸をフラット化 */
+        border-radius: 0; /* 画面を広く使うため角丸をリセット */
     }
 
     h2 {
         font-size: 18px;
     }
 
-    /* ニュースリストのレスポンス：日付と内容を縦並びに切り替え */
+    /* ニュースリストを縦並びにして見やすく */
     .update-list li {
         font-size: 14px;
         flex-direction: column;
         align-items: flex-start;
+        gap: 5px;
     }
 
     .update-date {
-        margin-bottom: 5px;
         margin-right: 0;
     }
 
-    /* ホームのリンクカードを完全縦1列に変換 */
+    /* カードリンクを縦1列に */
     .link-grid {
         grid-template-columns: 1fr;
     }
 
-    /* 広告ボード・ポスターの各種文字サイズ縮小調整 */
+    /* 広告ボード・ポスターのスマホ用文字サイズ一括縮小 */
     .ad-board {
-        max-width: 90%;
+        max-width: 95%;
         margin: 20px auto;
         padding: 15px;
+        box-shadow: 5px 5px 0px #888888;
     }
 
     .poster-header h1 {
@@ -589,15 +426,5 @@ footer {
     .description {
         font-size: 0.9em;
         padding: 10px;
-    }
-}
-
-/* ==========================================================================
-   13. レスポンシブ対応：画面幅 500px 以下 (Small Smartphone)
-   ========================================================================== */
-@media (max-width: 500px) {
-    /* さらに画面が小さい場合、ナビゲーションを押しやすい3列に変更 */
-    nav ul {
-        grid-template-columns: repeat(3, 1fr);
     }
 }
