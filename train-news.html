@@ -6,32 +6,165 @@
     <title>Train-News - 篠ノ井乗務区</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px 0; }
-        .news-card { background: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; border-left: 5px solid #004da0; position: relative; }
+        /* レイアウトベース調整 */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        /* ヘッダー・ナビゲーション・ログインバーの統合・レスポンシブ化 */
+        .header-container {
+            background: #004da0;
+            color: #fff;
+            padding: 10px 20px;
+        }
+        
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding-bottom: 10px;
+        }
+
+        .site-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .user-status-bar {
+            font-size: 0.85em;
+            color: #fff;
+        }
+        .user-status-bar a {
+            color: #ffaa00;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0 5px;
+        }
+        .user-status-bar a:hover {
+            text-decoration: underline;
+        }
+
+        /* メニュー全体のレスポンシブ対応 */
+        .nav-container {
+            padding-top: 10px;
+        }
+        .nav-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .nav-list li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.9em;
+            font-weight: bold;
+            transition: color 0.2s;
+        }
+        .nav-list li a:hover {
+            color: #ffaa00;
+        }
+
+        /* コンテンツエリア */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .news-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 20px; 
+            padding: 20px 0; 
+        }
+
+        .news-card { 
+            background: #fff; 
+            border: 1px solid #ddd; 
+            padding: 15px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            border-left: 5px solid #004da0; 
+            position: relative; 
+            box-sizing: border-box;
+        }
         .news-card:hover { transform: translateY(-3px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .news-card h3 { margin: 0 0 5px; color: #004da0; font-size: 1.1em; padding-right: 35px; }
+        
         .fav-btn { position: absolute; top: 12px; right: 10px; background: none; border: none; font-size: 1.4em; cursor: pointer; filter: grayscale(1); transition: 0.2s; z-index: 10; }
         .fav-btn.active { filter: grayscale(0); }
+        
+        /* ビューオーバーレイ */
         .viewer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; display: none; flex-direction: column; z-index: 9999; }
         .viewer-header { background: #004da0; color: white; padding: 10px; display: flex; justify-content: space-between; align-items: center; }
         .viewer-body { flex: 1; position: relative; background: #525659; overflow: hidden; }
         #pdf-frame { width: 100%; height: 100%; border: none; }
+        
+        /* コメントサイドバー（スマホ時は下部から、PC時は右側から出すなど調整可能ですが、元の挙動を維持しつつ調整） */
         .comment-sidebar { position: absolute; bottom: -100%; left: 0; width: 100%; height: 75%; background: #f9f9f9; transition: 0.3s; z-index: 10000; display: flex; flex-direction: column; box-shadow: 0 -5px 15px rgba(0,0,0,0.2); }
         .comment-sidebar.open { bottom: 0; }
         .comment-list { flex: 1; overflow-y: auto; padding: 15px; }
         .comment-item { background: #fff; padding: 10px; margin-bottom: 8px; border-radius: 5px; border: 1px solid #ddd; font-size: 0.9em; position: relative; }
         .official-badge { background: #ffaa00; color: #fff; font-size: 0.75em; padding: 2px 6px; border-radius: 3px; margin-left: 5px; font-weight: bold; }
         .comment-official { border-left: 4px solid #ffaa00; background: #fff9f0; }
+
+        /* スマートフォン向けのレスポンシブ微調整 */
+        @media (max-width: 600px) {
+            .header-top {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .user-status-bar {
+                align-self: flex-end;
+            }
+            .nav-list {
+                gap: 10px;
+            }
+            .nav-list li a {
+                font-size: 0.85em;
+            }
+            .comment-sidebar {
+                height: 85%; /* スマホ画面ではコメント欄を広めにとる */
+            }
+        }
     </style>
 </head>
 <body>
 
-<header></header>
-<nav></nav>
-
-<div class="user-status-bar" style="text-align:right; padding:10px; background:#eee; font-size:0.8em; border-bottom:1px solid #ccc;">
-    <span id="userInfoDisplay">ゲスト 様 | <a href="login.html">ログイン</a></span>
-</div>
+<header class="header-container">
+    <div class="header-top">
+        <h1 class="site-title">篠ノ井乗務区 公式サイト</h1>
+        <div class="user-status-bar">
+            <span id="userInfoDisplay">ゲスト 様 | <a href="login.html">ログイン</a></span>
+        </div>
+    </div>
+    <nav class="nav-container">
+        <ul class="nav-list">
+            <li><a href="index.html">ホーム</a></li>
+            <li><a href="news.html">お知らせ</a></li>
+            <li><a href="train-news.html" style="color: #ffaa00;">Train-News</a></li>
+            <li><a href="fliers.html">手作り広告</a></li>
+            <li><a href="philosophy.html">活動理念</a></li>
+            <li><a href="photos.html">写真記録</a></li>
+            <li><a href="notebook.html">乗車印帳</a></li>
+            <li><a href="faq.html">よくある質問</a></li>
+            <li><a href="links.html">SNS/外部リンク</a></li>
+            <li><a href="contact.html">お問い合わせ</a></li>
+        </ul>
+    </nav>
+</header>
 
 <div class="container">
     <h2 style="border-bottom: 2px solid #004da0; padding-bottom: 10px; margin-top: 20px;">Train-News 一覧</h2>
