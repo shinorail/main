@@ -13,82 +13,8 @@
             font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
             background-color: #f8f9fa;
             color: #333;
-        }
-
-        /* ヘッダー・ナビゲーション・ログインバーの一体化 */
-        .header-container {
-            background: #004da0;
-            color: #fff;
-            padding: 15px 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-        
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-            padding-bottom: 12px;
-        }
-
-        .site-title {
-            font-size: 1.4em;
-            font-weight: bold;
-            margin: 0;
-            letter-spacing: 1px;
-        }
-
-        /* ログインステータスバーの強化 */
-        .user-status-bar {
-            font-size: 0.9em;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 6px 12px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .user-status-bar a {
-            color: #ffaa00;
-            text-decoration: none;
-            font-weight: bold;
-            margin: 0 5px;
-            transition: color 0.2s;
-        }
-        .user-status-bar a:hover {
-            color: #fff;
-            text-decoration: underline;
-        }
-
-        /* メニュー（ナビゲーション）のレスポンシブ化 */
-        .nav-container {
-            padding-top: 12px;
-        }
-        .nav-list {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        .nav-list li a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 0.9em;
-            font-weight: bold;
-            padding: 4px 8px;
-            border-radius: 4px;
-            transition: background 0.2s, color 0.2s;
-        }
-        .nav-list li a:hover {
-            background: rgba(255, 255, 255, 0.15);
-            color: #ffaa00;
-        }
-        .nav-list li a.active {
-            color: #ffaa00;
-            border-bottom: 2px solid #ffaa00;
-            border-radius: 0;
+            /* 固定ヘッダーの高さ分、上部に余白を確保（レスポンシブ対応） */
+            padding-top: 140px; 
         }
 
         /* コンテンツエリア */
@@ -137,24 +63,10 @@
         .official-badge { background: #ffaa00; color: #fff; font-size: 0.75em; padding: 2px 6px; border-radius: 3px; margin-left: 5px; font-weight: bold; }
         .comment-official { border-left: 4px solid #ffaa00; background: #fff9f0; }
 
-        /* スマートフォン向けのレスポンシブ調整 */
+        /* スマホ向けコンテンツの調整 */
         @media (max-width: 768px) {
-            .header-top {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-            .user-status-bar {
-                width: 100%;
-                box-sizing: border-box;
-                text-align: center;
-            }
-            .nav-list {
-                gap: 8px;
-            }
-            .nav-list li a {
-                font-size: 0.85em;
-                padding: 4px 6px;
+            body {
+                padding-top: 170px; /* スマホはヘッダーが縦に伸びるため余白を広げる */
             }
             .comment-sidebar {
                 height: 85%;
@@ -164,28 +76,8 @@
 </head>
 <body>
 
-<header class="header-container">
-    <div class="header-top">
-        <h1 class="site-title">篠ノ井乗務区 公式サイト</h1>
-        <div class="user-status-bar">
-            <span id="userInfoDisplay">ゲスト 様 | <a href="login.html">ログイン</a></span>
-        </div>
-    </div>
-    <nav class="nav-container">
-        <ul class="nav-list">
-            <li><a href="index.html">ホーム</a></li>
-            <li><a href="news.html">お知らせ</a></li>
-            <li><a href="train-news.html" class="active">Train-News</a></li>
-            <li><a href="fliers.html">手作り広告</a></li>
-            <li><a href="philosophy.html">活動理念</a></li>
-            <li><a href="photos.html">写真記録</a></li>
-            <li><a href="notebook.html">乗車印帳</a></li>
-            <li><a href="faq.html">よくある質問</a></li>
-            <li><a href="links.html">SNS/外部リンク</a></li>
-            <li><a href="contact.html">お問い合わせ</a></li>
-        </ul>
-    </nav>
-</header>
+<header></header>
+<nav></nav>
 
 <div class="container">
     <h2 style="border-bottom: 2px solid #004da0; padding-bottom: 10px; margin-top: 20px;">Train-News 一覧</h2>
@@ -217,6 +109,8 @@
     </div>
 </div>
 
+<footer></footer>
+
 <script src="menu.js"></script>
 
 <script>
@@ -225,42 +119,29 @@
     const _auth = "cGFzc3dvcmQyMDI2"; 
     const isAuthorized = (p) => btoa(p) === _auth;
 
-    // ログイン状態表示の同期ロジック強化
-    function updateLoginUI() {
-        const email = localStorage.getItem("userEmail");
-        const name = localStorage.getItem("userName");
-        
-        if (email) {
-            // ログイン中：ユーザー名（またはメアド）とマイページ、ログアウトを表示
-            document.getElementById("userInfoDisplay").innerHTML = `
-                <strong>${name || email}</strong> 様 | 
-                <a href="mypage.html">マイページ</a> | 
-                <a href="#" onclick="logout(event)">ログアウト</a>
-            `;
-            if(name) {
-                const nameInput = document.getElementById("u-name");
-                if (nameInput) nameInput.value = name;
-            }
-        } else {
-            // 未ログイン：ゲスト状態
-            document.getElementById("userInfoDisplay").innerHTML = `ゲスト 様 | <a href="login.html">ログイン</a>`;
-        }
-        
-        // 公式管理者の非表示パスワード枠制御
+    // ログイン状態に応じたフォーム制御のみを担当（表示の生成はmenu.jsが行うため競合排除）
+    function setupFormAdminControl() {
         const uNameEl = document.getElementById("u-name");
         if (uNameEl) {
             uNameEl.addEventListener("input", (e) => {
-                document.getElementById("admin-pass-area").style.display = (e.target.value === "篠ノ井乗務区") ? "block" : "none";
+                const adminArea = document.getElementById("admin-pass-area");
+                if(adminArea) adminArea.style.display = (e.target.value === "篠ノ井乗務区") ? "block" : "none";
             });
+        }
+        // ログインしている場合はお名前フォームに名前を自動セット
+        const name = localStorage.getItem("userName");
+        if (name && uNameEl) {
+            uNameEl.value = name;
         }
     }
 
-    function logout(event) { 
+    // ログアウト処理（menu.jsから呼び出せるようにグローバル展開）
+    window.logoutUser = function(event) {
         if(event) event.preventDefault();
-        localStorage.removeItem("userEmail"); 
-        localStorage.removeItem("userName"); // 必要に応じて追加
-        location.reload(); 
-    }
+        localStorage.removeItem("userEmail");
+        localStorage.removeItem("userName");
+        location.reload();
+    };
 
     function toggleFavorite(event, id, title) {
         event.stopPropagation();
@@ -271,7 +152,7 @@
         localStorage.setItem("favNews", JSON.stringify(favs));
     }
 
-    async function loadNews() {
+    async function loadNewsData() {
         try {
             const res = await fetch(newsScriptUrl + "?sheet=新聞");
             const data = await res.json();
@@ -301,7 +182,6 @@
     }
 
     function openViewer(url, id, title, isLocked) {
-        // 会員限定記事の場合のログインチェックを確実にする
         if (isLocked && !localStorage.getItem("userEmail")) { 
             alert("会員限定記事です。ログインしてください。"); 
             return; 
@@ -362,9 +242,9 @@
         }
     };
 
-    // 初期化処理の実行
-    updateLoginUI();
-    loadNews();
+    // 初期化
+    setupFormAdminControl();
+    loadNewsData();
 </script>
 </body>
 </html>
