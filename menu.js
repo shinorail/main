@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     } catch (e) { console.log("Stamp recording error"); }
 
-    // 3. 共通パーツの生成
+    // 3. 共通パーツの生成（★CSS完全連動版）
     renderParts();
 
     // 4. エフェクトの開始
@@ -30,38 +30,21 @@ document.addEventListener("DOMContentLoaded", function() {
         loadNews(newsBox);
     }
 
-    // --- ハンバーガーメニューの動作制御 ---
-    const hamburger = document.getElementById('hamburger');
-    const nav = document.querySelector('nav');
-    if (hamburger && nav) {
-        hamburger.addEventListener('click', function() {
-            hamburger.classList.toggle('active');
-            nav.classList.toggle('active');
-        });
-        nav.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                nav.classList.remove('active');
-            });
-        });
-    }
+    // --- 【修正】ハンバーガーメニューのJS制御を完全に削除（CSS側に一任するため） ---
 
-    // --- 1. スクロール時にヘッダーを固定・小型化 & 2. ページ上部へ戻るボタン ---
+    // --- スクロール時にヘッダーを固定・小型化 & ページ上部へ戻るボタン ---
     const header = document.querySelector('header');
     const topBtn = document.createElement('div');
     topBtn.innerHTML = '▲';
-    // 戻るボタンのスタイル
     topBtn.style.cssText = 'position:fixed;bottom:20px;right:20px;width:45px;height:45px;background:#004da0;color:#fff;display:none;align-items:center;justify-content:center;border-radius:50%;cursor:pointer;z-index:10001;font-weight:bold;box-shadow:0 3px 10px rgba(0,0,0,0.3);transition:0.3s;';
     document.body.appendChild(topBtn);
 
     window.addEventListener('scroll', () => {
         if (window.scrollY > 150) {
-            // スクロール時のヘッダー小型化
             header.style.padding = '5px 0';
             header.style.boxShadow = '0 2px 10px rgba(0,0,0,0.3)';
             topBtn.style.display = 'flex';
         } else {
-            // 通常時のヘッダー
             header.style.padding = '15px 0';
             header.style.boxShadow = 'none';
             topBtn.style.display = 'none';
@@ -78,23 +61,28 @@ function renderParts() {
     if (header) {
         // ヘッダーを上部固定に設定
         header.style.cssText = "position:fixed;top:0;left:0;width:100%;z-index:10000;background:#004da0;transition:all 0.3s ease;padding:15px 0;";
+        
+        // ★【最重要】CSSだけで動くように、隠しチェックボックス(input)とlabel構造をJSから出力します
         header.innerHTML = `
             <div class="header-inner" style="max-width:1000px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:0 20px;">
                 <h1 style="margin:0;font-size:1.1em;color:white;letter-spacing:1px;">篠ノ井乗務区 公式サイト</h1>
-                <div class="hamburger" id="hamburger">
+                
+                <input type="checkbox" id="nav-toggle" class="nav-toggle-checkbox">
+                
+                <label for="nav-toggle" class="hamburger">
                     <span></span>
                     <span></span>
                     <span></span>
-                </div>
+                </label>
             </div>`;
     }
 
     const nav = document.querySelector('nav');
     if (nav) {
-        // --- 3. 「運用情報」へのショートカット通知（バッジ） ---
-        // メニュー項目の「Train-News」や「お知らせ」に更新マークを付与
+        // ★【最重要】nav要素にクラス名「nav-menu」を付与し、内部構造を整理
+        nav.className = "nav-menu";
         nav.innerHTML = `
-            <ul>
+            <ul class="nav-list">
                 <li><a href="index.html">ホーム</a></li>
                 <li><a href="news.html">お知らせ <span style="display:inline-block;width:8px;height:8px;background:#ff3b30;border-radius:50%;margin-left:5px;vertical-align:middle;"></span></a></li>
                 <li><a href="train-news.html">Train-News</a></li>
@@ -107,6 +95,12 @@ function renderParts() {
                 <li><a href="links.html">SNS/外部リンク</a></li>
                 <li><a href="renkei.html" style="color: #ffcc00; font-weight: bold;">連携パーツ配布</a></li>
             </ul>`;
+            
+        // JSでheaderの中にnavを移動（CSSの「~」間接セレクタを通すための必須処理）
+        const headerInner = document.querySelector('.header-inner');
+        if (headerInner) {
+            headerInner.appendChild(nav);
+        }
     }
 
     const footer = document.querySelector('footer');
