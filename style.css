@@ -17,7 +17,7 @@ header {
 }
 
 .header-inner {
-    max-width: 900px;
+    max-width: 1000px; /* メニュー数が多いため少し広げました */
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
@@ -27,12 +27,13 @@ header {
 
 header h1 {
     margin: 0;
-    font-size: 1.6em;
+    font-size: 1.5em;
     letter-spacing: 2px;
+    white-space: nowrap; /* タイトルの強制改行を防ぐ */
 }
 
 /* ==========================================================================
-   2. ナビゲーション（PC基準：横並び）
+   2. ナビゲーション（PC基準：ヘッダー内に綺麗に横並び）
    ========================================================================== */
 /* チェックボックス自体は完全に非表示 */
 .nav-toggle-checkbox {
@@ -45,20 +46,28 @@ header h1 {
 }
 
 .nav-list {
-    list-style: none;
+    list-style: none; /* 【バグ修正】黒丸を完全に消去 */
     margin: 0;
     padding: 0;
     display: flex;
-    gap: 20px;
+    flex-wrap: wrap;  /* 【バグ修正】メニューが多いのでPCでも溢れたら折り返す */
+    gap: 10px 15px;   /* 縦横の間隔 */
+    justify-content: flex-end;
+}
+
+.nav-list li {
+    margin: 0;
+    padding: 0;
 }
 
 .nav-list a {
-    color: white;
-    text-decoration: none;
+    color: white; /* 基本は白文字 */
+    text-decoration: none; /* 【バグ修正】下線を消去 */
     font-weight: bold;
-    font-size: 0.95em;
-    padding: 5px 10px;
+    font-size: 0.9em;
+    padding: 5px 8px;
     transition: background-color 0.3s;
+    display: inline-block;
 }
 
 .nav-list a:hover {
@@ -66,7 +75,7 @@ header h1 {
     border-radius: 4px;
 }
 
-/* PCではハンバーガーボタン（label）を非表示 */
+/* PCではハンバーガーボタン（label）を完全に非表示 */
 .hamburger {
     display: none;
     width: 30px;
@@ -97,7 +106,7 @@ header h1 {
    ========================================================================== */
 @media (max-width: 768px) {
     header h1 {
-        font-size: 1.3em;
+        font-size: 1.2em;
     }
 
     /* スマホでハンバーガーボタンを表示 */
@@ -105,14 +114,14 @@ header h1 {
         display: block;
     }
 
-    /* 【エラー修正①】全画面メニューがスクロールを邪魔しないよう初期状態を「非表示」に変更 */
+    /* ナビゲーションを画面外（右側）に完全に隠す */
     .nav-menu {
         position: fixed;
         top: 0;
         right: -100%; 
         width: 100%;
         height: 100vh;
-        background: rgba(0, 43, 91, 0.95); /* 濃い紺色背景 */
+        background: rgba(0, 43, 91, 0.98); /* 濃い紺色背景（後ろが透けないよう濃いめに） */
         z-index: 9998;
         transition: right 0.4s ease, opacity 0.4s ease, visibility 0.4s ease;
         display: flex;
@@ -122,11 +131,13 @@ header h1 {
         visibility: hidden;
     }
 
-    /* メニューを縦並びに */
+    /* スマホメニューは縦一列に中央寄せ */
     .nav-list {
         flex-direction: column;
         align-items: center;
-        gap: 30px;
+        justify-content: center;
+        gap: 20px;
+        width: 100%;
     }
 
     .nav-list a {
@@ -134,13 +145,17 @@ header h1 {
         display: block;
         width: 100%;
         text-align: center;
+        padding: 10px;
+    }
+
+    /* 特定のカラー文字がスマホの暗い背景でも見やすくなるよう補正（お好みで変更可） */
+    .nav-list a[style*="color"] {
+        filter: brightness(1.2); 
     }
 
     /* ----------------------------------------------------------------------
-       ★ CSSだけの切り替えマジック（エラー修正箇所）
+       ★ CSSだけの切り替えマジック（チェックが入った時の処理）
        ---------------------------------------------------------------------- */
-    
-    /* 【エラー修正②】~ セレクタが正しく届くよう、HTMLの並び順に依存しない書き方に修正 */
     .nav-toggle-checkbox:checked ~ .nav-menu {
         right: 0;
         opacity: 1;
@@ -159,7 +174,7 @@ header h1 {
 }
 
 /* ==========================================================================
-   4. コンテンツ・装飾パーツ（鉄道アニメーションなど）
+   4. コンテンツ・装飾パーツ（共通設定）
    ========================================================================== */
 .container {
     max-width: 900px;
@@ -186,11 +201,11 @@ h2 {
     font-size: 20px;
 }
 
-/* 【エラー修正③】余計な高さの発生を防ぐため、線路幅と電車の高さを適正化 */
+/* 鉄道アニメーション */
 .loading-rail {
     position: relative;
     width: 100%;
-    height: 24px; 
+    height: 24px;
     border-bottom: 2px solid #666;
     margin: 20px 0;
     overflow: hidden;
@@ -198,7 +213,7 @@ h2 {
 
 .train-icon {
     position: absolute;
-    bottom: 0; /* 線路の真上に固定 */
+    bottom: 0;
     left: -100px;
     width: 60px;
     height: 20px;
@@ -220,18 +235,8 @@ h2 {
 }
 
 .update-list li {
-    opacity: 0;
-    transform: translateY(10px);
-    transition: all 0.5s ease-out;
     border-bottom: 1px dashed #ccc;
     padding: 10px 0;
-}
-
-/* 【エラー修正④】JSなしでも最初からリストが見える、あるいはフェードインを機能させるための暫定対応 */
-.update-list li.show,
-.update-list li {
-    opacity: 1;
-    transform: translateY(0);
 }
 
 @media (max-width: 600px) {
