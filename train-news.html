@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Train-News - 篠ノ井乗務区</title>
-    <link rel="stylesheet" href="style.css">
+    <link class="css-link" rel="stylesheet" href="style.css">
     <style>
         /* レイアウトベース調整 */
         body {
@@ -51,9 +51,14 @@
         
         /* ビューオーバーレイ */
         .viewer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; display: none; flex-direction: column; z-index: 9999; }
-        .viewer-header { background: #004da0; color: white; padding: 10px; display: flex; justify-content: space-between; align-items: center; }
-        .viewer-body { flex: 1; position: relative; background: #525659; overflow: hidden; }
-        #pdf-frame { width: 100%; height: 100%; border: none; }
+        .viewer-header { background: #004da0; color: white; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; }
+        .viewer-body { flex: 1; position: relative; background: #525659; overflow: hidden; display: flex; flex-direction: column; }
+        #pdf-frame { flex: 1; width: 100%; border: none; }
+        
+        /* 【新規追加】下部閉じるボタンエリア */
+        .viewer-footer { background: #333; padding: 12px; text-align: center; box-sizing: border-box; }
+        .v-close-btn-bottom { background: #ff4444; color: white; border: none; padding: 12px 40px; font-size: 1em; font-weight: bold; border-radius: 4px; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.3); transition: background 0.2s; }
+        .v-close-btn-bottom:hover { background: #cc0000; }
         
         /* コメントサイドバー */
         .comment-sidebar { position: absolute; bottom: -100%; left: 0; width: 100%; height: 75%; background: #f9f9f9; transition: 0.3s; z-index: 10000; display: flex; flex-direction: column; box-shadow: 0 -5px 15px rgba(0,0,0,0.2); }
@@ -87,13 +92,17 @@
 
 <div id="viewer" class="viewer-overlay">
     <div class="viewer-header">
-        <h2 id="v-title" style="font-size:0.9em; margin:0;"></h2>
-        <button onclick="closeViewer()" style="background:#ff4444; color:white; border:none; padding:5px 15px; border-radius:3px; cursor:pointer;">閉じる</button>
+        <h2 id="v-title" style="font-size:1em; margin:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:70%;"></h2>
+        <button onclick="closeViewer()" style="background:#ff4444; color:white; border:none; padding:8px 18px; font-weight:bold; border-radius:4px; cursor:pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">閉じる</button>
     </div>
     <div class="viewer-body">
         <iframe id="pdf-frame"></iframe>
-        <button onclick="toggleComments(true)" style="position:absolute; right:0; top:40%; background:#004da0; color:white; border:none; padding:15px 8px; writing-mode:vertical-rl; border-radius:5px 0 0 5px; cursor:pointer; font-weight:bold;">💬 コメント</button>
+        <button onclick="toggleComments(true)" style="position:absolute; right:0; top:35%; background:#004da0; color:white; border:none; padding:15px 8px; writing-mode:vertical-rl; border-radius:5px 0 0 5px; cursor:pointer; font-weight:bold; box-shadow: -2px 0 5px rgba(0,0,0,0.2);">💬 コメント</button>
         
+        <div class="viewer-footer">
+            <button onclick="closeViewer()" class="v-close-btn-bottom">📰 記事を閉じて一覧に戻る</button>
+        </div>
+
         <div id="comment-area" class="comment-sidebar">
             <div onclick="toggleComments(false)" style="background:#ddd; text-align:center; padding:10px; font-weight:bold; cursor:pointer;">▼ 閉じる</div>
             <div id="comment-list" class="comment-list"></div>
@@ -182,8 +191,10 @@
     }
 
     function openViewer(url, id, title, isLocked) {
+        // 会員限定フラグが立っており、かつlocalStorageにログイン情報がない場合
         if (isLocked && !localStorage.getItem("userEmail")) { 
-            alert("会員限定記事です。ログインしてください。"); 
+            alert("会員限定記事です。閲覧するにはログインしてください。"); 
+            window.location.href = "login.html"; // 作成済みのlogin.htmlへ自動遷移
             return; 
         }
         document.getElementById('v-title').innerText = `${id ? '第'+id+'号' : '号外'} ${title}`;
