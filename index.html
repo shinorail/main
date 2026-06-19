@@ -149,7 +149,7 @@
 
 <section class="omikuji-box">
   <h3 id="txt-omikuji-title">【重要】 ホームの御知らせが読み込みエラーで閲覧できなくなっています。</h3>
-  <p id="txt-omikuji-note">解消まで右下のお知らせ一覧からご覧ください<p>
+  <p id="txt-omikuji-note">解消まで右下のお知らせ一覧からご覧ください</p>
 </section>
 
 <p id="txt-welcome">
@@ -243,23 +243,34 @@ async function loadTopNews() {
             return;
         }
 
-        data.reverse().slice(0, 3).forEach(item => {
+        // 読み込み順序の整理と、破損データに対する防御処理
+        const validData = Array.isArray(data) ? data.filter(item => item) : [];
+        
+        validData.reverse().slice(0, 3).forEach(item => {
             const li = document.createElement('li');
             li.className = 'top-news-item';
             
             let tagClass = "";
-            if(item['タグ'] === "更新") tagClass = "tag-red";
-            if(item['タグ'] === "行事") tagClass = "tag-green";
+            const tagValue = item['タグ'] || "重要";
+            if(tagValue === "更新") tagClass = "tag-red";
+            if(tagValue === "行事") tagClass = "tag-green";
+
+            const dateValue = item['日付'] || "";
+            const titleValue = item['見出し'] || "無題";
 
             li.innerHTML = `
-                <span class="info-date" style="color:#888; font-size:12px;">${item['日付'] || ""}</span><br>
-                <span class="info-tag ${tagClass}">${item['タグ'] || "重要"}</span>
-                <span class="info-title"><strong>${item['見出し'] || "無題"}</strong></span>
+                <span class="info-date" style="color:#888; font-size:12px;">${dateValue}</span><br>
+                <span class="info-tag ${tagClass}">${tagValue}</span>
+                <span class="info-title"><strong>${titleValue}</strong></span>
             `;
             list.appendChild(li);
         });
     } catch(e) {
-        if (loading) loading.innerText = "お知らせの読み込みに失敗しました。";
+        // エラー発生時も強制的にローディング表示を消し、部分的に読めたデータを残す安全仕様に変更
+        if (loading) {
+            loading.style.display = 'none';
+        }
+        console.error("お知らせ読み込み中にエラーが発生しました:", e);
     }
 }
 
