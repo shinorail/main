@@ -83,17 +83,17 @@ function renderParts() {
         nav.className = "nav-menu";
         nav.innerHTML = `
             <ul class="nav-list">
-                <li><a href="index.html">ホーム</a></li>
-                <li><a href="news.html">お知らせ <span style="display:inline-block;width:8px;height:8px;background:#ff3b30;border-radius:50%;margin-left:5px;vertical-align:middle;"></span></a></li>
-                <li><a href="train-news.html">Train-News</a></li>
-                <li><a href="ad.html" style="color: #2e7d32; font-weight: bold;">手作り広告</a></li>
-                <li><a href="mission.html#2026">活動理念</a></li>
-                <li><a href="portfolio.html">写真記録</a></li>
-                <li><a href="stamp.html" style="color: #e63946; font-weight: bold;">乗車印帳</a></li>
-                <li><a href="contact.html">お問い合わせ</a></li>
-                <li><a href="faq.html">よくある質問</a></li>
-                <li><a href="links.html">SNS/外部リンク</a></li>
-                <li><a href="renkei.html" style="color: #ffcc00; font-weight: bold;">連携パーツ配布</a></li>
+                <li><a href="index">ホーム</a></li>
+                <li><a href="news">お知らせ <span style="display:inline-block;width:8px;height:8px;background:#ff3b30;border-radius:50%;margin-left:5px;vertical-align:middle;"></span></a></li>
+                <li><a href="train-news">Train-News</a></li>
+                <li><a href="ad" style="color: #2e7d32; font-weight: bold;">手作り広告</a></li>
+                <li><a href="mission#2026">活動理念</a></li>
+                <li><a href="portfolio">写真記録</a></li>
+                <li><a href="stamp" style="color: #e63946; font-weight: bold;">乗車印帳</a></li>
+                <li><a href="contact">お問い合わせ</a></li>
+                <li><a href="faq">よくある質問</a></li>
+                <li><a href="links">SNS/外部リンク</a></li>
+                <li><a href="renkei" style="color: #ffcc00; font-weight: bold;">連携パーツ配布</a></li>
             </ul>`;
             
         // JSでheaderの中にnavを移動（CSSの「~」間接セレクタを通すための必須処理）
