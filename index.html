@@ -227,20 +227,19 @@ function googleTranslateElementInit() {
 /* ===== 定数・設定 ===== */
 const scriptUrl = "https://script.google.com/macros/s/AKfycbwbUTBxVeTkRlAJ1dnBlgcmpGaWI9B0SeMwkwKSwAJYjRDAtVcX67QwA5FcNGaJE9Cq/exec";
 
-/* ===== Markdownお知らせ読み込み機能（最新3件抽出・安全版） ===== */
+/* ===== Markdownお知らせ読み込み機能 ===== */
 async function loadTopNewsFromMD() {
     const list = document.getElementById('top-news-list');
     const loading = document.getElementById('news-loading');
     try {
-        // キャッシュを強制回避するためにタイムスタンプ(?t=...)を付与してnews.mdを読み込む
-        const res = await fetch('news.md?t=' + new Date().getTime());
+        // キャッシュを完全に無視させて最新のnews.mdを取得
+        const res = await fetch('news.md?v=' + Math.random(), { cache: "no-store" });
         if (!res.ok) throw new Error();
         const text = await res.text();
 
+        // 読み込みが成功したら、リストのHTMLを完全に上書きロックする
         if (loading) loading.style.display = 'none';
-        list.innerHTML = "";
-
-        // Markdown内の「## 」(見出し)を基準に分割
+        
         const items = text.split(/^##\s+/m).filter(item => item.trim() !== "");
 
         if (items.length === 0) {
@@ -248,30 +247,31 @@ async function loadTopNewsFromMD() {
             return;
         }
 
-        // 最新の3件を取り出してループ
+        // 以前の古いデータが入る隙をなくすため、ここで完全に空にする
+        let finalHtml = "";
+
         items.slice(0, 3).forEach(item => {
             const lines = item.split('\n');
             const titleLine = lines[0].trim();
             const bodyText = lines.slice(1).join('\n').trim();
 
-            const li = document.createElement('li');
-            li.className = 'top-news-item notranslate';
-            li.setAttribute('translate', 'no'); // 翻訳対象外に指定
-
-            // 翻訳バグによる文字消えを防ぐため、HTML構造をシンプル化
             const titleHtml = marked.parseInline(titleLine);
             const bodyHtml = marked.parse(bodyText);
 
-            li.innerHTML = `
-                <div><strong>${titleHtml}</strong></div>
-                <div style="color:#555; font-size:13px; margin-top:4px;">${bodyHtml}</div>
+            finalHtml += `
+                <li class="top-news-item notranslate" translate="no">
+                    <div><strong>${titleHtml}</strong></div>
+                    <div style="color:#555; font-size:13px; margin-top:4px;">${bodyHtml}</div>
+                </li>
             `;
-            list.appendChild(li);
         });
+
+        // 最後に一括でHTMLを確定（ロック）させる
+        list.innerHTML = finalHtml;
 
     } catch(e) {
         if (loading) loading.style.display = 'none';
-        list.innerHTML = "<li>お知らせの読み込みに失敗しました。news.mdがあるか確認してください。</li>";
+        list.innerHTML = "<li>お知らせの読み込みに失敗しました。</li>";
         console.error(e);
     }
 }
@@ -306,7 +306,7 @@ document.getElementById('survey-form').onsubmit = async (e) => {
     }
 };
 
-/* ===== UI制御機能（アンケート・オフライン） ===== */
+/* ===== UI制御機能 ===== */
 function toggleSurvey(){
   const s=document.getElementById('survey-container');
   s.style.display=s.style.display==='flex'?'none':'flex';
@@ -348,6 +348,7 @@ function showUpdate(waitingSW){
 }
 
 /* ===== 実行 ===== */
+// 古いGAS読み込みの関数（loadTopNews）の残骸は完全に消去しました
 loadTopNewsFromMD();
 </script>
 
