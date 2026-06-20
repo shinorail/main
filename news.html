@@ -7,15 +7,30 @@
     <link rel="stylesheet" href="style.css">
     <style>
         .news-container { background: #fff; padding: 20px; border-radius: 8px; border-top: 4px solid #004da0; }
-        .news-item { border-bottom: 1px dashed #ccc; padding: 15px 0; }
+        .news-item { 
+            border-bottom: 1px dashed #ccc; 
+            padding: 15px 0; 
+            transition: background 0.2s;
+        }
+        /* お知らせ全体を押せるようにマウスカーソルをポインタに変更 */
+        .news-item-link {
+            cursor: pointer;
+        }
+        /* マウスを乗せたときにわかりやすく背景を変える設定 */
+        .news-item-link:hover {
+            background-color: #f7fafc;
+        }
         .news-item:last-child { border-bottom: none; }
         .news-date { color: #666; font-size: 0.85em; margin-bottom: 5px; }
         .news-tag { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 0.75em; color: #fff; margin-right: 10px; font-weight: bold; background: #004da0; }
         .tag-update { background: #d00; }
         .tag-event { background: #080; }
+        .tag-important { background: #ff9800; }
         .news-title { font-weight: bold; color: #333; font-size: 1.1em; }
+        .news-body { font-size: 0.95em; color: #555; margin-top: 8px; line-height: 1.6; }
         #loading { text-align: center; padding: 30px; color: #666; }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
 
@@ -26,49 +41,75 @@
     <div class="news-container">
         <h2>お知らせ一覧</h2>
         <div id="loading">読み込み中...</div>
-        <div id="news-list"></div>
+        <div id="news-list" class="notranslate" translate="no"></div>
     </div>
 </div>
 
 <script src="menu.js"></script>
 <script>
-    // index.htmlと同じGASのURLを入れてください
-    const newsScriptUrl = "https://script.google.com/macros/s/AKfycbwbUTBxVeTkRlAJ1dnBlgcmpGaWI9B0SeMwkwKSwAJYjRDAtVcX67QwA5FcNGaJE9Cq/exec";
-
-    async function loadAllNews() {
+    async function loadAllNewsFromMD() {
         const list = document.getElementById('news-list');
         const loading = document.getElementById('loading');
 
         try {
-            // 重要：URLの末尾に「?sheet=お知らせ」を付けて呼び出す
-            const response = await fetch(newsScriptUrl + "?sheet=お知らせ");
-            const data = await response.json();
-
-            if (data.error) throw new Error(data.error);
+            // キャッシュを回避して最新のnews.mdを取得
+            const response = await fetch('news.md?v=' + new Date().getTime(), { cache: "no-store" });
+            if (!response.ok) throw new Error("ファイルの読み込みに失敗しました");
+            
+            const text = await response.text();
+            
+            // Markdownの「## 」を目印に分割
+            const items = text.split(/^##\s+/m).filter(item => item.trim() !== "");
 
             loading.style.display = 'none';
             list.innerHTML = "";
 
-            if (!data || data.length === 0) {
+            if (items.length === 0) {
                 list.innerHTML = "<p>現在お知らせはありません。</p>";
                 return;
             }
 
-            // 新しい順にすべて表示
-            data.reverse().forEach(item => {
+            items.forEach(item => {
+                const lines = item.split('\n');
+                const headerLine = lines[0].trim(); // 例: "2026/01/06 【お知らせ】 新年のご挨拶"
+                const bodyText = lines.slice(1).join('\n').trim();
+
+                // 日付、タグ、見出しを分解
+                const match = headerLine.match(/^([\d/]+)\s+【(.+?)】\s+(.+)$/);
+                if (!match) return;
+
+                const [_, date, tag, title] = match;
+
                 const div = document.createElement('div');
                 div.className = 'news-item';
 
+                // タグのスタイル設定
                 let tagClass = "";
-                let tagName = item['タグ'] || "重要";
-                if(tagName === "更新") tagClass = "tag-update";
-                if(tagName === "行事") tagClass = "tag-event";
+                if (tag === "更新" || tag === "アップデート") tagClass = "tag-update";
+                if (tag === "行事") tagClass = "tag-event";
+                if (tag === "重要") tagClass = "tag-important";
+
+                // 自動移動先の判定処理（本文に含まれる特定のHTMLを検知）
+                let targetUrl = "";
+                if (bodyText.includes("ayumi.html")) targetUrl = "ayumi.html";
+                else if (bodyText.includes("contact.html")) targetUrl = "contact.html";
+
+                // 移動先が見つかった場合はクリック処理を設定
+                if (targetUrl) {
+                    div.classList.add('news-item-link');
+                    div.onclick = () => {
+                        window.location.href = targetUrl;
+                    };
+                }
 
                 div.innerHTML = `
-                    <div class="news-date">${item['日付'] || ""}</div>
+                    <div class="news-date">${date}</div>
                     <div>
-                        <span class="news-tag ${tagClass}">${tagName}</span>
-                        <span class="news-title">${item['見出し'] || "無題"}</span>
+                        <span class="news-tag ${tagClass}">${tag}</span>
+                        <span class="news-title">${title}</span>
+                    </div>
+                    <div class="news-body">
+                        ${marked.parse(bodyText)}
                     </div>
                 `;
                 list.appendChild(div);
@@ -79,7 +120,7 @@
         }
     }
 
-    loadAllNews();
+    loadAllNewsFromMD();
 </script>
 </body>
 </html>
