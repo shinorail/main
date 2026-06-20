@@ -138,8 +138,7 @@
 <div class="container">
     <div class="page-header-line">
         <h2>Train-News 一覧</h2>
-        <div id="page-auth-action">
-            </div>
+        <div id="page-auth-action"></div>
     </div>
     
     <div id="loading" style="text-align:center; padding:40px;">データを読み込み中...</div>
@@ -153,6 +152,9 @@
     </div>
     <div class="viewer-body">
         <iframe id="pdf-frame"></iframe>
+
+        <div id="html-content" style="display:none; flex:1; background:#fff; color:#333; padding:20px; overflow-y:auto; box-sizing:border-box; line-height:1.6;"></div>
+
         <button onclick="toggleComments(true)" style="position:absolute; right:0; top:35%; background:#004da0; color:white; border:none; padding:15px 8px; writing-mode:vertical-rl; border-radius:5px 0 0 5px; cursor:pointer; font-weight:bold; box-shadow: -2px 0 5px rgba(0,0,0,0.2);">💬 コメント</button>
         
         <div class="viewer-footer">
@@ -200,7 +202,7 @@
             uNameEl.value = name;
         }
 
-        // 【新規追加】ページ内ログイン・ログアウト切り替えボタンの動的配置
+        // ページ内ログイン・ログアウト切り替えボタンの動的配置
         const authActionArea = document.getElementById("page-auth-action");
         if (authActionArea) {
             if (email) {
@@ -228,24 +230,46 @@
         localStorage.setItem("favNews", JSON.stringify(favs));
     }
 
+    // スプレッドシートの過去ログと新管理用JSONデータをドッキングさせて取得
     async function loadNewsData() {
         try {
-            const res = await fetch(newsScriptUrl + "?sheet=新聞");
-            const data = await res.json();
-            if (!Array.isArray(data)) throw new Error("Format Error");
+            // 1. 従来のスプレッドシート（GAS）からデータを取得
+            let spreadsheetData = [];
+            try {
+                const resSpreadsheet = await fetch(newsScriptUrl + "?sheet=新聞");
+                spreadsheetData = await resSpreadsheet.json();
+                if (!Array.isArray(spreadsheetData)) spreadsheetData = [];
+            } catch(e) {
+                console.error("スプレッドシートのデータ読込失敗:", e);
+            }
+
+            // 2. 新方式のフォルダ管理用インデックスJSONからデータを取得
+            let localJsonData = [];
+            try {
+                const resJson = await fetch("news-index.json");
+                localJsonData = await resJson.json();
+                if (!Array.isArray(localJsonData)) localJsonData = [];
+            } catch(e) {
+                console.error("新着JSONファイルの読込失敗(未作成の場合は問題ありません):", e);
+            }
+
+            // 3. 過去ログ（スプレッドシート）を下に、新しいデータ（JSON）を上にドッキング
+            const allData = spreadsheetData.concat(localJsonData);
 
             document.getElementById('loading').style.display = 'none';
             const list = document.getElementById('news-list');
             const favs = JSON.parse(localStorage.getItem("favNews") || "[]");
 
-            data.reverse().forEach(item => {
+            // 最新順（逆順）にループしてカードを生成
+            allData.reverse().forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'news-card';
                 const isLocked = item.isMemberOnly || item['限定'] === true;
                 const lockLabel = isLocked ? '<span style="color:red; font-size:0.8em; font-weight:bold;"> [会員限定]</span>' : '';
                 const isFaved = favs.some(f => f.id == item['号数']) ? "active" : "";
 
-                card.onclick = () => openViewer(item.URL, item['号数'], item['見出し'], isLocked);
+                // 引数にオブジェクトをそのまま渡せるよう修正
+                card.onclick = () => openViewer(item, isLocked);
                 card.innerHTML = `
                     <button class="fav-btn ${isFaved}" onclick="toggleFavorite(event, '${item['号数']}', '${item['見出し']}')">⭐</button>
                     <h3>${item['号数'] ? '第 '+item['号数']+' 号' : '号外'}${lockLabel}</h3>
@@ -254,24 +278,67 @@
                 `;
                 list.appendChild(card);
             });
-        } catch(e) { document.getElementById('loading').innerText = "エラー：データ取得に失敗しました。"; }
+        } catch(e) { 
+            document.getElementById('loading').innerText = "エラー：データ取得に失敗しました。"; 
+        }
     }
 
-    function openViewer(url, id, title, isLocked) {
+    // ビューアオープン（PDF / 新フォルダ内HTMLの自動判別対応）
+    async function openViewer(item, isLocked) {
         if (isLocked && !localStorage.getItem("userEmail")) { 
             alert("会員限定記事です。閲覧するにはログインしてください。"); 
             window.location.href = "login.html";
             return; 
         }
+
+        const id = item['号数'] || "";
+        const title = item['見出し'] || "無題";
         document.getElementById('v-title').innerText = `${id ? '第'+id+'号' : '号外'} ${title}`;
-        document.getElementById('pdf-frame').src = url.replace('/view?usp=sharing', '/preview');
+
+        const pdfFrame = document.getElementById('pdf-frame');
+        const htmlContent = document.getElementById('html-content');
+
+        // 【新方式】独立したHTMLファイルパスが指定されている場合
+        if (item.isHtmlFile && item.htmlPath) {
+            pdfFrame.style.display = 'none';
+            htmlContent.style.display = 'block';
+            htmlContent.innerHTML = "<p style='color:#999; padding:20px;'>記事を読み込み中...</p>";
+
+            try {
+                // 指定されたHTMLファイルを非同期読込
+                const res = await fetch(item.htmlPath);
+                if (!res.ok) throw new Error();
+                const htmlText = await res.text();
+                htmlContent.innerHTML = htmlText;
+            } catch (e) {
+                htmlContent.innerHTML = "<p style='color:red; padding:20px;'>記事ファイルの読み込みに失敗しました。</p>";
+            }
+        } 
+        // 【従来方式】Googleスプレッドシートデータ（PDF表示）の場合
+        else {
+            htmlContent.style.display = 'none';
+            pdfFrame.style.display = 'block';
+            if (item.URL) {
+                pdfFrame.src = item.URL.replace('/view?usp=sharing', '/preview');
+            } else {
+                pdfFrame.src = "";
+            }
+        }
+
         document.getElementById('viewer').style.display = 'flex';
         loadComments(id);
     }
 
-    function closeViewer() { document.getElementById('viewer').style.display = 'none'; document.getElementById('pdf-frame').src = ""; }
+    // ビューアクローズ時に表示内容をリセット
+    function closeViewer() { 
+        document.getElementById('viewer').style.display = 'none'; 
+        document.getElementById('pdf-frame').src = ""; 
+        document.getElementById('html-content').innerHTML = "";
+    }
+
     function toggleComments(show) { document.getElementById('comment-area').classList.toggle('open', show); }
 
+    // コメント取得（GAS連動維持）
     async function loadComments(id) {
         const list = document.getElementById('comment-list');
         list.innerHTML = "<small>読込中...</small>";
@@ -289,6 +356,7 @@
         } catch(e) { list.innerHTML = "<small>読み込み失敗</small>"; }
     }
 
+    // コメント送信（GAS連動維持）
     document.getElementById('comment-form').onsubmit = async (e) => {
         e.preventDefault();
         const btn = document.getElementById('comment-submit');
