@@ -340,11 +340,10 @@ if ('serviceWorker' in navigator) {
 function showUpdate(waitingSW){
   if(window.innerWidth >= 768) return;
   const t = document.getElementById('update-toast');
-  if(t) t.style.display = 'block';
-  setTimeout(() => {
-    if(waitingSW) waitingSW.postMessage({action: 'skipWaiting'});
-    location.reload();
-  }, 2000);
+  if(t) t.style.display = 'block'; // 「新しい更新があります」の通知を出すだけ
+
+  // バックグラウンドで裏側だけ最新の状態に更新する
+  if(waitingSW) waitingSW.postMessage({action: 'skipWaiting'});
 }
 
 /* ===== 実行 ===== */
