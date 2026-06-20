@@ -60,9 +60,7 @@
 /* ===== お知らせ表示用スタイル ===== */
 #top-news-list { list-style: none; padding: 0; }
 .top-news-item { border-bottom: 1px solid #eee; padding: 10px 0; font-size: 14px; }
-/* マークダウン内から日付やリストを綺麗に抜粋するための簡易スタイル */
 .top-news-item strong { color: #333; }
-.top-news-item em { font-style: normal; font-size: 11px; background: #004da0; color: #fff; padding: 2px 6px; border-radius: 3px; margin-right: 5px; }
 
 /* ===== アンケート ===== */
 .survey-toggle{
@@ -166,7 +164,7 @@
 <section style="margin-top:40px">
   <h3>最新のお知らせ</h3>
   <p id="news-loading">読み込み中...</p>
-  <ul id="top-news-list" class="notranslate"></ul>
+  <ul id="top-news-list" class="notranslate" translate="no"></ul>
   <div style="text-align:right;font-size:13px">
     <a href="news.html">お知らせ一覧へ</a>
   </div>
@@ -229,20 +227,20 @@ function googleTranslateElementInit() {
 /* ===== 定数・設定 ===== */
 const scriptUrl = "https://script.google.com/macros/s/AKfycbwbUTBxVeTkRlAJ1dnBlgcmpGaWI9B0SeMwkwKSwAJYjRDAtVcX67QwA5FcNGaJE9Cq/exec";
 
-/* ===== Markdownお知らせ読み込み機能（最新3件抽出） ===== */
+/* ===== Markdownお知らせ読み込み機能（最新3件抽出・安全版） ===== */
 async function loadTopNewsFromMD() {
     const list = document.getElementById('top-news-list');
     const loading = document.getElementById('news-loading');
     try {
-        // news.mdファイルを読み込む
-        const res = await fetch('news.md');
+        // キャッシュを強制回避するためにタイムスタンプ(?t=...)を付与してnews.mdを読み込む
+        const res = await fetch('news.md?t=' + new Date().getTime());
         if (!res.ok) throw new Error();
         const text = await res.text();
 
         if (loading) loading.style.display = 'none';
         list.innerHTML = "";
 
-        // Markdown内の「## 」(見出し)を基準に分割してお知らせを1件ずつに分ける
+        // Markdown内の「## 」(見出し)を基準に分割
         const items = text.split(/^##\s+/m).filter(item => item.trim() !== "");
 
         if (items.length === 0) {
@@ -253,18 +251,20 @@ async function loadTopNewsFromMD() {
         // 最新の3件を取り出してループ
         items.slice(0, 3).forEach(item => {
             const lines = item.split('\n');
-            const titleLine = lines[0].trim(); // 見出し部分
-
-            // 残りの本文
+            const titleLine = lines[0].trim();
             const bodyText = lines.slice(1).join('\n').trim();
 
             const li = document.createElement('li');
-            li.className = 'top-news-item';
-            
-            // 見出しと本文をHTMLにパースしてトップに表示
+            li.className = 'top-news-item notranslate';
+            li.setAttribute('translate', 'no'); // 翻訳対象外に指定
+
+            // 翻訳バグによる文字消えを防ぐため、HTML構造をシンプル化
+            const titleHtml = marked.parseInline(titleLine);
+            const bodyHtml = marked.parse(bodyText);
+
             li.innerHTML = `
-                <div><strong>${marked.parseInline(titleLine)}</strong></div>
-                <div style="color:#555; font-size:13px; margin-top:4px;">${marked.parse(bodyText)}</div>
+                <div><strong>${titleHtml}</strong></div>
+                <div style="color:#555; font-size:13px; margin-top:4px;">${bodyHtml}</div>
             `;
             list.appendChild(li);
         });
@@ -276,7 +276,7 @@ async function loadTopNewsFromMD() {
     }
 }
 
-/* ===== アンケート送信機能 (GASへのPOSTは維持) ===== */
+/* ===== アンケート送信機能 ===== */
 document.getElementById('survey-form').onsubmit = async (e) => {
     e.preventDefault();
     const btn = document.getElementById('survey-btn');
@@ -348,7 +348,7 @@ function showUpdate(waitingSW){
 }
 
 /* ===== 実行 ===== */
-loadTopNewsFromMD(); // Markdownからの読み込みを実行
+loadTopNewsFromMD();
 </script>
 
 </body>
