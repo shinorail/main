@@ -41,6 +41,7 @@
   border-left:5px solid #2196f3;
 }
 
+/* リンクカードのグリッド配置 */
 .link-grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
@@ -57,13 +58,13 @@
   border-radius:5px;
 }
 
-/* ===== お知らせ表示用スタイル ===== */
+/* ===== Markdownお知らせ表示用専用スタイル ===== */
 #top-news-container { background: #fff; border-radius: 4px; }
 .top-news-item { border-bottom: 1px solid #eee; padding: 12px 0; font-size: 14px; line-height: 1.6; color: #333; }
 .top-news-item strong { color: #111; font-size: 14px; }
 .top-news-item p { margin: 4px 0 0 0; color: #555; font-size: 13px; }
 
-/* ===== アンケート ===== */
+/* ===== アンケート用スタイル ===== */
 .survey-toggle{
   position:fixed;
   bottom:20px;
@@ -122,7 +123,7 @@
 }
 #msg { width:100%; box-sizing:border-box; margin-bottom:10px; padding:8px; }
 
-/* ===== 更新通知 ===== */
+/* ===== 更新通知トースト ===== */
 .update-toast{
   position:fixed;
   bottom:20px;
@@ -230,18 +231,19 @@ function googleTranslateElementInit() {
 /* ===== 定数・設定 ===== */
 const scriptUrl = "https://script.google.com/macros/s/AKfycbwbUTBxVeTkRlAJ1dnBlgcmpGaWI9B0SeMwkwKSwAJYjRDAtVcX67QwA5FcNGaJE9Cq/exec";
 
-/* ===== Markdownお知らせ読み込み機能 ===== */
+/* ===== 1. Markdownお知らせ読み込み機能 ===== */
 async function loadTopNewsFromMD() {
     const container = document.getElementById('top-news-container');
     const loading = document.getElementById('news-loading');
     try {
-        // 毎回完全に新規リクエストとして取得させ、古いPWAキャッシュをすり抜ける
+        // PWAやブラウザの古いキャッシュをすり抜けるため毎回新規クエリを付与
         const res = await fetch('news.md?nocache=' + new Date().getTime(), { cache: "no-store" });
         if (!res.ok) throw new Error();
         const text = await res.text();
 
         if (loading) loading.style.display = 'none';
 
+        // Markdownの「## 」を基準に区切って配列化
         const items = text.split(/^##\s+/m).filter(item => item.trim() !== "");
 
         if (items.length === 0) {
@@ -251,7 +253,7 @@ async function loadTopNewsFromMD() {
 
         let finalHtml = "";
 
-        // 最新の3件を取り出して、完全に新しいHTML構造を構築
+        // 最新の3件をループ処理して安全な新しいHTMLとして合成
         items.slice(0, 3).forEach(item => {
             const lines = item.split('\n');
             const titleLine = lines[0].trim();
@@ -268,7 +270,7 @@ async function loadTopNewsFromMD() {
             `;
         });
 
-        // 枠ごと中身を完全上書き（これで古い残骸は消滅します）
+        // 最後に一括でコンテナに流し込み（古い別スクリプトからの上書き干渉をこれで完全ロック）
         container.innerHTML = finalHtml;
 
     } catch(e) {
@@ -278,7 +280,7 @@ async function loadTopNewsFromMD() {
     }
 }
 
-/* ===== アンケート送信機能 ===== */
+/* ===== 2. アンケート送信機能（GASへの連携維持） ===== */
 document.getElementById('survey-form').onsubmit = async (e) => {
     e.preventDefault();
     const btn = document.getElementById('survey-btn');
@@ -308,7 +310,7 @@ document.getElementById('survey-form').onsubmit = async (e) => {
     }
 };
 
-/* ===== UI制御機能 ===== */
+/* ===== 3. UI表示制御（アンケートウィンドウ） ===== */
 function toggleSurvey(){
   const s=document.getElementById('survey-container');
   s.style.display=s.style.display==='flex'?'none':'flex';
@@ -322,7 +324,7 @@ window.addEventListener('online',surveyVisibility);
 window.addEventListener('offline',surveyVisibility);
 surveyVisibility();
 
-/* ===== PWA・Service Worker関連 ===== */
+/* ===== 4. PWA・Service Worker関連（修正済・リロード無限ループ防止） ===== */
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./service-worker.js').then(reg => {
@@ -339,14 +341,15 @@ if ('serviceWorker' in navigator) {
   });
 }
 
+// 自動リロードさせず、通知表示とバックグラウンド移行のみを実行する安全な関数
 function showUpdate(waitingSW){
   if(window.innerWidth >= 768) return;
   const t = document.getElementById('update-toast');
-  if(t) t.style.display = 'block'; // トースト表示のみ実行（勝手なリロードはさせない）
+  if(t) t.style.display = 'block'; 
   if(waitingSW) waitingSW.postMessage({action: 'skipWaiting'});
 }
 
-/* ===== 実行 ===== */
+/* ===== 5. ページの初期実行処理 ===== */
 loadTopNewsFromMD();
 </script>
 
