@@ -1,37 +1,57 @@
 <!DOCTYPE html>
-
-<html lang="ja"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>運行・メンテナンス情報 | 篠ノ井乗務区</title> <style> body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; background-color: #f4f4f4; text-align: center; } .container { background: white; padding: 40px; border-radius: 15px; shadow: 0 4px 10px rgba(0,0,0,0.1); max-width: 500px; width: 90%; } .icon { font-size: 4em; margin-bottom: 10px; } h1 { margin: 10px 0; } #msg { line-height: 1.6; margin: 20px 0; } .btn { display: inline-block; padding: 10px 20px; background: #3b887a; color: white; text-decoration: none; border-radius: 5px; } /* 状態別スタイル */ .mode-normal h1 { color: #28a745; } .mode-maintenance h1 { color: #d9534f; } </style> </head> <body class="mode-normal"> <div class="container"> <div id="status-icon" class="icon">✅</div> <h1 id="status-title">サービス稼働中</h1> <p id="msg">情報を読み込み中...</p> <div id="update-time" style="font-size: 0.8em; color: #999; margin-bottom: 20px;"></div> <a href="index.html" class="btn">トップページへ</a> </div>
-
-<script>
-    async function fetchStatus() {
-        try {
-            // status.md を取得
-            const response = await fetch('status.md');
-            const text = await response.text();
-            
-            // シンプルな解析
-            const isMaintenance = text.includes('status: maintenance');
-            const msgMatch = text.match(/message: (.*)/);
-            const dateMatch = text.match(/updated: (.*)/);
-            
-            const msg = msgMatch ? msgMatch[1] : "現在メンテナンス情報はございません。";
-            const date = dateMatch ? dateMatch[1] : "";
-
-            if (isMaintenance) {
-                document.body.className = 'mode-maintenance';
-                document.getElementById('status-icon').innerText = '🚧';
-                document.getElementById('status-title').innerText = 'メンテナンス中';
-            } else {
-                document.body.className = 'mode-normal';
-                document.getElementById('status-icon').innerText = '✅';
-                document.getElementById('status-title').innerText = 'サービス稼働中';
-            }
-            document.getElementById('msg').innerText = msg;
-            document.getElementById('update-time').innerText = "最終更新: " + date;
-        } catch (e) {
-            document.getElementById('msg').innerText = "情報の取得に失敗しました。";
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>メンテナンスのお知らせ</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
         }
-    }
-    fetchStatus();
-</script>
-</body> </html>
+        .container {
+            text-align: center;
+            padding: 40px 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            max-width: 500px;
+            width: 100%;
+        }
+        h1 { font-size: 24px; color: #d9534f; margin-bottom: 20px; }
+        p { color: #555; font-size: 15px; line-height: 1.6; }
+        .info-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid #0066cc;
+            padding: 15px;
+            margin: 25px 0;
+            text-align: left;
+        }
+        .info-title { font-weight: bold; color: #333; margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ただいまメンテナンス中です</h1>
+        <p>いつもサイトをご覧いただきありがとうございます。<br>ただいま、より快適にご利用いただくためのアップデート作業を行っております。</p>
+        
+        <div class="info-box">
+            <div class="info-title">📅 予定日時</div>
+            <div>2026年 〇月 〇日（〇） 00:00 〜 00:00 まで</div>
+            <br>
+            <div class="info-title">🛠️ 更新内容</div>
+            <div>デザインのリニューアル、および新コンテンツの追加</div>
+        </div>
+
+        <p>作業が完了するまで、いましばらくお待ちください。</p>
+    </div>
+</body>
+</html>
