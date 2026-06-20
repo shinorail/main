@@ -60,9 +60,9 @@
 /* ===== お知らせ表示用スタイル ===== */
 #top-news-list { list-style: none; padding: 0; }
 .top-news-item { border-bottom: 1px solid #eee; padding: 10px 0; font-size: 14px; }
-.info-tag { font-size: 10px; padding: 2px 6px; border-radius: 3px; color: #fff; margin-right: 8px; background: #004da0; }
-.tag-red { background: #d00; }
-.tag-green { background: #080; }
+/* マークダウン内から日付やリストを綺麗に抜粋するための簡易スタイル */
+.top-news-item strong { color: #333; }
+.top-news-item em { font-style: normal; font-size: 11px; background: #004da0; color: #fff; padding: 2px 6px; border-radius: 3px; margin-right: 5px; }
 
 /* ===== アンケート ===== */
 .survey-toggle{
@@ -138,6 +138,8 @@
   z-index:2000;
 }
 </style>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 
 <body>
@@ -149,7 +151,7 @@
 
 <section class="omikuji-box">
 <h3 id="txt-omikuji-title">【修正完了】ホームのお知らせ不具合が解消されました。</h3>
-<p id="txt-omikuji-note">読み込みエラーの不具合が修正され、現在は正常に閲覧いただけます。ご不便をおかけいたしました。</p>
+<p id="txt-omikuji-note">読み込みエラーの不具合が修正され、今後はMarkdown形式で通常通り閲覧いただけます。</p>
 </section>
 
 <p id="txt-welcome">
@@ -164,9 +166,7 @@
 <section style="margin-top:40px">
   <h3>最新のお知らせ</h3>
   <p id="news-loading">読み込み中...</p>
-  <ul id="top-news-list" class="notranslate">
-    <li>現在新しいお知らせはありません。</li>
-  </ul>
+  <ul id="top-news-list" class="notranslate"></ul>
   <div style="text-align:right;font-size:13px">
     <a href="news.html">お知らせ一覧へ</a>
   </div>
@@ -229,59 +229,54 @@ function googleTranslateElementInit() {
 /* ===== 定数・設定 ===== */
 const scriptUrl = "https://script.google.com/macros/s/AKfycbwbUTBxVeTkRlAJ1dnBlgcmpGaWI9B0SeMwkwKSwAJYjRDAtVcX67QwA5FcNGaJE9Cq/exec";
 
-/* ===== お知らせ読み込み機能 ===== */
-async function loadTopNews() {
+/* ===== Markdownお知らせ読み込み機能（最新3件抽出） ===== */
+async function loadTopNewsFromMD() {
     const list = document.getElementById('top-news-list');
     const loading = document.getElementById('news-loading');
     try {
-        const res = await fetch(scriptUrl + "?sheet=お知らせ");
-        const data = await res.json();
-        
+        // news.mdファイルを読み込む
+        const res = await fetch('news.md');
+        if (!res.ok) throw new Error();
+        const text = await res.text();
+
         if (loading) loading.style.display = 'none';
-        
-        // データが壊れている、または配列でない、または空っぽの場合の処理を強化
-        if (!data || !Array.isArray(data) || data.length === 0 || data.error) {
-            list.innerHTML = "<li>現在新しいお知らせはありません。</li>";
-            return;
-        }
-
-        const validData = data.filter(item => item && item['見出し']);
-        
-        if (validData.length === 0) {
-            list.innerHTML = "<li>現在新しいお知らせはありません。</li>";
-            return;
-        }
-
-        // 正常にデータがある場合のみ、リストをリセットして描画
         list.innerHTML = "";
-        
-        validData.reverse().slice(0, 3).forEach(item => {
+
+        // Markdown内の「## 」(見出し)を基準に分割してお知らせを1件ずつに分ける
+        const items = text.split(/^##\s+/m).filter(item => item.trim() !== "");
+
+        if (items.length === 0) {
+            list.innerHTML = "<li>現在新しいお知らせはありません。</li>";
+            return;
+        }
+
+        // 最新の3件を取り出してループ
+        items.slice(0, 3).forEach(item => {
+            const lines = item.split('\n');
+            const titleLine = lines[0].trim(); // 見出し部分
+
+            // 残りの本文
+            const bodyText = lines.slice(1).join('\n').trim();
+
             const li = document.createElement('li');
             li.className = 'top-news-item';
             
-            let tagClass = "";
-            const tagValue = item['タグ'] || "重要";
-            if(tagValue === "更新") tagClass = "tag-red";
-            if(tagValue === "行事") tagClass = "tag-green";
-
-            const dateValue = item['日付'] || "";
-            const titleValue = item['見出し'] || "無題";
-
+            // 見出しと本文をHTMLにパースしてトップに表示
             li.innerHTML = `
-                <span class="info-date" style="color:#888; font-size:12px;">${dateValue}</span><br>
-                <span class="info-tag ${tagClass}">${tagValue}</span>
-                <span class="info-title"><strong>${titleValue}</strong></span>
+                <div><strong>${marked.parseInline(titleLine)}</strong></div>
+                <div style="color:#555; font-size:13px; margin-top:4px;">${marked.parse(bodyText)}</div>
             `;
             list.appendChild(li);
         });
+
     } catch(e) {
         if (loading) loading.style.display = 'none';
-        list.innerHTML = "<li>お知らせの読み込みに失敗しました。</li>";
-        console.error("お知らせ読み込み中にエラーが発生しました:", e);
+        list.innerHTML = "<li>お知らせの読み込みに失敗しました。news.mdがあるか確認してください。</li>";
+        console.error(e);
     }
 }
 
-/* ===== アンケート送信機能 ===== */
+/* ===== アンケート送信機能 (GASへのPOSTは維持) ===== */
 document.getElementById('survey-form').onsubmit = async (e) => {
     e.preventDefault();
     const btn = document.getElementById('survey-btn');
@@ -353,7 +348,7 @@ function showUpdate(waitingSW){
 }
 
 /* ===== 実行 ===== */
-loadTopNews();
+loadTopNewsFromMD(); // Markdownからの読み込みを実行
 </script>
 
 </body>
