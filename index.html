@@ -164,7 +164,9 @@
 <section style="margin-top:40px">
   <h3>最新のお知らせ</h3>
   <p id="news-loading">読み込み中...</p>
-  <ul id="top-news-list" class="notranslate"></ul>
+  <ul id="top-news-list" class="notranslate">
+    <li>現在新しいお知らせはありません。</li>
+  </ul>
   <div style="text-align:right;font-size:13px">
     <a href="news.html">お知らせ一覧へ</a>
   </div>
@@ -236,15 +238,22 @@ async function loadTopNews() {
         const data = await res.json();
         
         if (loading) loading.style.display = 'none';
-        list.innerHTML = "";
         
-        if (!data || data.length === 0 || data.error) {
-            list.innerHTML = "<li>現在お知らせはありません。</li>";
+        // データが壊れている、または配列でない、または空っぽの場合の処理を強化
+        if (!data || !Array.isArray(data) || data.length === 0 || data.error) {
+            list.innerHTML = "<li>現在新しいお知らせはありません。</li>";
             return;
         }
 
-        // 読み込み順序の整理と、破損データに対する防御処理
-        const validData = Array.isArray(data) ? data.filter(item => item) : [];
+        const validData = data.filter(item => item && item['見出し']);
+        
+        if (validData.length === 0) {
+            list.innerHTML = "<li>現在新しいお知らせはありません。</li>";
+            return;
+        }
+
+        // 正常にデータがある場合のみ、リストをリセットして描画
+        list.innerHTML = "";
         
         validData.reverse().slice(0, 3).forEach(item => {
             const li = document.createElement('li');
@@ -266,10 +275,8 @@ async function loadTopNews() {
             list.appendChild(li);
         });
     } catch(e) {
-        // エラー発生時も強制的にローディング表示を消し、部分的に読めたデータを残す安全仕様に変更
-        if (loading) {
-            loading.style.display = 'none';
-        }
+        if (loading) loading.style.display = 'none';
+        list.innerHTML = "<li>お知らせの読み込みに失敗しました。</li>";
         console.error("お知らせ読み込み中にエラーが発生しました:", e);
     }
 }
