@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>TEMU風フル機能EC（index.html一枚）</title>
+<title>TEMU風フル機能EC（全部盛り）</title>
 <style>
   body {
     background: #ffefdb;
@@ -20,9 +20,6 @@
     font-size: 28px;
     font-weight: bold;
   }
-  .nav {
-    margin-top: 5px;
-  }
   .nav button {
     margin: 0 5px;
     padding: 5px 10px;
@@ -34,12 +31,21 @@
   .nav button:hover {
     background: #ffe08a;
   }
-  /* ログイン */
+  /* ログインカード */
   #login-area {
-    background: #fff7e6;
+    background: linear-gradient(135deg, #ff9a00, #ff3b3b);
+    color: white;
     padding: 10px;
     margin: 10px;
-    border-radius: 10px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px #ff3b3b;
+    display: inline-block;
+  }
+  #login-area input {
+    border-radius: 5px;
+    border: none;
+    padding: 5px;
+    margin: 3px;
   }
   #bonus {
     background: gold;
@@ -65,30 +71,30 @@
     margin: 10px auto;
     box-shadow: 0 0 30px gold;
   }
-  .spin-btn {
+  .spin-btn, .gacha-btn, .otoshidama-btn {
     background: #ff3b3b;
     color: white;
-    padding: 10px 20px;
+    padding: 8px 16px;
     border: none;
     border-radius: 10px;
-    font-size: 18px;
+    font-size: 16px;
     cursor: pointer;
     box-shadow: 0 0 10px #ff3b3b;
-    animation: pulse 1.5s infinite;
+    margin: 5px;
   }
+  .spin-btn { animation: pulse 1.5s infinite; }
   @keyframes pulse {
     0% { transform: scale(1); box-shadow: 0 0 10px #ff3b3b; }
     50% { transform: scale(1.05); box-shadow: 0 0 20px #ff9a00; }
     100% { transform: scale(1); box-shadow: 0 0 10px #ff3b3b; }
   }
-  /* Canvasエフェクト */
   #fxCanvas {
     display: block;
     margin: 10px auto;
     background: transparent;
   }
   /* 商品一覧 */
-  #product-list {
+  #product-list, #recommend-list {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -130,7 +136,6 @@
     font-size: 11px;
     color: #ff3b3b;
   }
-  /* 商品詳細 */
   #detail {
     display: none;
     background: white;
@@ -139,14 +144,12 @@
     border-radius: 10px;
     box-shadow: 0 0 20px #ff9a00;
   }
-  /* カート */
   #cart {
     background: #fff7e6;
     padding: 15px;
     margin: 10px;
     border-radius: 10px;
   }
-  /* 注文ページ */
   #order {
     display: none;
     background: #ffe8c2;
@@ -158,12 +161,18 @@
     padding: 5px;
     margin: 3px;
   }
+  #missions, #ranking {
+    background: #fff7e6;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+  }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">🔥TEMU風フル機能EC🔥</div>
+  <div class="logo">🔥TEMU風フル機能EC（全部盛り）🔥</div>
   <div class="nav">
     <button onclick="showSection('main')">ホーム</button>
     <button onclick="showSection('order')">注文ページ</button>
@@ -173,20 +182,27 @@
 <div id="login-area">
   <div>ログインID: <input id="login-id" placeholder="user1"></div>
   <div>パスワード: <input id="login-pass" type="password" placeholder="pass1"></div>
-  <button onclick="login()">ログイン</button>
-  <span id="login-status"></span>
+  <button onclick="login()">入場する🔥</button>
+  <div id="login-status"></div>
 </div>
 
 <div id="bonus"></div>
 
-<!-- ルーレット＋Canvasエフェクト -->
+<div id="missions"></div>
+<div id="ranking"></div>
+
 <div id="main-section">
   <div id="wheel"></div>
-  <button class="spin-btn" onclick="spin()">ルーレットを回す</button>
+  <button class="spin-btn" onclick="spin()">ルーレット</button>
+  <button class="gacha-btn" onclick="gacha()">ガチャ</button>
+  <button class="otoshidama-btn" onclick="otoshidama()">お年玉</button>
   <canvas id="fxCanvas" width="300" height="150"></canvas>
 
   <h2>おすすめ商品</h2>
   <div id="product-list"></div>
+
+  <h3>AIおすすめ</h3>
+  <div id="recommend-list"></div>
 
   <div id="detail"></div>
 
@@ -194,11 +210,16 @@
     <h3>🛒カート</h3>
     <div id="cart-items"></div>
     <p id="cart-total"></p>
+    <div>
+      クーポンコード: <input id="coupon" placeholder="OFF10">
+      ポイント使用: <input id="use-points" type="number" min="0">
+      <button onclick="applyDiscount()">割引適用</button>
+      <p id="discount-info"></p>
+    </div>
     <button onclick="goOrder()">この内容で注文ページへ</button>
   </div>
 </div>
 
-<!-- 注文ページ -->
 <div id="order">
   <h3>📦注文確認</h3>
   <div id="order-items"></div>
@@ -218,14 +239,12 @@
 </div>
 
 <script>
-/* 疑似ユーザーDB */
 const users = [
-  { id: "user1", pass: "pass1", points: 0 },
-  { id: "vip", pass: "vip123", points: 100 }
+  { id: "user1", pass: "pass1", points: 0, spent: 0 },
+  { id: "vip", pass: "vip123", points: 100, spent: 0 }
 ];
 let currentUser = null;
 
-/* ログイン */
 function login() {
   const id = document.getElementById("login-id").value;
   const pass = document.getElementById("login-pass").value;
@@ -233,15 +252,16 @@ function login() {
   const status = document.getElementById("login-status");
   if (user) {
     currentUser = user;
-    status.innerText = "ログイン成功：" + user.id;
+    status.innerText = "ようこそ " + user.id + " さん";
     localStorage.setItem("currentUser", user.id);
     loginBonus();
+    renderMissions();
+    renderRanking();
   } else {
-    status.innerText = "ログイン失敗";
+    status.innerText = "入場拒否";
   }
 }
 
-/* ログインボーナス */
 function loginBonus() {
   if (!currentUser) {
     document.getElementById("bonus").innerText = "ログインするとボーナスがもらえます";
@@ -265,31 +285,28 @@ function loginBonus() {
   }
 }
 
-/* Canvas超派手エフェクト */
 const canvas = document.getElementById("fxCanvas");
 const ctx = canvas.getContext("2d");
 function drawFx() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < 40; i++) {
     ctx.fillStyle = "hsl(" + Math.random() * 360 + ",100%,50%)";
     ctx.beginPath();
-    ctx.arc(Math.random() * 300, Math.random() * 150, Math.random() * 10, 0, Math.PI * 2);
+    ctx.arc(Math.random() * 300, Math.random() * 150, Math.random() * 8, 0, Math.PI * 2);
     ctx.fill();
   }
 }
-setInterval(drawFx, 500);
+setInterval(drawFx, 400);
 
-/* 豪華ルーレット */
 function spin() {
   const wheel = document.getElementById("wheel");
   const deg = Math.floor(3600 + Math.random() * 360);
   wheel.style.transition = "4s cubic-bezier(.17,.67,.83,.67)";
   wheel.style.transform = `rotate(${deg}deg)`;
-
   setTimeout(() => {
     const effects = ["✨", "💥", "🌟", "🔥"];
     const effect = effects[Math.floor(Math.random() * effects.length)];
-    alert(effect + " 当選：割引クーポン or ポイントUP！ " + effect);
+    alert(effect + " 当選：割引 or ポイントUP！ " + effect);
     if (currentUser) {
       const keyPts = "points_" + currentUser.id;
       let points = Number(localStorage.getItem(keyPts) || 0);
@@ -298,52 +315,21 @@ function spin() {
       document.getElementById("bonus").innerText =
         "ルーレットボーナス +5pt（" + currentUser.id + "：" + points + "pt）";
     }
+    missionProgress("spin");
   }, 4000);
 }
 
-/* 商品データ（ローカル埋め込み） */
 let products = [
-  {
-    id: 1,
-    name: "激安スマホスタンド",
-    price: 399,
-    sale: "-50%",
-    desc: "角度調整可能なスマホスタンド。激安なのに高品質！",
-    image: "https://via.placeholder.com/150",
-    timer: "残り3時間"
-  },
-  {
-    id: 2,
-    name: "LEDゲーミングマウス",
-    price: 1299,
-    sale: "-30%",
-    desc: "RGBライト搭載のゲーミングマウス。クリック感最高。",
-    image: "https://via.placeholder.com/150",
-    timer: "残り1時間"
-  },
-  {
-    id: 3,
-    name: "中華系爆光キーボード",
-    price: 2999,
-    sale: "-40%",
-    desc: "爆光RGB＋中華フォントキーキャップ。",
-    image: "https://via.placeholder.com/150",
-    timer: "残り24時間"
-  }
+  { id: 1, name: "激安スマホスタンド", price: 399, sale: "-50%", desc: "角度調整可能なスマホスタンド。激安なのに高品質！", image: "https://via.placeholder.com/150", timer: 10 },
+  { id: 2, name: "LEDゲーミングマウス", price: 1299, sale: "-30%", desc: "RGBライト搭載のゲーミングマウス。クリック感最高。", image: "https://via.placeholder.com/150", timer: 20 },
+  { id: 3, name: "中華系爆光キーボード", price: 2999, sale: "-40%", desc: "爆光RGB＋中華フォントキーキャップ。", image: "https://via.placeholder.com/150", timer: 30 }
 ];
 
-/* 外部JSONから商品読み込み（失敗したらローカルのまま） */
 fetch("products.json")
   .then(res => res.json())
-  .then(data => {
-    products = data;
-    renderProducts();
-  })
-  .catch(() => {
-    renderProducts();
-  });
+  .then(data => { products = data; renderProducts(); })
+  .catch(() => { renderProducts(); });
 
-/* 商品一覧表示 */
 function renderProducts() {
   const list = document.getElementById("product-list");
   list.innerHTML = "";
@@ -351,7 +337,7 @@ function renderProducts() {
     list.innerHTML += `
       <div class="product-card" onclick="showDetail(${p.id})">
         <span class="sale-label">${p.sale}</span>
-        <div class="timer-label">${p.timer || ""}</div>
+        <div class="timer-label" id="timer-${p.id}">残り${p.timer || 0}秒</div>
         <img src="${p.image}" class="product-img">
         <p>${p.name}</p>
         <p class="price">¥${p.price}</p>
@@ -359,8 +345,21 @@ function renderProducts() {
     `;
   });
 }
+setInterval(() => {
+  products.forEach(p => {
+    if (p.timer > 0) {
+      p.timer--;
+      const el = document.getElementById("timer-" + p.id);
+      if (el) el.innerText = "残り" + p.timer + "秒";
+    } else if (p.timer === 0) {
+      p.timer = -1;
+      p.sale = "爆安-70%";
+      alert("💥 " + p.name + " が爆光セール突入！");
+      renderProducts();
+    }
+  });
+}, 1000);
 
-/* 商品詳細 */
 function showDetail(id) {
   const p = products.find(x => x.id === id);
   const detail = document.getElementById("detail");
@@ -372,27 +371,28 @@ function showDetail(id) {
     <p class="price">¥${p.price} <span class="sale-label">${p.sale}</span></p>
     <button onclick="addCart(${p.id})">🛒カートに追加</button>
   `;
+  missionProgress("view");
+  updateRecommend(p.id);
 }
 
-/* カート（簡易EC＋localStorage） */
-function getCart() {
-  return JSON.parse(localStorage.getItem("cart") || "[]");
-}
-function saveCart(cart) {
-  localStorage.setItem("cart", JSON.stringify(cart));
-}
+function getCart() { return JSON.parse(localStorage.getItem("cart") || "[]"); }
+function saveCart(cart) { localStorage.setItem("cart", JSON.stringify(cart)); }
+
 function addCart(id) {
   let cart = getCart();
   cart.push(id);
   saveCart(cart);
   renderCart();
+  missionProgress("cart");
 }
+
 function removeCart(index) {
   let cart = getCart();
   cart.splice(index, 1);
   saveCart(cart);
   renderCart();
 }
+
 function renderCart() {
   let cart = getCart();
   const area = document.getElementById("cart-items");
@@ -408,7 +408,30 @@ function renderCart() {
 }
 renderCart();
 
-/* 注文ページへ */
+function applyDiscount() {
+  let cart = getCart();
+  let total = cart.reduce((sum, id) => sum + products.find(p => p.id === id).price, 0);
+  const coupon = document.getElementById("coupon").value;
+  const usePts = Number(document.getElementById("use-points").value || 0);
+  let discount = 0;
+  if (coupon === "OFF10") discount += total * 0.1;
+  if (currentUser) {
+    const keyPts = "points_" + currentUser.id;
+    let points = Number(localStorage.getItem(keyPts) || 0);
+    if (usePts > points) {
+      document.getElementById("discount-info").innerText = "ポイントが足りません";
+      return;
+    }
+    discount += usePts;
+    points -= usePts;
+    localStorage.setItem(keyPts, points);
+    document.getElementById("bonus").innerText = currentUser.id + "：" + points + "pt";
+  }
+  const final = Math.max(0, total - discount);
+  document.getElementById("discount-info").innerText =
+    "割引額：¥" + Math.floor(discount) + " / 支払金額：¥" + Math.floor(final);
+}
+
 function goOrder() {
   showSection("order");
   let cart = getCart();
@@ -424,7 +447,6 @@ function goOrder() {
   totalArea.innerText = "合計金額：¥" + total;
 }
 
-/* 注文確定 */
 function submitOrder() {
   const name = document.getElementById("order-name").value;
   const addr = document.getElementById("order-address").value;
@@ -433,28 +455,140 @@ function submitOrder() {
     document.getElementById("order-result").innerText = "名前と住所を入力してください";
     return;
   }
+  let cart = getCart();
+  let total = cart.reduce((sum, id) => sum + products.find(p => p.id === id).price, 0);
+  if (currentUser) {
+    const keySpent = "spent_" + currentUser.id;
+    let spent = Number(localStorage.getItem(keySpent) || 0);
+    spent += total;
+    localStorage.setItem(keySpent, spent);
+  }
   const orderId = "ORD-" + Date.now();
   document.getElementById("order-result").innerText =
     "注文完了！注文番号：" + orderId + " / 支払い：" + pay;
   localStorage.setItem("lastOrder", orderId);
+  missionProgress("order");
+  renderRanking();
 }
 
-/* セクション切り替え */
 function showSection(name) {
   document.getElementById("main-section").style.display = (name === "main") ? "block" : "none";
   document.getElementById("order").style.display = (name === "order") ? "block" : "none";
 }
 
-/* 起動時：ログイン状態復元 */
+function gacha() {
+  const roll = Math.random();
+  let rarity = "R";
+  if (roll < 0.01) rarity = "SSR";
+  else if (roll < 0.11) rarity = "SR";
+  const p = products[Math.floor(Math.random() * products.length)];
+  alert("🎰 ガチャ結果：" + rarity + " / " + p.name);
+  addCart(p.id);
+  if (currentUser) {
+    const keyPts = "points_" + currentUser.id;
+    let points = Number(localStorage.getItem(keyPts) || 0);
+    points += (rarity === "SSR" ? 50 : rarity === "SR" ? 20 : 5);
+    localStorage.setItem(keyPts, points);
+    document.getElementById("bonus").innerText = currentUser.id + "：" + points + "pt";
+  }
+  missionProgress("gacha");
+}
+
+function otoshidama() {
+  if (!currentUser) {
+    alert("ログインしてからお年玉を受け取ってね");
+    return;
+  }
+  const keyOto = "otoshidama_" + currentUser.id;
+  const today = new Date().toLocaleDateString();
+  const last = localStorage.getItem(keyOto);
+  if (last === today) {
+    alert("今日はもう受け取り済み");
+    return;
+  }
+  const amount = Math.floor(Math.random() * 100) + 1;
+  const keyPts = "points_" + currentUser.id;
+  let points = Number(localStorage.getItem(keyPts) || 0);
+  points += amount;
+  localStorage.setItem(keyPts, points);
+  localStorage.setItem(keyOto, today);
+  alert("🧧 お年玉：" + amount + "pt");
+  document.getElementById("bonus").innerText = currentUser.id + "：" + points + "pt";
+}
+
+const missionsDef = [
+  { id: "view", label: "商品を3つ見る", target: 3 },
+  { id: "spin", label: "ルーレットを1回回す", target: 1 },
+  { id: "gacha", label: "ガチャを1回引く", target: 1 },
+  { id: "cart", label: "カートに3回追加", target: 3 },
+  { id: "order", label: "注文を1回する", target: 1 }
+];
+
+function missionProgress(type) {
+  if (!currentUser) return;
+  const key = "mission_" + currentUser.id + "_" + type;
+  let val = Number(localStorage.getItem(key) || 0);
+  val++;
+  localStorage.setItem(key, val);
+  renderMissions();
+}
+
+function renderMissions() {
+  const box = document.getElementById("missions");
+  if (!currentUser) {
+    box.innerText = "ログインするとミッションが表示されます";
+    return;
+  }
+  box.innerHTML = "<h4>🎯デイリーミッション</h4>";
+  missionsDef.forEach(m => {
+    const key = "mission_" + currentUser.id + "_" + m.id;
+    let val = Number(localStorage.getItem(key) || 0);
+    const done = val >= m.target;
+    box.innerHTML += `<p>${m.label}：${val}/${m.target} ${done ? "✅" : ""}</p>`;
+  });
+}
+
+function renderRanking() {
+  const box = document.getElementById("ranking");
+  box.innerHTML = "<h4>🏆ランキング（購入額）</h4>";
+  let data = users.map(u => {
+    const keySpent = "spent_" + u.id;
+    let spent = Number(localStorage.getItem(keySpent) || 0);
+    return { id: u.id, spent };
+  }).sort((a, b) => b.spent - a.spent);
+  data.forEach((u, i) => {
+    box.innerHTML += `<p>${i + 1}位：${u.id} - ¥${u.spent}</p>`;
+  });
+}
+
+function updateRecommend(lastId) {
+  const box = document.getElementById("recommend-list");
+  box.innerHTML = "";
+  products.filter(p => p.id !== lastId).slice(0, 2).forEach(p => {
+    box.innerHTML += `
+      <div class="product-card">
+        <span class="sale-label">${p.sale}</span>
+        <img src="${p.image}" class="product-img">
+        <p>${p.name}</p>
+        <p class="price">¥${p.price}</p>
+      </div>
+    `;
+  });
+}
+
 window.onload = () => {
   const savedId = localStorage.getItem("currentUser");
   if (savedId) {
     const user = users.find(u => u.id === savedId);
     if (user) {
       currentUser = user;
-      document.getElementById("login-status").innerText = "ログイン中：" + user.id;
+      document.getElementById("login-status").innerText = "ようこそ " + user.id + " さん";
       loginBonus();
+      renderMissions();
+      renderRanking();
     }
+  } else {
+    renderRanking();
   }
 };
 </script>
