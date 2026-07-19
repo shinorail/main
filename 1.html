@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>TEMU風フル機能EC（全部盛り）</title>
+<title>TEMU風爆光フル機能EC（完全版）</title>
 <style>
   body {
     background: #ffefdb;
@@ -31,14 +31,16 @@
   .nav button:hover {
     background: #ffe08a;
   }
-  /* ログインカード */
+
+  /* ログイン神殿化 */
   #login-area {
     background: linear-gradient(135deg, #ff9a00, #ff3b3b);
-    color: white;
-    padding: 10px;
-    margin: 10px;
-    border-radius: 15px;
-    box-shadow: 0 0 20px #ff3b3b;
+    color: gold;
+    padding: 20px;
+    margin: 10px auto;
+    border-radius: 20px;
+    box-shadow: 0 0 40px gold;
+    animation: glow 3s infinite;
     display: inline-block;
   }
   #login-area input {
@@ -47,6 +49,12 @@
     padding: 5px;
     margin: 3px;
   }
+  @keyframes glow {
+    0% { box-shadow:0 0 20px gold; }
+    50% { box-shadow:0 0 40px orange; }
+    100% { box-shadow:0 0 20px gold; }
+  }
+
   #bonus {
     background: gold;
     padding: 10px;
@@ -54,7 +62,8 @@
     border-radius: 10px;
     font-weight: bold;
   }
-  /* ルーレット */
+
+  /* ルーレット・ガチャボタン */
   #wheel {
     width: 260px;
     height: 260px;
@@ -88,12 +97,14 @@
     50% { transform: scale(1.05); box-shadow: 0 0 20px #ff9a00; }
     100% { transform: scale(1); box-shadow: 0 0 10px #ff3b3b; }
   }
+
   #fxCanvas {
     display: block;
     margin: 10px auto;
     background: transparent;
   }
-  /* 商品一覧 */
+
+  /* 商品一覧・おすすめ */
   #product-list, #recommend-list {
     display: flex;
     flex-wrap: wrap;
@@ -136,6 +147,7 @@
     font-size: 11px;
     color: #ff3b3b;
   }
+
   #detail {
     display: none;
     background: white;
@@ -144,12 +156,14 @@
     border-radius: 10px;
     box-shadow: 0 0 20px #ff9a00;
   }
+
   #cart {
     background: #fff7e6;
     padding: 15px;
     margin: 10px;
     border-radius: 10px;
   }
+
   #order {
     display: none;
     background: #ffe8c2;
@@ -157,22 +171,47 @@
     margin: 10px;
     border-radius: 10px;
   }
+
   input, select {
     padding: 5px;
     margin: 3px;
   }
+
   #missions, #ranking {
     background: #fff7e6;
     padding: 10px;
     margin: 10px;
     border-radius: 10px;
   }
+
+  /* 爆光フラッシュ */
+  @keyframes flash {
+    0% { background:white; }
+    100% { background:#ffefdb; }
+  }
+
+  /* AIおすすめ光 */
+  .recommend-glow {
+    animation: glow2 2s infinite;
+  }
+  @keyframes glow2 {
+    0% { box-shadow:0 0 10px gold; }
+    50% { box-shadow:0 0 25px orange; }
+    100% { box-shadow:0 0 10px gold; }
+  }
+
+  /* 王宮ランキング */
+  #ranking {
+    background: linear-gradient(180deg, gold, transparent);
+    box-shadow: 0 0 20px gold;
+    padding: 10px;
+  }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">🔥TEMU風フル機能EC（全部盛り）🔥</div>
+  <div class="logo">🔥TEMU風爆光フル機能EC（完全版）🔥</div>
   <div class="nav">
     <button onclick="showSection('main')">ホーム</button>
     <button onclick="showSection('order')">注文ページ</button>
@@ -238,13 +277,22 @@
   <p id="order-result"></p>
 </div>
 
+<!-- 爆光エンジン用 Canvas -->
+<canvas id="explosionCanvas" width="400" height="300"
+style="position:fixed;top:0;left:0;pointer-events:none;z-index:99999;"></canvas>
+
+<!-- お年玉封筒乱舞エリア -->
+<div id="otoshidama-area" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;"></div>
+
 <script>
+/* 疑似ユーザーDB */
 const users = [
   { id: "user1", pass: "pass1", points: 0, spent: 0 },
   { id: "vip", pass: "vip123", points: 100, spent: 0 }
 ];
 let currentUser = null;
 
+/* ログイン */
 function login() {
   const id = document.getElementById("login-id").value;
   const pass = document.getElementById("login-pass").value;
@@ -254,6 +302,8 @@ function login() {
     currentUser = user;
     status.innerText = "ようこそ " + user.id + " さん";
     localStorage.setItem("currentUser", user.id);
+    spawnExplosion(200,150,"gold");
+    spawnExplosion(200,150,"white");
     loginBonus();
     renderMissions();
     renderRanking();
@@ -262,6 +312,7 @@ function login() {
   }
 }
 
+/* ログインボーナス */
 function loginBonus() {
   if (!currentUser) {
     document.getElementById("bonus").innerText = "ログインするとボーナスがもらえます";
@@ -285,6 +336,7 @@ function loginBonus() {
   }
 }
 
+/* Canvas軽量派手エフェクト */
 const canvas = document.getElementById("fxCanvas");
 const ctx = canvas.getContext("2d");
 function drawFx() {
@@ -298,6 +350,50 @@ function drawFx() {
 }
 setInterval(drawFx, 400);
 
+/* 爆光エンジン */
+const exCanvas = document.getElementById("explosionCanvas");
+const exCtx = exCanvas.getContext("2d");
+let particles = [];
+
+function spawnExplosion(x, y, color="hsl(" + Math.random()*360 + ",100%,50%)") {
+  for (let i = 0; i < 80; i++) {
+    particles.push({
+      x, y,
+      vx: (Math.random() - 0.5) * 8,
+      vy: (Math.random() - 0.5) * 8,
+      life: 60,
+      color
+    });
+  }
+}
+
+function renderExplosion() {
+  exCtx.clearRect(0, 0, exCanvas.width, exCanvas.height);
+  particles.forEach(p => {
+    exCtx.fillStyle = p.color;
+    exCtx.beginPath();
+    exCtx.arc(p.x, p.y, 4, 0, Math.PI * 2);
+    exCtx.fill();
+    p.x += p.vx;
+    p.y += p.vy;
+    p.life--;
+  });
+  particles = particles.filter(p => p.life > 0);
+  requestAnimationFrame(renderExplosion);
+}
+renderExplosion();
+
+/* 光の滝 */
+setInterval(() => {
+  spawnExplosion(Math.random()*400, 0, "rgba(255,255,255,0.8)");
+}, 200);
+
+/* ホーム花火大会 */
+setInterval(() => {
+  spawnExplosion(Math.random()*400, Math.random()*300);
+}, 500);
+
+/* 豪華ルーレット */
 function spin() {
   const wheel = document.getElementById("wheel");
   const deg = Math.floor(3600 + Math.random() * 360);
@@ -307,6 +403,7 @@ function spin() {
     const effects = ["✨", "💥", "🌟", "🔥"];
     const effect = effects[Math.floor(Math.random() * effects.length)];
     alert(effect + " 当選：割引 or ポイントUP！ " + effect);
+    spawnExplosion(200,150,"white");
     if (currentUser) {
       const keyPts = "points_" + currentUser.id;
       let points = Number(localStorage.getItem(keyPts) || 0);
@@ -319,23 +416,26 @@ function spin() {
   }, 4000);
 }
 
+/* 商品データ（ローカル埋め込み） */
 let products = [
   { id: 1, name: "激安スマホスタンド", price: 399, sale: "-50%", desc: "角度調整可能なスマホスタンド。激安なのに高品質！", image: "https://via.placeholder.com/150", timer: 10 },
   { id: 2, name: "LEDゲーミングマウス", price: 1299, sale: "-30%", desc: "RGBライト搭載のゲーミングマウス。クリック感最高。", image: "https://via.placeholder.com/150", timer: 20 },
   { id: 3, name: "中華系爆光キーボード", price: 2999, sale: "-40%", desc: "爆光RGB＋中華フォントキーキャップ。", image: "https://via.placeholder.com/150", timer: 30 }
 ];
 
+/* 外部JSON読み込み（失敗したらローカル） */
 fetch("products.json")
   .then(res => res.json())
   .then(data => { products = data; renderProducts(); })
   .catch(() => { renderProducts(); });
 
+/* 商品一覧表示＋爆光セールタイマー */
 function renderProducts() {
   const list = document.getElementById("product-list");
   list.innerHTML = "";
   products.forEach(p => {
     list.innerHTML += `
-      <div class="product-card" onclick="showDetail(${p.id})">
+      <div class="product-card" onclick="spawnExplosion(event.clientX, event.clientY); showDetail(${p.id})">
         <span class="sale-label">${p.sale}</span>
         <div class="timer-label" id="timer-${p.id}">残り${p.timer || 0}秒</div>
         <img src="${p.image}" class="product-img">
@@ -353,13 +453,16 @@ setInterval(() => {
       if (el) el.innerText = "残り" + p.timer + "秒";
     } else if (p.timer === 0) {
       p.timer = -1;
-      p.sale = "爆安-70%";
+      p.sale = "爆安-90%";
+      spawnExplosion(200,150,"gold");
+      document.body.style.animation = "flash 0.3s";
       alert("💥 " + p.name + " が爆光セール突入！");
       renderProducts();
     }
   });
 }, 1000);
 
+/* 商品詳細 */
 function showDetail(id) {
   const p = products.find(x => x.id === id);
   const detail = document.getElementById("detail");
@@ -375,6 +478,7 @@ function showDetail(id) {
   updateRecommend(p.id);
 }
 
+/* カート */
 function getCart() { return JSON.parse(localStorage.getItem("cart") || "[]"); }
 function saveCart(cart) { localStorage.setItem("cart", JSON.stringify(cart)); }
 
@@ -394,6 +498,7 @@ function removeCart(index) {
 }
 
 function renderCart() {
+  spawnExplosion(200,150,"white");
   let cart = getCart();
   const area = document.getElementById("cart-items");
   const totalArea = document.getElementById("cart-total");
@@ -408,6 +513,7 @@ function renderCart() {
 }
 renderCart();
 
+/* 割引（クーポン＋ポイント） */
 function applyDiscount() {
   let cart = getCart();
   let total = cart.reduce((sum, id) => sum + products.find(p => p.id === id).price, 0);
@@ -432,6 +538,7 @@ function applyDiscount() {
     "割引額：¥" + Math.floor(discount) + " / 支払金額：¥" + Math.floor(final);
 }
 
+/* 注文ページへ */
 function goOrder() {
   showSection("order");
   let cart = getCart();
@@ -447,6 +554,7 @@ function goOrder() {
   totalArea.innerText = "合計金額：¥" + total;
 }
 
+/* 注文確定＋ランキング反映 */
 function submitOrder() {
   const name = document.getElementById("order-name").value;
   const addr = document.getElementById("order-address").value;
@@ -469,11 +577,21 @@ function submitOrder() {
   localStorage.setItem("lastOrder", orderId);
   missionProgress("order");
   renderRanking();
+  spawnExplosion(200,150,"gold");
 }
 
+/* セクション切り替え */
 function showSection(name) {
   document.getElementById("main-section").style.display = (name === "main") ? "block" : "none";
   document.getElementById("order").style.display = (name === "order") ? "block" : "none";
+}
+
+/* ガチャ（虹色渦＋爆光） */
+function gachaExplosion(rarity) {
+  let color = rarity==="SSR" ? "gold" : rarity==="SR" ? "purple" : "cyan";
+  for (let i=0;i<10;i++){
+    setTimeout(()=>spawnExplosion(200,150,color), i*60);
+  }
 }
 
 function gacha() {
@@ -483,6 +601,7 @@ function gacha() {
   else if (roll < 0.11) rarity = "SR";
   const p = products[Math.floor(Math.random() * products.length)];
   alert("🎰 ガチャ結果：" + rarity + " / " + p.name);
+  gachaExplosion(rarity);
   addCart(p.id);
   if (currentUser) {
     const keyPts = "points_" + currentUser.id;
@@ -494,6 +613,7 @@ function gacha() {
   missionProgress("gacha");
 }
 
+/* お年玉封筒乱舞 */
 function otoshidama() {
   if (!currentUser) {
     alert("ログインしてからお年玉を受け取ってね");
@@ -514,8 +634,26 @@ function otoshidama() {
   localStorage.setItem(keyOto, today);
   alert("🧧 お年玉：" + amount + "pt");
   document.getElementById("bonus").innerText = currentUser.id + "：" + points + "pt";
+
+  const area = document.getElementById("otoshidama-area");
+  area.innerHTML = "";
+  for (let i=0;i<10;i++){
+    const f = document.createElement("div");
+    f.innerText = "🧧";
+    f.style.position="absolute";
+    f.style.fontSize="40px";
+    f.style.left=Math.random()*300+"px";
+    f.style.top=Math.random()*200+"px";
+    f.style.pointerEvents="auto";
+    f.onclick=()=>{
+      spawnExplosion(event.clientX,event.clientY,"red");
+      f.remove();
+    };
+    area.appendChild(f);
+  }
 }
 
+/* ミッション */
 const missionsDef = [
   { id: "view", label: "商品を3つ見る", target: 3 },
   { id: "spin", label: "ルーレットを1回回す", target: 1 },
@@ -533,6 +671,11 @@ function missionProgress(type) {
   renderMissions();
 }
 
+function missionCompleteFX() {
+  spawnExplosion(200,150,"gold");
+  spawnExplosion(200,150,"white");
+}
+
 function renderMissions() {
   const box = document.getElementById("missions");
   if (!currentUser) {
@@ -545,9 +688,11 @@ function renderMissions() {
     let val = Number(localStorage.getItem(key) || 0);
     const done = val >= m.target;
     box.innerHTML += `<p>${m.label}：${val}/${m.target} ${done ? "✅" : ""}</p>`;
+    if (done) missionCompleteFX();
   });
 }
 
+/* ランキング */
 function renderRanking() {
   const box = document.getElementById("ranking");
   box.innerHTML = "<h4>🏆ランキング（購入額）</h4>";
@@ -561,12 +706,13 @@ function renderRanking() {
   });
 }
 
+/* AIおすすめ */
 function updateRecommend(lastId) {
   const box = document.getElementById("recommend-list");
   box.innerHTML = "";
   products.filter(p => p.id !== lastId).slice(0, 2).forEach(p => {
     box.innerHTML += `
-      <div class="product-card">
+      <div class="product-card recommend-glow">
         <span class="sale-label">${p.sale}</span>
         <img src="${p.image}" class="product-img">
         <p>${p.name}</p>
@@ -576,6 +722,7 @@ function updateRecommend(lastId) {
   });
 }
 
+/* 起動時 */
 window.onload = () => {
   const savedId = localStorage.getItem("currentUser");
   if (savedId) {
