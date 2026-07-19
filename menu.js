@@ -175,3 +175,10 @@ async function loadNews(container) {
         if (container) container.innerHTML = "<li>お知らせの取得に失敗しました。</li>";
     }
 }
+fetch("/config.json")
+  .then(res => res.json())
+  .then(cfg => {
+    if (cfg.maintenance) {
+      window.location.href = "/maintenance.html";
+    }
+  });
