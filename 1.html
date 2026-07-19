@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>TEMU風フル機能EC（index.html一枚）</title>
+<style>
+  body {
+    background: #ffefdb;
+    font-family: 'Noto Sans JP', sans-serif;
+    text-align: center;
+    margin: 0;
+  }
+  header {
+    background: linear-gradient(90deg, #ff3b3b, #ff9a00);
+    color: white;
+    padding: 10px;
+    box-shadow: 0 0 20px #ff3b3b;
+  }
+  .logo {
+    font-size: 28px;
+    font-weight: bold;
+  }
+  .nav {
+    margin-top: 5px;
+  }
+  .nav button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    background: #fff3d6;
+    cursor: pointer;
+  }
+  .nav button:hover {
+    background: #ffe08a;
+  }
+  /* ログイン */
+  #login-area {
+    background: #fff7e6;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+  }
+  #bonus {
+    background: gold;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+    font-weight: bold;
+  }
+  /* ルーレット */
+  #wheel {
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    border: 10px solid gold;
+    background: conic-gradient(
+      #ff9a00 0deg 60deg,
+      #ff3b3b 60deg 120deg,
+      #ff9a00 120deg 180deg,
+      #ff3b3b 180deg 240deg,
+      #ff9a00 240deg 300deg,
+      #ff3b3b 300deg 360deg
+    );
+    margin: 10px auto;
+    box-shadow: 0 0 30px gold;
+  }
+  .spin-btn {
+    background: #ff3b3b;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0 0 10px #ff3b3b;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse {
+    0% { transform: scale(1); box-shadow: 0 0 10px #ff3b3b; }
+    50% { transform: scale(1.05); box-shadow: 0 0 20px #ff9a00; }
+    100% { transform: scale(1); box-shadow: 0 0 10px #ff3b3b; }
+  }
+  /* Canvasエフェクト */
+  #fxCanvas {
+    display: block;
+    margin: 10px auto;
+    background: transparent;
+  }
+  /* 商品一覧 */
+  #product-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  .product-card {
+    width: 150px;
+    background: white;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 8px;
+    box-shadow: 0 0 10px #ff9a00;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.2s;
+  }
+  .product-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 15px #ff3b3b;
+  }
+  .product-img {
+    width: 100%;
+    border-radius: 10px;
+  }
+  .price {
+    color: #ff3b3b;
+    font-weight: bold;
+  }
+  .sale-label {
+    background: red;
+    color: white;
+    padding: 3px 6px;
+    font-size: 11px;
+    border-radius: 5px;
+    display: inline-block;
+    margin-bottom: 5px;
+  }
+  .timer-label {
+    font-size: 11px;
+    color: #ff3b3b;
+  }
+  /* 商品詳細 */
+  #detail {
+    display: none;
+    background: white;
+    padding: 15px;
+    margin: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px #ff9a00;
+  }
+  /* カート */
+  #cart {
+    background: #fff7e6;
+    padding: 15px;
+    margin: 10px;
+    border-radius: 10px;
+  }
+  /* 注文ページ */
+  #order {
+    display: none;
+    background: #ffe8c2;
+    padding: 15px;
+    margin: 10px;
+    border-radius: 10px;
+  }
+  input, select {
+    padding: 5px;
+    margin: 3px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🔥TEMU風フル機能EC🔥</div>
+  <div class="nav">
+    <button onclick="showSection('main')">ホーム</button>
+    <button onclick="showSection('order')">注文ページ</button>
+  </div>
+</header>
+
+<div id="login-area">
+  <div>ログインID: <input id="login-id" placeholder="user1"></div>
+  <div>パスワード: <input id="login-pass" type="password" placeholder="pass1"></div>
+  <button onclick="login()">ログイン</button>
+  <span id="login-status"></span>
+</div>
+
+<div id="bonus"></div>
+
+<!-- ルーレット＋Canvasエフェクト -->
+<div id="main-section">
+  <div id="wheel"></div>
+  <button class="spin-btn" onclick="spin()">ルーレットを回す</button>
+  <canvas id="fxCanvas" width="300" height="150"></canvas>
+
+  <h2>おすすめ商品</h2>
+  <div id="product-list"></div>
+
+  <div id="detail"></div>
+
+  <div id="cart">
+    <h3>🛒カート</h3>
+    <div id="cart-items"></div>
+    <p id="cart-total"></p>
+    <button onclick="goOrder()">この内容で注文ページへ</button>
+  </div>
+</div>
+
+<!-- 注文ページ -->
+<div id="order">
+  <h3>📦注文確認</h3>
+  <div id="order-items"></div>
+  <p id="order-total"></p>
+  <div>
+    お名前: <input id="order-name"><br>
+    住所: <input id="order-address"><br>
+    支払い方法:
+    <select id="order-pay">
+      <option>クレジットカード</option>
+      <option>コンビニ払い</option>
+      <option>代引き</option>
+    </select>
+  </div>
+  <button onclick="submitOrder()">注文確定</button>
+  <p id="order-result"></p>
+</div>
+
+<script>
+/* 疑似ユーザーDB */
+const users = [
+  { id: "user1", pass: "pass1", points: 0 },
+  { id: "vip", pass: "vip123", points: 100 }
+];
+let currentUser = null;
+
+/* ログイン */
+function login() {
+  const id = document.getElementById("login-id").value;
+  const pass = document.getElementById("login-pass").value;
+  const user = users.find(u => u.id === id && u.pass === pass);
+  const status = document.getElementById("login-status");
+  if (user) {
+    currentUser = user;
+    status.innerText = "ログイン成功：" + user.id;
+    localStorage.setItem("currentUser", user.id);
+    loginBonus();
+  } else {
+    status.innerText = "ログイン失敗";
+  }
+}
+
+/* ログインボーナス */
+function loginBonus() {
+  if (!currentUser) {
+    document.getElementById("bonus").innerText = "ログインするとボーナスがもらえます";
+    return;
+  }
+  const keyLast = "lastLogin_" + currentUser.id;
+  const keyPts = "points_" + currentUser.id;
+  const last = localStorage.getItem(keyLast);
+  const today = new Date().toLocaleDateString();
+  let points = Number(localStorage.getItem(keyPts) || currentUser.points || 0);
+
+  if (last !== today) {
+    points += 10;
+    localStorage.setItem(keyLast, today);
+    localStorage.setItem(keyPts, points);
+    document.getElementById("bonus").innerText =
+      "🎁ログインボーナス +10pt（" + currentUser.id + "：" + points + "pt）";
+  } else {
+    document.getElementById("bonus").innerText =
+      "今日のログインボーナスは受け取り済み（" + currentUser.id + "：" + points + "pt）";
+  }
+}
+
+/* Canvas超派手エフェクト */
+const canvas = document.getElementById("fxCanvas");
+const ctx = canvas.getContext("2d");
+function drawFx() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (let i = 0; i < 30; i++) {
+    ctx.fillStyle = "hsl(" + Math.random() * 360 + ",100%,50%)";
+    ctx.beginPath();
+    ctx.arc(Math.random() * 300, Math.random() * 150, Math.random() * 10, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+setInterval(drawFx, 500);
+
+/* 豪華ルーレット */
+function spin() {
+  const wheel = document.getElementById("wheel");
+  const deg = Math.floor(3600 + Math.random() * 360);
+  wheel.style.transition = "4s cubic-bezier(.17,.67,.83,.67)";
+  wheel.style.transform = `rotate(${deg}deg)`;
+
+  setTimeout(() => {
+    const effects = ["✨", "💥", "🌟", "🔥"];
+    const effect = effects[Math.floor(Math.random() * effects.length)];
+    alert(effect + " 当選：割引クーポン or ポイントUP！ " + effect);
+    if (currentUser) {
+      const keyPts = "points_" + currentUser.id;
+      let points = Number(localStorage.getItem(keyPts) || 0);
+      points += 5;
+      localStorage.setItem(keyPts, points);
+      document.getElementById("bonus").innerText =
+        "ルーレットボーナス +5pt（" + currentUser.id + "：" + points + "pt）";
+    }
+  }, 4000);
+}
+
+/* 商品データ（ローカル埋め込み） */
+let products = [
+  {
+    id: 1,
+    name: "激安スマホスタンド",
+    price: 399,
+    sale: "-50%",
+    desc: "角度調整可能なスマホスタンド。激安なのに高品質！",
+    image: "https://via.placeholder.com/150",
+    timer: "残り3時間"
+  },
+  {
+    id: 2,
+    name: "LEDゲーミングマウス",
+    price: 1299,
+    sale: "-30%",
+    desc: "RGBライト搭載のゲーミングマウス。クリック感最高。",
+    image: "https://via.placeholder.com/150",
+    timer: "残り1時間"
+  },
+  {
+    id: 3,
+    name: "中華系爆光キーボード",
+    price: 2999,
+    sale: "-40%",
+    desc: "爆光RGB＋中華フォントキーキャップ。",
+    image: "https://via.placeholder.com/150",
+    timer: "残り24時間"
+  }
+];
+
+/* 外部JSONから商品読み込み（失敗したらローカルのまま） */
+fetch("products.json")
+  .then(res => res.json())
+  .then(data => {
+    products = data;
+    renderProducts();
+  })
+  .catch(() => {
+    renderProducts();
+  });
+
+/* 商品一覧表示 */
+function renderProducts() {
+  const list = document.getElementById("product-list");
+  list.innerHTML = "";
+  products.forEach(p => {
+    list.innerHTML += `
+      <div class="product-card" onclick="showDetail(${p.id})">
+        <span class="sale-label">${p.sale}</span>
+        <div class="timer-label">${p.timer || ""}</div>
+        <img src="${p.image}" class="product-img">
+        <p>${p.name}</p>
+        <p class="price">¥${p.price}</p>
+      </div>
+    `;
+  });
+}
+
+/* 商品詳細 */
+function showDetail(id) {
+  const p = products.find(x => x.id === id);
+  const detail = document.getElementById("detail");
+  detail.style.display = "block";
+  detail.innerHTML = `
+    <h2>${p.name}</h2>
+    <img src="${p.image}" style="width:200px;border-radius:10px;">
+    <p>${p.desc}</p>
+    <p class="price">¥${p.price} <span class="sale-label">${p.sale}</span></p>
+    <button onclick="addCart(${p.id})">🛒カートに追加</button>
+  `;
+}
+
+/* カート（簡易EC＋localStorage） */
+function getCart() {
+  return JSON.parse(localStorage.getItem("cart") || "[]");
+}
+function saveCart(cart) {
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+function addCart(id) {
+  let cart = getCart();
+  cart.push(id);
+  saveCart(cart);
+  renderCart();
+}
+function removeCart(index) {
+  let cart = getCart();
+  cart.splice(index, 1);
+  saveCart(cart);
+  renderCart();
+}
+function renderCart() {
+  let cart = getCart();
+  const area = document.getElementById("cart-items");
+  const totalArea = document.getElementById("cart-total");
+  area.innerHTML = "";
+  let total = 0;
+  cart.forEach((id, i) => {
+    const p = products.find(x => x.id === id);
+    total += p.price;
+    area.innerHTML += `<p>${p.name} - ¥${p.price} <button onclick="removeCart(${i})">削除</button></p>`;
+  });
+  totalArea.innerText = "合計金額：¥" + total;
+}
+renderCart();
+
+/* 注文ページへ */
+function goOrder() {
+  showSection("order");
+  let cart = getCart();
+  const area = document.getElementById("order-items");
+  const totalArea = document.getElementById("order-total");
+  area.innerHTML = "";
+  let total = 0;
+  cart.forEach(id => {
+    const p = products.find(x => x.id === id);
+    total += p.price;
+    area.innerHTML += `<p>${p.name} - ¥${p.price}</p>`;
+  });
+  totalArea.innerText = "合計金額：¥" + total;
+}
+
+/* 注文確定 */
+function submitOrder() {
+  const name = document.getElementById("order-name").value;
+  const addr = document.getElementById("order-address").value;
+  const pay = document.getElementById("order-pay").value;
+  if (!name || !addr) {
+    document.getElementById("order-result").innerText = "名前と住所を入力してください";
+    return;
+  }
+  const orderId = "ORD-" + Date.now();
+  document.getElementById("order-result").innerText =
+    "注文完了！注文番号：" + orderId + " / 支払い：" + pay;
+  localStorage.setItem("lastOrder", orderId);
+}
+
+/* セクション切り替え */
+function showSection(name) {
+  document.getElementById("main-section").style.display = (name === "main") ? "block" : "none";
+  document.getElementById("order").style.display = (name === "order") ? "block" : "none";
+}
+
+/* 起動時：ログイン状態復元 */
+window.onload = () => {
+  const savedId = localStorage.getItem("currentUser");
+  if (savedId) {
+    const user = users.find(u => u.id === savedId);
+    if (user) {
+      currentUser = user;
+      document.getElementById("login-status").innerText = "ログイン中：" + user.id;
+      loginBonus();
+    }
+  }
+};
+</script>
+
+</body>
+</html>
