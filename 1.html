@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>TEMU風爆光フル機能EC（完全版）</title>
+<title>爆光ECフル統合版（狂気クーポンモード）</title>
 <style>
   body {
     background: #ffefdb;
@@ -63,7 +63,6 @@
     font-weight: bold;
   }
 
-  /* ルーレット・ガチャボタン */
   #wheel {
     width: 260px;
     height: 260px;
@@ -104,7 +103,6 @@
     background: transparent;
   }
 
-  /* 商品一覧・おすすめ */
   #product-list, #recommend-list {
     display: flex;
     flex-wrap: wrap;
@@ -184,13 +182,11 @@
     border-radius: 10px;
   }
 
-  /* 爆光フラッシュ */
   @keyframes flash {
     0% { background:white; }
     100% { background:#ffefdb; }
   }
 
-  /* AIおすすめ光 */
   .recommend-glow {
     animation: glow2 2s infinite;
   }
@@ -200,18 +196,23 @@
     100% { box-shadow:0 0 10px gold; }
   }
 
-  /* 王宮ランキング */
   #ranking {
     background: linear-gradient(180deg, gold, transparent);
     box-shadow: 0 0 20px gold;
     padding: 10px;
+  }
+
+  #coupon-mode {
+    font-size: 12px;
+    color: #ff3b3b;
+    margin-top: 4px;
   }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">🔥TEMU風爆光フル機能EC（完全版）🔥</div>
+  <div class="logo">🔥爆光ECフル統合版（狂気クーポンモード）🔥</div>
   <div class="nav">
     <button onclick="showSection('main')">ホーム</button>
     <button onclick="showSection('order')">注文ページ</button>
@@ -250,9 +251,10 @@
     <div id="cart-items"></div>
     <p id="cart-total"></p>
     <div>
-      クーポンコード: <input id="coupon" placeholder="OFF10">
+      クーポンコード: <input id="coupon" placeholder="何を入れても狂気モード">
+      <div id="coupon-mode">※入力した瞬間に全クーポン同時発動（ほぼ無料）</div>
       ポイント使用: <input id="use-points" type="number" min="0">
-      <button onclick="applyDiscount()">割引適用</button>
+      <button onclick="applyDiscount()">割引適用（狂気）</button>
       <p id="discount-info"></p>
     </div>
     <button onclick="goOrder()">この内容で注文ページへ</button>
@@ -277,22 +279,19 @@
   <p id="order-result"></p>
 </div>
 
-<!-- 爆光エンジン用 Canvas -->
 <canvas id="explosionCanvas" width="400" height="300"
 style="position:fixed;top:0;left:0;pointer-events:none;z-index:99999;"></canvas>
 
-<!-- お年玉封筒乱舞エリア -->
 <div id="otoshidama-area" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;"></div>
 
 <script>
-/* 疑似ユーザーDB */
 const users = [
   { id: "user1", pass: "pass1", points: 0, spent: 0 },
   { id: "vip", pass: "vip123", points: 100, spent: 0 }
 ];
 let currentUser = null;
+let lastGachaRarity = null;
 
-/* ログイン */
 function login() {
   const id = document.getElementById("login-id").value;
   const pass = document.getElementById("login-pass").value;
@@ -312,7 +311,6 @@ function login() {
   }
 }
 
-/* ログインボーナス */
 function loginBonus() {
   if (!currentUser) {
     document.getElementById("bonus").innerText = "ログインするとボーナスがもらえます";
@@ -336,7 +334,6 @@ function loginBonus() {
   }
 }
 
-/* Canvas軽量派手エフェクト */
 const canvas = document.getElementById("fxCanvas");
 const ctx = canvas.getContext("2d");
 function drawFx() {
@@ -350,7 +347,6 @@ function drawFx() {
 }
 setInterval(drawFx, 400);
 
-/* 爆光エンジン */
 const exCanvas = document.getElementById("explosionCanvas");
 const exCtx = exCanvas.getContext("2d");
 let particles = [];
@@ -383,17 +379,14 @@ function renderExplosion() {
 }
 renderExplosion();
 
-/* 光の滝 */
 setInterval(() => {
   spawnExplosion(Math.random()*400, 0, "rgba(255,255,255,0.8)");
 }, 200);
 
-/* ホーム花火大会 */
 setInterval(() => {
   spawnExplosion(Math.random()*400, Math.random()*300);
 }, 500);
 
-/* 豪華ルーレット */
 function spin() {
   const wheel = document.getElementById("wheel");
   const deg = Math.floor(3600 + Math.random() * 360);
@@ -416,20 +409,17 @@ function spin() {
   }, 4000);
 }
 
-/* 商品データ（ローカル埋め込み） */
 let products = [
   { id: 1, name: "激安スマホスタンド", price: 399, sale: "-50%", desc: "角度調整可能なスマホスタンド。激安なのに高品質！", image: "https://via.placeholder.com/150", timer: 10 },
   { id: 2, name: "LEDゲーミングマウス", price: 1299, sale: "-30%", desc: "RGBライト搭載のゲーミングマウス。クリック感最高。", image: "https://via.placeholder.com/150", timer: 20 },
   { id: 3, name: "中華系爆光キーボード", price: 2999, sale: "-40%", desc: "爆光RGB＋中華フォントキーキャップ。", image: "https://via.placeholder.com/150", timer: 30 }
 ];
 
-/* 外部JSON読み込み（失敗したらローカル） */
 fetch("products.json")
   .then(res => res.json())
   .then(data => { products = data; renderProducts(); })
   .catch(() => { renderProducts(); });
 
-/* 商品一覧表示＋爆光セールタイマー */
 function renderProducts() {
   const list = document.getElementById("product-list");
   list.innerHTML = "";
@@ -462,7 +452,6 @@ setInterval(() => {
   });
 }, 1000);
 
-/* 商品詳細 */
 function showDetail(id) {
   const p = products.find(x => x.id === id);
   const detail = document.getElementById("detail");
@@ -478,7 +467,6 @@ function showDetail(id) {
   updateRecommend(p.id);
 }
 
-/* カート */
 function getCart() { return JSON.parse(localStorage.getItem("cart") || "[]"); }
 function saveCart(cart) { localStorage.setItem("cart", JSON.stringify(cart)); }
 
@@ -513,14 +501,39 @@ function renderCart() {
 }
 renderCart();
 
-/* 割引（クーポン＋ポイント） */
+/* 狂気クーポンモード */
 function applyDiscount() {
   let cart = getCart();
   let total = cart.reduce((sum, id) => sum + products.find(p => p.id === id).price, 0);
-  const coupon = document.getElementById("coupon").value;
   const usePts = Number(document.getElementById("use-points").value || 0);
+
   let discount = 0;
-  if (coupon === "OFF10") discount += total * 0.1;
+
+  // 爆光クーポン（50%）
+  discount += total * 0.5;
+
+  // タイムセールクーポン（90%）
+  discount += total * 0.9;
+
+  // ガチャ連動（SSR:70 / SR:40 / R:10）
+  let gachaRate = 0.1;
+  if (lastGachaRarity === "SSR") gachaRate = 0.7;
+  else if (lastGachaRarity === "SR") gachaRate = 0.4;
+  discount += total * gachaRate;
+
+  // お年玉クーポン（1〜100%）
+  const otoRate = (Math.floor(Math.random() * 100) + 1) / 100;
+  discount += total * otoRate;
+
+  // VIP専用（80%）
+  if (currentUser && currentUser.id === "vip") {
+    discount += total * 0.8;
+  }
+
+  // 光の滝クーポン（30%）
+  discount += total * 0.3;
+
+  // ポイント使用
   if (currentUser) {
     const keyPts = "points_" + currentUser.id;
     let points = Number(localStorage.getItem(keyPts) || 0);
@@ -533,9 +546,22 @@ function applyDiscount() {
     localStorage.setItem(keyPts, points);
     document.getElementById("bonus").innerText = currentUser.id + "：" + points + "pt";
   }
-  const final = Math.max(0, total - discount);
-  document.getElementById("discount-info").innerText =
-    "割引額：¥" + Math.floor(discount) + " / 支払金額：¥" + Math.floor(final);
+
+  const final = total - discount;
+
+  spawnExplosion(200,150,"gold");
+  spawnExplosion(200,150,"white");
+  spawnExplosion(50,50,"red");
+  spawnExplosion(350,50,"purple");
+  document.body.style.animation = "flash 0.3s";
+
+  let msg;
+  if (final <= 0) {
+    msg = `割引額：¥${Math.floor(discount)} / 支払金額：¥0（実質無料・店が損してるレベル）`;
+  } else {
+    msg = `割引額：¥${Math.floor(discount)} / 支払金額：¥${Math.floor(final)}`;
+  }
+  document.getElementById("discount-info").innerText = msg;
 }
 
 /* 注文ページへ */
@@ -554,7 +580,6 @@ function goOrder() {
   totalArea.innerText = "合計金額：¥" + total;
 }
 
-/* 注文確定＋ランキング反映 */
 function submitOrder() {
   const name = document.getElementById("order-name").value;
   const addr = document.getElementById("order-address").value;
@@ -580,13 +605,11 @@ function submitOrder() {
   spawnExplosion(200,150,"gold");
 }
 
-/* セクション切り替え */
 function showSection(name) {
   document.getElementById("main-section").style.display = (name === "main") ? "block" : "none";
   document.getElementById("order").style.display = (name === "order") ? "block" : "none";
 }
 
-/* ガチャ（虹色渦＋爆光） */
 function gachaExplosion(rarity) {
   let color = rarity==="SSR" ? "gold" : rarity==="SR" ? "purple" : "cyan";
   for (let i=0;i<10;i++){
@@ -599,6 +622,7 @@ function gacha() {
   let rarity = "R";
   if (roll < 0.01) rarity = "SSR";
   else if (roll < 0.11) rarity = "SR";
+  lastGachaRarity = rarity;
   const p = products[Math.floor(Math.random() * products.length)];
   alert("🎰 ガチャ結果：" + rarity + " / " + p.name);
   gachaExplosion(rarity);
@@ -613,7 +637,6 @@ function gacha() {
   missionProgress("gacha");
 }
 
-/* お年玉封筒乱舞 */
 function otoshidama() {
   if (!currentUser) {
     alert("ログインしてからお年玉を受け取ってね");
@@ -653,7 +676,6 @@ function otoshidama() {
   }
 }
 
-/* ミッション */
 const missionsDef = [
   { id: "view", label: "商品を3つ見る", target: 3 },
   { id: "spin", label: "ルーレットを1回回す", target: 1 },
@@ -692,7 +714,6 @@ function renderMissions() {
   });
 }
 
-/* ランキング */
 function renderRanking() {
   const box = document.getElementById("ranking");
   box.innerHTML = "<h4>🏆ランキング（購入額）</h4>";
@@ -706,7 +727,6 @@ function renderRanking() {
   });
 }
 
-/* AIおすすめ */
 function updateRecommend(lastId) {
   const box = document.getElementById("recommend-list");
   box.innerHTML = "";
@@ -722,7 +742,6 @@ function updateRecommend(lastId) {
   });
 }
 
-/* 起動時 */
 window.onload = () => {
   const savedId = localStorage.getItem("currentUser");
   if (savedId) {
@@ -742,3 +761,4 @@ window.onload = () => {
 
 </body>
 </html>
+```
