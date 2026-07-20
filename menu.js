@@ -175,10 +175,11 @@ async function loadNews(container) {
         if (container) container.innerHTML = "<li>お知らせの取得に失敗しました。</li>";
     }
 }
-fetch("/config.json")
+fetch("/main/config.json")
   .then(res => res.json())
   .then(cfg => {
     if (cfg.maintenance) {
       window.location.href = "/maintenance.html";
     }
-  });
+  })
+  .catch(err => console.error("設定ファイルが読み込めません:", err));
