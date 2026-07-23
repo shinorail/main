@@ -92,7 +92,7 @@ function renderParts() {
                 <li><a href="stamp" style="color: #e63946; font-weight: bold;">乗車印帳</a></li>
                 <li><a href="contact">お問い合わせ</a></li>
                 <li><a href="faq">よくある質問</a></li>
-                <li><a href="links">SNS/外部リンク</a></li>
+                <li><a href="/links.html">SNS/外部リンク</a></li>
                 <li><a href="renkei" style="color: #ffcc00; font-weight: bold;">連携パーツ配布</a></li>
             </ul>`;
             
