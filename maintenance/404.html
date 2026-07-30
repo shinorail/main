@@ -5,6 +5,8 @@
 <title>404 - ページが見つかりません</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown-light.min.css">
+
 <style>
 body {
     font-family: "Noto Sans JP", sans-serif;
@@ -13,51 +15,130 @@ body {
     padding: 0;
 }
 .container {
-    max-width: 700px;
-    margin: 80px auto;
+    max-width: 900px;
+    margin: 40px auto;
     background: #fff;
-    padding: 40px;
+    padding: 30px;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-    text-align: center;
 }
 h1 {
-    font-size: 2em;
-    color: #0078d4;
+    color: #d9534f;
+    text-align: center;
 }
-p {
-    font-size: 1.1em;
-    margin-top: 20px;
+h2 {
+    border-left: 6px solid #0078d4;
+    padding-left: 10px;
 }
-a.button {
+.button {
     display: inline-block;
-    margin-top: 30px;
     padding: 12px 25px;
     background: #0078d4;
     color: #fff;
     border-radius: 8px;
     text-decoration: none;
-    font-size: 1em;
+    margin-top: 20px;
 }
-a.button:hover {
+.button:hover {
     background: #005fa3;
 }
+.progress {
+    width: 100%;
+    background: #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 10px 0;
+}
+.progress-bar {
+    height: 12px;
+    background: #0078d4;
+    width: 0%;
+}
 .small {
-    margin-top: 30px;
+    font-size: 0.85em;
     color: #666;
-    font-size: 0.9em;
 }
 </style>
 </head>
 
 <body>
+
 <div class="container">
-    <h1>404 - ページが見つかりません</h1>
-    <p>お探しのページは存在しないか、移動された可能性があります。</p>
 
-    <a class="button" href="/main/maintenance/">メンテナンス情報ページへ戻る</a>
+<h1>404 - ページが見つかりません</h1>
+<p>お探しのページは存在しないか、移動された可能性があります。</p>
 
-    <p class="small">篠ノ井乗務区公式サイト</p>
+<a class="button" href="/main/maintenance/">メンテナンス情報ページへ戻る</a>
+
+<hr>
+
+<!-- 最新メンテ情報 -->
+<h2>最新メンテナンス情報（latest.md）</h2>
+<div id="latest" class="markdown-body">読み込み中…</div>
+<p class="small" id="latest-updated"></p>
+
+<!-- ステータスAPI -->
+<h2>メンテナンス進捗状況</h2>
+<div class="progress">
+    <div id="progress-bar" class="progress-bar"></div>
 </div>
+<p id="progress-text">読み込み中…</p>
+
+<!-- PDF一覧 -->
+<h2>PDF資料</h2>
+<ul id="pdf-list"></ul>
+
+<!-- 誘導 -->
+<h2>最新情報はこちら</h2>
+<p>このページは存在しませんが、最新のメンテナンス情報は以下から確認できます。</p>
+<a class="button" href="/main/maintenance/">メンテナンス情報ページへ</a>
+
+<!-- PWA誘導 -->
+<h2>PWA新聞アプリ</h2>
+<p>最新のメンテナンス情報は PWA新聞アプリでも確認できます。</p>
+<a class="button" href="/pwa/">新聞アプリを開く</a>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+<script>
+// latest.md 読み込み
+async function loadLatest() {
+    const res = await fetch("latest.md");
+    const text = await res.text();
+    const html = marked.parse(text);
+    document.getElementById("latest").innerHTML = html;
+
+    const firstLine = text.split("\n")[0];
+    document.getElementById("latest-updated").innerText = firstLine.replace("# ", "");
+}
+
+// status.json 読み込み
+async function loadStatus() {
+    const res = await fetch("status.json");
+    const data = await res.json();
+
+    const percent = data.percent ?? 0;
+    document.getElementById("progress-bar").style.width = percent + "%";
+    document.getElementById("progress-text").innerText =
+        `ステータス：${data.status}　／　進捗率：${percent}%（更新日：${data.updated}）`;
+}
+
+// PDF一覧
+const pdfFiles = ["maintenance-report.pdf", "update-summary.pdf"];
+const pdfList = document.getElementById("pdf-list");
+
+pdfFiles.forEach(file => {
+    const li = document.createElement("li");
+    li.innerHTML = `<a href="pdf/${file}" target="_blank">${file}</a>`;
+    pdfList.appendChild(li);
+});
+
+// 実行
+loadLatest();
+loadStatus();
+</script>
+
 </body>
 </html>
