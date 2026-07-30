@@ -1,1 +1,100 @@
 
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>メンテナンス情報 - 篠ノ井乗務区</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown-light.min.css">
+<style>
+body {
+    font-family: "Noto Sans JP", sans-serif;
+    margin: 0;
+    padding: 20px;
+    background: #f5f5f5;
+}
+.container {
+    max-width: 900px;
+    margin: auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+}
+h1 {
+    border-left: 6px solid #0078d4;
+    padding-left: 10px;
+}
+.section {
+    margin-top: 40px;
+}
+.code {
+    background: #eee;
+    padding: 10px;
+    border-radius: 5px;
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>メンテナンス情報</h1>
+<p>このページでは、篠ノ井乗務区公式サイトの更新情報・履歴・PDF資料をまとめています。</p>
+
+<!-- 最新情報 -->
+<div class="section">
+<h2>最新情報（latest.md）</h2>
+<div id="latest" class="markdown-body">読み込み中…</div>
+</div>
+
+<!-- 履歴一覧 -->
+<div class="section">
+<h2>更新履歴（history/）</h2>
+<ul id="history-list"></ul>
+</div>
+
+<!-- PDF一覧 -->
+<div class="section">
+<h2>PDF資料</h2>
+<ul id="pdf-list"></ul>
+</div>
+
+</div>
+
+<script>
+// Markdown読み込み
+async function loadMarkdown(url, targetId) {
+    const res = await fetch(url);
+    const text = await res.text();
+    const html = marked.parse(text);
+    document.getElementById(targetId).innerHTML = html;
+}
+
+// 最新情報読み込み
+loadMarkdown("latest.md", "latest");
+
+// 履歴一覧生成
+const historyFiles = ["2024-08.md", "2024-09.md", "2024-10.md"];
+const historyList = document.getElementById("history-list");
+
+historyFiles.forEach(file => {
+    const li = document.createElement("li");
+    li.innerHTML = `<a href="history/${file}" target="_blank">${file.replace(".md","")} の更新内容</a>`;
+    historyList.appendChild(li);
+});
+
+// PDF一覧生成
+const pdfFiles = ["maintenance-report.pdf", "update-summary.pdf"];
+const pdfList = document.getElementById("pdf-list");
+
+pdfFiles.forEach(file => {
+    const li = document.createElement("li");
+    li.innerHTML = `<a href="pdf/${file}" target="_blank">${file}</a>`;
+    pdfList.appendChild(li);
+});
+</script>
+
+<!-- Markdownパーサー -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+</body>
+</html>
