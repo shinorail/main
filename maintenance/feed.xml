@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
+  <title>篠ノ井乗務区メンテナンス情報</title>
+  <link>https://shinorail.github.io/main/maintenance/</link>
+  <description>公式メンテナンス情報フィード</description>
+
+  <item>
+    <title>メンテナンス情報更新</title>
+    <link>https://shinorail.github.io/main/maintenance/</link>
+    <description>区紹介ページとニュースページの大規模更新を実施中。</description>
+    <pubDate>Tue, 30 Jul 2026 13:00:00 +0900</pubDate>
+  </item>
+</channel>
+</rss>
