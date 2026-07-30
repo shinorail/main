@@ -14,20 +14,17 @@ body {
     padding: 0;
     background: #eef1f5;
 }
-
 .header {
     background: #0078d4;
     color: #fff;
     padding: 20px;
     text-align: center;
 }
-
 .container {
     max-width: 1000px;
     margin: 30px auto;
     padding: 20px;
 }
-
 .card {
     background: #fff;
     padding: 20px;
@@ -35,12 +32,10 @@ body {
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.08);
 }
-
 h2 {
     border-left: 6px solid #0078d4;
     padding-left: 10px;
 }
-
 .progress {
     width: 100%;
     background: #ddd;
@@ -48,15 +43,17 @@ h2 {
     overflow: hidden;
     margin: 10px 0;
 }
-
 .progress-bar {
     height: 12px;
     background: #0078d4;
-    width: 40%; /* 自動更新スクリプトで変更される */
+    width: 0%;
 }
-
 ul {
     padding-left: 20px;
+}
+.small {
+    font-size: 0.85em;
+    color: #666;
 }
 </style>
 </head>
@@ -72,8 +69,9 @@ ul {
 
 <!-- 最新情報 -->
 <div class="card">
-    <h2>最新情報</h2>
+    <h2>最新情報（latest.md）</h2>
     <div id="latest" class="markdown-body">読み込み中…</div>
+    <p class="small" id="latest-updated"></p>
 </div>
 
 <!-- 進捗状況 -->
@@ -97,23 +95,46 @@ ul {
     <ul id="pdf-list"></ul>
 </div>
 
+<!-- フィード案内 -->
+<div class="card">
+    <h2>フィード・連携情報</h2>
+    <ul>
+        <li><a href="feed.json" target="_blank">JSONフィード（PWA用）</a></li>
+        <li><a href="feed.xml" target="_blank">RSSフィード</a></li>
+        <li><a href="status.json" target="_blank">ステータスAPI</a></li>
+    </ul>
+    <p class="small">PWA新聞アプリはこれらの情報を利用して、メンテナンスニュースや通知を表示できます。</p>
+</div>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 <script>
-// Markdown読み込み
-async function loadMarkdown(url, targetId) {
-    const res = await fetch(url);
+// latest.md 読み込み
+async function loadLatest() {
+    const res = await fetch("latest.md");
     const text = await res.text();
     const html = marked.parse(text);
-    document.getElementById(targetId).innerHTML = html;
+    document.getElementById("latest").innerHTML = html;
+
+    // 更新日を抜き出して表示（1行目に「更新日：」がある前提）
+    const firstLine = text.split("\n")[0];
+    document.getElementById("latest-updated").innerText = firstLine.replace("# ", "");
 }
 
-// 最新情報読み込み
-loadMarkdown("latest.md", "latest");
+// status.json 読み込み → 進捗バー更新
+async function loadStatus() {
+    const res = await fetch("status.json");
+    const data = await res.json();
 
-// 履歴一覧
+    const percent = data.percent ?? 0;
+    document.getElementById("progress-bar").style.width = percent + "%";
+    document.getElementById("progress-text").innerText =
+        `ステータス：${data.status}　／　進捗率：${percent}%（更新日：${data.updated}）`;
+}
+
+// 履歴一覧（historyフォルダのファイル名を手動列挙）
 const historyFiles = ["2024-08.md", "2024-09.md", "2024-10.md"];
 const historyList = document.getElementById("history-list");
 
@@ -133,21 +154,9 @@ pdfFiles.forEach(file => {
     pdfList.appendChild(li);
 });
 
-// 自動進捗更新スクリプト
-async function updateProgress() {
-    const res = await fetch("latest.md");
-    const text = await res.text();
-
-    let percent = 40;
-    if (text.includes("作業中")) percent = 60;
-    if (text.includes("ほぼ完了")) percent = 90;
-    if (text.includes("完了")) percent = 100;
-
-    document.getElementById("progress-bar").style.width = percent + "%";
-    document.getElementById("progress-text").innerText = "進捗率：" + percent + "%";
-}
-
-updateProgress();
+// 実行
+loadLatest();
+loadStatus();
 </script>
 
 </body>
