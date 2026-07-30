@@ -58,6 +58,16 @@ h2 {
     font-size: 0.85em;
     color: #666;
 }
+.search-box {
+    margin: 20px 0;
+}
+.search-box input {
+    width: 100%;
+    padding: 10px;
+    font-size: 1em;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
 </style>
 </head>
 
@@ -84,9 +94,28 @@ h2 {
 </div>
 <p id="progress-text">読み込み中…</p>
 
+<!-- 履歴一覧 -->
+<h2>更新履歴（history/）</h2>
+<ul id="history-list"></ul>
+
 <!-- PDF一覧 -->
 <h2>PDF資料</h2>
 <ul id="pdf-list"></ul>
+
+<!-- RSS / JSON フィード -->
+<h2>フィード情報</h2>
+<ul>
+    <li><a href="feed.json" target="_blank">JSONフィード（最新情報）</a></li>
+    <li><a href="feed.xml" target="_blank">RSSフィード</a></li>
+    <li><a href="status.json" target="_blank">ステータスAPI</a></li>
+</ul>
+
+<!-- 検索機能 -->
+<h2>メンテナンス情報検索</h2>
+<div class="search-box">
+    <input type="text" id="search" placeholder="キーワードで検索（最新情報・履歴）">
+</div>
+<ul id="search-results"></ul>
 
 <!-- 誘導 -->
 <h2>最新情報はこちら</h2>
@@ -112,6 +141,8 @@ async function loadLatest() {
 
     const firstLine = text.split("\n")[0];
     document.getElementById("latest-updated").innerText = firstLine.replace("# ", "");
+
+    return text;
 }
 
 // status.json 読み込み
@@ -125,6 +156,16 @@ async function loadStatus() {
         `ステータス：${data.status}　／　進捗率：${percent}%（更新日：${data.updated}）`;
 }
 
+// 履歴一覧
+const historyFiles = ["2024-08.md", "2024-09.md", "2024-10.md"];
+const historyList = document.getElementById("history-list");
+
+historyFiles.forEach(file => {
+    const li = document.createElement("li");
+    li.innerHTML = `<a href="history/${file}" target="_blank">${file.replace(".md","")} の更新内容</a>`;
+    historyList.appendChild(li);
+});
+
 // PDF一覧
 const pdfFiles = ["maintenance-report.pdf", "update-summary.pdf"];
 const pdfList = document.getElementById("pdf-list");
@@ -135,9 +176,45 @@ pdfFiles.forEach(file => {
     pdfList.appendChild(li);
 });
 
+// 検索機能
+async function setupSearch() {
+    const latestText = await loadLatest();
+
+    const historyTexts = {};
+    for (const file of historyFiles) {
+        const res = await fetch("history/" + file);
+        historyTexts[file] = await res.text();
+    }
+
+    document.getElementById("search").addEventListener("input", e => {
+        const q = e.target.value.trim();
+        const results = document.getElementById("search-results");
+        results.innerHTML = "";
+
+        if (!q) return;
+
+        // latest.md検索
+        if (latestText.includes(q)) {
+            const li = document.createElement("li");
+            li.innerHTML = `<a href="latest.md" target="_blank">最新情報に一致</a>`;
+            results.appendChild(li);
+        }
+
+        // 履歴検索
+        for (const file in historyTexts) {
+            if (historyTexts[file].includes(q)) {
+                const li = document.createElement("li");
+                li.innerHTML = `<a href="history/${file}" target="_blank">${file.replace(".md","")} に一致</a>`;
+                results.appendChild(li);
+            }
+        }
+    });
+}
+
 // 実行
 loadLatest();
 loadStatus();
+setupSearch();
 </script>
 
 </body>
