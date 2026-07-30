@@ -1,64 +1,105 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <title>メンテナンス情報 - 篠ノ井乗務区</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown-light.min.css">
+
 <style>
 body {
     font-family: "Noto Sans JP", sans-serif;
     margin: 0;
-    padding: 20px;
-    background: #f5f5f5;
+    padding: 0;
+    background: #eef1f5;
 }
+
+.header {
+    background: #0078d4;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
+
 .container {
-    max-width: 900px;
-    margin: auto;
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 20px;
+}
+
+.card {
     background: #fff;
     padding: 20px;
-    border-radius: 10px;
+    margin-bottom: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
 }
-h1 {
+
+h2 {
     border-left: 6px solid #0078d4;
     padding-left: 10px;
 }
-.section {
-    margin-top: 40px;
+
+.progress {
+    width: 100%;
+    background: #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 10px 0;
 }
-.code {
-    background: #eee;
-    padding: 10px;
-    border-radius: 5px;
+
+.progress-bar {
+    height: 12px;
+    background: #0078d4;
+    width: 40%; /* 自動更新スクリプトで変更される */
+}
+
+ul {
+    padding-left: 20px;
 }
 </style>
 </head>
+
 <body>
+
+<div class="header">
+    <h1>メンテナンス情報</h1>
+    <p>篠ノ井乗務区公式サイトの更新状況をまとめています。</p>
+</div>
+
 <div class="container">
 
-<h1>メンテナンス情報</h1>
-<p>このページでは、篠ノ井乗務区公式サイトの更新情報・履歴・PDF資料をまとめています。</p>
-
 <!-- 最新情報 -->
-<div class="section">
-<h2>最新情報（latest.md）</h2>
-<div id="latest" class="markdown-body">読み込み中…</div>
+<div class="card">
+    <h2>最新情報（latest.md）</h2>
+    <div id="latest" class="markdown-body">読み込み中…</div>
+</div>
+
+<!-- 進捗状況 -->
+<div class="card">
+    <h2>進捗状況</h2>
+    <div class="progress">
+        <div id="progress-bar" class="progress-bar"></div>
+    </div>
+    <p id="progress-text">読み込み中…</p>
 </div>
 
 <!-- 履歴一覧 -->
-<div class="section">
-<h2>更新履歴（history/）</h2>
-<ul id="history-list"></ul>
+<div class="card">
+    <h2>更新履歴（history/）</h2>
+    <ul id="history-list"></ul>
 </div>
 
 <!-- PDF一覧 -->
-<div class="section">
-<h2>PDF資料</h2>
-<ul id="pdf-list"></ul>
+<div class="card">
+    <h2>PDF資料</h2>
+    <ul id="pdf-list"></ul>
 </div>
 
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 <script>
 // Markdown読み込み
@@ -72,7 +113,7 @@ async function loadMarkdown(url, targetId) {
 // 最新情報読み込み
 loadMarkdown("latest.md", "latest");
 
-// 履歴一覧生成
+// 履歴一覧
 const historyFiles = ["2024-08.md", "2024-09.md", "2024-10.md"];
 const historyList = document.getElementById("history-list");
 
@@ -82,7 +123,7 @@ historyFiles.forEach(file => {
     historyList.appendChild(li);
 });
 
-// PDF一覧生成
+// PDF一覧
 const pdfFiles = ["maintenance-report.pdf", "update-summary.pdf"];
 const pdfList = document.getElementById("pdf-list");
 
@@ -91,10 +132,23 @@ pdfFiles.forEach(file => {
     li.innerHTML = `<a href="pdf/${file}" target="_blank">${file}</a>`;
     pdfList.appendChild(li);
 });
-</script>
 
-<!-- Markdownパーサー -->
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+// 自動進捗更新スクリプト
+async function updateProgress() {
+    const res = await fetch("latest.md");
+    const text = await res.text();
+
+    let percent = 40;
+    if (text.includes("作業中")) percent = 60;
+    if (text.includes("ほぼ完了")) percent = 90;
+    if (text.includes("完了")) percent = 100;
+
+    document.getElementById("progress-bar").style.width = percent + "%";
+    document.getElementById("progress-text").innerText = "進捗率：" + percent + "%";
+}
+
+updateProgress();
+</script>
 
 </body>
 </html>
