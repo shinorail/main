@@ -2,162 +2,33 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>メンテナンス情報 - 篠ノ井乗務区</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ページ移動中</title>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown-light.min.css">
+<!-- ★ 2秒後に /maintenance/ へ移動 ★ -->
+<meta http-equiv="refresh" content="2; url=https://shinorail.github.io/maintenance/">
 
 <style>
-body {
+  body {
     font-family: "Noto Sans JP", sans-serif;
-    margin: 0;
-    padding: 0;
-    background: #eef1f5;
-}
-.header {
-    background: #0078d4;
-    color: #fff;
-    padding: 20px;
     text-align: center;
-}
-.container {
-    max-width: 1000px;
-    margin: 30px auto;
-    padding: 20px;
-}
-.card {
-    background: #fff;
-    padding: 20px;
-    margin-bottom: 25px;
+    padding: 60px 20px;
+    background: #f5f5f5;
+  }
+  .box {
+    background: white;
+    padding: 30px;
+    margin: auto;
+    max-width: 480px;
     border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-}
-h2 {
-    border-left: 6px solid #0078d4;
-    padding-left: 10px;
-}
-.progress {
-    width: 100%;
-    background: #ddd;
-    border-radius: 10px;
-    overflow: hidden;
-    margin: 10px 0;
-}
-.progress-bar {
-    height: 12px;
-    background: #0078d4;
-    width: 0%;
-}
-ul {
-    padding-left: 20px;
-}
-.small {
-    font-size: 0.85em;
-    color: #666;
-}
+    box-shadow: 0 0 12px rgba(0,0,0,0.1);
+  }
 </style>
 </head>
 
 <body>
-
-<div class="header">
-    <h1>メンテナンス情報</h1>
-    <p>篠ノ井乗務区公式サイトの更新状況をまとめています。</p>
+<div class="box">
+  <h2>ページを移動しています</h2>
+  <p>数秒お待ちください。</p>
 </div>
-
-<div class="container">
-
-<!-- 最新情報 -->
-<div class="card">
-    <h2>最新情報（latest.md）</h2>
-    <div id="latest" class="markdown-body">読み込み中…</div>
-    <p class="small" id="latest-updated"></p>
-</div>
-
-<!-- 進捗状況 -->
-<div class="card">
-    <h2>進捗状況</h2>
-    <div class="progress">
-        <div id="progress-bar" class="progress-bar"></div>
-    </div>
-    <p id="progress-text">読み込み中…</p>
-</div>
-
-<!-- 履歴一覧 -->
-<div class="card">
-    <h2>更新履歴（history/）</h2>
-    <ul id="history-list"></ul>
-</div>
-
-<!-- PDF一覧 -->
-<div class="card">
-    <h2>PDF資料</h2>
-    <ul id="pdf-list"></ul>
-</div>
-
-<!-- フィード案内 -->
-<div class="card">
-    <h2>フィード・連携情報</h2>
-    <ul>
-        <li><a href="feed.json" target="_blank">JSONフィード（PWA用）</a></li>
-        <li><a href="feed.xml" target="_blank">RSSフィード</a></li>
-        <li><a href="status.json" target="_blank">ステータスAPI</a></li>
-    </ul>
-    <p class="small">PWA新聞アプリはこれらの情報を利用して、メンテナンスニュースや通知を表示できます。</p>
-</div>
-
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-
-<script>
-// latest.md 読み込み
-async function loadLatest() {
-    const res = await fetch("latest.md");
-    const text = await res.text();
-    const html = marked.parse(text);
-    document.getElementById("latest").innerHTML = html;
-
-    // 更新日を抜き出して表示（1行目に「更新日：」がある前提）
-    const firstLine = text.split("\n")[0];
-    document.getElementById("latest-updated").innerText = firstLine.replace("# ", "");
-}
-
-// status.json 読み込み → 進捗バー更新
-async function loadStatus() {
-    const res = await fetch("status.json");
-    const data = await res.json();
-
-    const percent = data.percent ?? 0;
-    document.getElementById("progress-bar").style.width = percent + "%";
-    document.getElementById("progress-text").innerText =
-        `ステータス：${data.status}　／　進捗率：${percent}%（更新日：${data.updated}）`;
-}
-
-// 履歴一覧（historyフォルダのファイル名を手動列挙）
-const historyFiles = ["2024-08.md", "2024-09.md", "2024-10.md"];
-const historyList = document.getElementById("history-list");
-
-historyFiles.forEach(file => {
-    const li = document.createElement("li");
-    li.innerHTML = `<a href="history/${file}" target="_blank">${file.replace(".md","")} の更新内容</a>`;
-    historyList.appendChild(li);
-});
-
-// PDF一覧
-const pdfFiles = ["maintenance-report.pdf", "update-summary.pdf"];
-const pdfList = document.getElementById("pdf-list");
-
-pdfFiles.forEach(file => {
-    const li = document.createElement("li");
-    li.innerHTML = `<a href="pdf/${file}" target="_blank">${file}</a>`;
-    pdfList.appendChild(li);
-});
-
-// 実行
-loadLatest();
-loadStatus();
-</script>
-
 </body>
 </html>
