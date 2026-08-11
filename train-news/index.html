@@ -1,1 +1,413 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Train-News - 篠ノ井乗務区</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#004da0">
+    <link rel="apple-touch-icon" href="icon-192.png">
 
+    <link class="css-link" rel="stylesheet" href="../style.css">
+    <style>
+        /* レイアウトベース調整 */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding-top: 140px; 
+        }
+
+        /* コンテンツエリア */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .page-header-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #004da0;
+            padding-bottom: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .page-header-line h2 { margin: 0; }
+
+        .page-login-btn {
+            background: #ffaa00;
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+        .page-login-btn:hover { background: #e69900; transform: translateY(-1px); }
+        .page-login-btn.logged-in { background: #e0e0e0; color: #555; }
+        .page-login-btn.logged-in:hover { background: #d4d4d4; }
+
+        .news-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 20px; 
+            padding: 20px 0; 
+        }
+
+        .news-card { 
+            background: #fff; 
+            border: 1px solid #ddd; 
+            padding: 15px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            border-left: 5px solid #004da0; 
+            position: relative; 
+            box-sizing: border-box;
+        }
+        .news-card:hover { transform: translateY(-3px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .news-card h3 { margin: 0 0 5px; color: #004da0; font-size: 1.1em; padding-right: 35px; }
+        
+        .fav-btn { position: absolute; top: 12px; right: 10px; background: none; border: none; font-size: 1.4em; cursor: pointer; filter: grayscale(1); transition: 0.2s; z-index: 10; }
+        .fav-btn.active { filter: grayscale(0); }
+        
+        /* ビューオーバーレイ */
+        .viewer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; display: none; flex-direction: column; z-index: 9999; }
+        .viewer-header { background: #004da0; color: white; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; }
+        .viewer-body { flex: 1; position: relative; background: #525659; overflow: hidden; display: flex; flex-direction: column; }
+        #pdf-frame { flex: 1; width: 100%; border: none; }
+        
+        .viewer-footer { background: #333; padding: 12px; text-align: center; box-sizing: border-box; }
+        .v-close-btn-bottom { background: #ff4444; color: white; border: none; padding: 12px 40px; font-size: 1em; font-weight: bold; border-radius: 4px; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.3); transition: background 0.2s; }
+        .v-close-btn-bottom:hover { background: #cc0000; }
+        
+        /* コメントサイドバー */
+        .comment-sidebar { position: absolute; bottom: -100%; left: 0; width: 100%; height: 75%; background: #f9f9f9; transition: 0.3s; z-index: 10000; display: flex; flex-direction: column; box-shadow: 0 -5px 15px rgba(0,0,0,0.2); }
+        .comment-sidebar.open { bottom: 0; }
+        .comment-list { flex: 1; overflow-y: auto; padding: 15px; }
+        .comment-item { background: #fff; padding: 10px; margin-bottom: 8px; border-radius: 5px; border: 1px solid #ddd; font-size: 0.9em; position: relative; }
+        .official-badge { background: #ffaa00; color: #fff; font-size: 0.75em; padding: 2px 6px; border-radius: 3px; margin-left: 5px; font-weight: bold; }
+        .comment-official { border-left: 4px solid #ffaa00; background: #fff9f0; }
+
+        /* アプリダウンロード案内（スマホブラウザ用） */
+        #app-download-screen {
+            display: none;
+            text-align: center;
+            padding: 50px 20px;
+            background: #fff;
+            min-height: 80vh;
+        }
+        .download-box {
+            border: 2px dashed #004da0;
+            padding: 30px 20px;
+            border-radius: 12px;
+            background: #f0f4f9;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            body { padding-top: 170px; }
+            .comment-sidebar { height: 85%; }
+            .page-header-line { flex-direction: column; align-items: flex-start; }
+            .page-login-btn { width: 100%; text-align: center; box-sizing: border-box; }
+        }
+    </style>
+</head>
+<body>
+
+<header></header>
+<nav></nav>
+
+<div id="app-download-screen">
+    <div class="download-box">
+        <h2 style="color: #004da0; margin-top:0;">📱 アプリのダウンロードが必要です</h2>
+        <p>スマホ・タブレットで新聞を読むには、アプリ（ホーム画面への追加）が必要です。</p>
+        <hr style="border: 0; border-top: 1px solid #ccc; margin: 20px 0;">
+        <p style="font-size: 0.9em; color: #555; text-align: left;">
+            <strong>【追加手順】</strong><br>
+            ・<strong>iPhone (Safari):</strong> 画面下の「共有ボタン ➔ ホーム画面に追加」<br>
+            ・<strong>Android (Chrome):</strong> 右上の「メニュー ➔ アプリをインストール」
+        </p>
+    </div>
+</div>
+
+<div class="container" id="main-content-area">
+    <div class="page-header-line">
+        <h2>Train-News 一覧</h2>
+        <div id="page-auth-action"></div>
+    </div>
+    
+    <div id="loading" style="text-align:center; padding:40px;">データを読み込み中...</div>
+    <div id="news-list" class="news-grid"></div>
+</div>
+
+<div id="viewer" class="viewer-overlay">
+    <div class="viewer-header">
+        <h2 id="v-title" style="font-size:1em; margin:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:70%;"></h2>
+        <button onclick="closeViewer()" style="background:#ff4444; color:white; border:none; padding:8px 18px; font-weight:bold; border-radius:4px; cursor:pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">閉じる</button>
+    </div>
+    <div class="viewer-body">
+        <iframe id="pdf-frame"></iframe>
+        <div id="html-content" style="display:none; flex:1; background:#fff; color:#333; padding:20px; overflow-y:auto; box-sizing:border-box; line-height:1.6;"></div>
+
+        <button onclick="toggleComments(true)" style="position:absolute; right:0; top:35%; background:#004da0; color:white; border:none; padding:15px 8px; writing-mode:vertical-rl; border-radius:5px 0 0 5px; cursor:pointer; font-weight:bold; box-shadow: -2px 0 5px rgba(0,0,0,0.2);">💬 コメント</button>
+        
+        <div class="viewer-footer">
+            <button onclick="closeViewer()" class="v-close-btn-bottom">📰 記事を閉じる</button>
+        </div>
+
+        <div id="comment-area" class="comment-sidebar">
+            <div onclick="toggleComments(false)" style="background:#ddd; text-align:center; padding:10px; font-weight:bold; cursor:pointer;">▼ 閉じる</div>
+            <div id="comment-list" class="comment-list"></div>
+            <form id="comment-form" style="padding:15px; background:#eee; border-top:1px solid #ccc;">
+                <input type="text" id="u-name" placeholder="お名前" required style="width:100%; margin-bottom:8px; padding:10px; box-sizing:border-box;">
+                <div id="admin-pass-area" style="display:none; margin-bottom:8px;">
+                    <input type="password" id="u-pass" placeholder="公式用パスワード" style="width:100%; padding:8px; border:1px solid #ffaa00; box-sizing:border-box;">
+                </div>
+                <textarea id="u-msg" placeholder="コメントを入力" required style="width:100%; margin-bottom:8px; padding:10px; box-sizing:border-box; height:60px;"></textarea>
+                <button type="submit" id="comment-submit" style="width:100%; background:#004da0; color:white; border:none; padding:12px; font-weight:bold; cursor:pointer; border-radius:4px;">コメント送信</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<footer></footer>
+
+<script src="../menu.js"></script>
+
+<script>
+    // Service Worker登録
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js').catch(err => console.log(err));
+        });
+    }
+
+    // 端末・PWA起動状態の判定
+    function checkDeviceAndAppMode() {
+        const ua = navigator.userAgent.toLowerCase();
+        const isMobileOrTablet = /iphone|ipad|ipod|android/.test(ua);
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches 
+                            || window.navigator.standalone 
+                            || document.referrer.includes('android-app://');
+
+        const mainArea = document.getElementById("main-content-area");
+        const downloadScreen = document.getElementById("app-download-screen");
+
+        if (isMobileOrTablet && !isStandalone) {
+            mainArea.style.display = "none";
+            downloadScreen.style.display = "block";
+        } else {
+            mainArea.style.display = "block";
+            downloadScreen.style.display = "none";
+            loadNewsData();
+        }
+    }
+
+    const newsScriptUrl = "https://script.google.com/macros/s/AKfycbwbUTBxVeTkRlAJ1dnBlgcmpGaWI9B0SeMwkwKSwAJYjRDAtVcX67QwA5FcNGaJE9Cq/exec";
+    const _auth = "cGFzc3dvcmQyMDI2"; 
+    const isAuthorized = (p) => btoa(p) === _auth;
+
+    function setupFormAdminControl() {
+        const uNameEl = document.getElementById("u-name");
+        if (uNameEl) {
+            uNameEl.addEventListener("input", (e) => {
+                const adminArea = document.getElementById("admin-pass-area");
+                if(adminArea) adminArea.style.display = (e.target.value === "篠ノ井乗務区") ? "block" : "none";
+            });
+        }
+        
+        const email = localStorage.getItem("userEmail");
+        const name = localStorage.getItem("userName");
+        if (name && uNameEl) { uNameEl.value = name; }
+
+        const authActionArea = document.getElementById("page-auth-action");
+        if (authActionArea) {
+            if (email) {
+                authActionArea.innerHTML = `<button onclick="logoutUser(event)" class="page-login-btn logged-in">🔓 ログアウト (${name || '会員'})</button>`;
+            } else {
+                authActionArea.innerHTML = `<a href="../login.html" class="page-login-btn">🔒 会員ログインはこちら</a>`;
+            }
+        }
+    }
+
+    window.logoutUser = function(event) {
+        if(event) event.preventDefault();
+        localStorage.removeItem("userEmail");
+        localStorage.removeItem("userName");
+        location.reload();
+    };
+
+    function toggleFavorite(event, id, title) {
+        event.stopPropagation();
+        let favs = JSON.parse(localStorage.getItem("favNews") || "[]");
+        const index = favs.findIndex(f => f.id == id);
+        if (index > -1) { 
+            favs.splice(index, 1); 
+            event.target.classList.remove("active"); 
+        } else { 
+            favs.push({id: id, title: title}); 
+            event.target.classList.add("active"); 
+        }
+        localStorage.setItem("favNews", JSON.stringify(favs));
+    }
+
+    // データ読み込み（スプレッドシート + news-index.json）
+    async function loadNewsData() {
+        try {
+            let spreadsheetData = [];
+            try {
+                const resSpreadsheet = await fetch(newsScriptUrl + "?sheet=新聞");
+                spreadsheetData = await resSpreadsheet.json();
+                if (!Array.isArray(spreadsheetData)) spreadsheetData = [];
+            } catch(e) { console.error("スプレッドシート読込失敗:", e); }
+
+            let localJsonData = [];
+            try {
+                const resJson = await fetch("./news-index.json?t=" + new Date().getTime());
+                localJsonData = await resJson.json();
+                if (!Array.isArray(localJsonData)) localJsonData = [];
+            } catch(e) { console.error("JSON読込失敗:", e); }
+
+            const allData = spreadsheetData.concat(localJsonData);
+
+            document.getElementById('loading').style.display = 'none';
+            const list = document.getElementById('news-list');
+            list.innerHTML = "";
+            const favs = JSON.parse(localStorage.getItem("favNews") || "[]");
+
+            allData.reverse().forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'news-card';
+                const isLocked = item.isMemberOnly || item['限定'] === true;
+                const lockLabel = isLocked ? '<span style="color:red; font-size:0.8em; font-weight:bold;"> [会員限定]</span>' : '';
+                const isFaved = favs.some(f => f.id == item['号数']) ? "active" : "";
+
+                card.onclick = () => openViewer(item, isLocked);
+                card.innerHTML = `
+                    <button class="fav-btn ${isFaved}" onclick="toggleFavorite(event, '${item['号数']}', '${item['見出し']}')">⭐</button>
+                    <h3>${item['号数'] ? '第 '+item['号数']+' 号' : '号外'}${lockLabel}</h3>
+                    <p style="font-size:0.85em; color:#666; margin-bottom:5px;">📅 ${item['発行日'] || "未設定"}</p>
+                    <p style="font-weight:bold; margin:0;">${item['見出し'] || "無題"}</p>
+                `;
+                list.appendChild(card);
+            });
+        } catch(e) { 
+            document.getElementById('loading').innerText = "エラー：データ取得に失敗しました。"; 
+        }
+    }
+
+    // 記事閲覧
+    async function openViewer(item, isLocked) {
+        if (isLocked && !localStorage.getItem("userEmail")) { 
+            alert("会員限定記事です。閲覧するにはログインしてください。"); 
+            window.location.href = "../login.html";
+            return; 
+        }
+
+        const id = item['号数'] || "";
+        const title = item['見出し'] || "無題";
+        document.getElementById('v-title').innerText = `${id ? '第'+id+'号' : '号外'} ${title}`;
+
+        const pdfFrame = document.getElementById('pdf-frame');
+        const htmlContent = document.getElementById('html-content');
+
+        if (item.isHtmlFile && item.htmlPath) {
+            pdfFrame.style.display = 'none';
+            htmlContent.style.display = 'block';
+            htmlContent.innerHTML = "<p style='color:#999; padding:20px;'>記事を読み込み中...</p>";
+
+            try {
+                const res = await fetch(item.htmlPath);
+                if (!res.ok) throw new Error();
+                const htmlText = await res.text();
+                htmlContent.innerHTML = htmlText;
+            } catch (e) {
+                htmlContent.innerHTML = "<p style='color:red; padding:20px;'>記事ファイルの読み込みに失敗しました。</p>";
+            }
+        } else {
+            htmlContent.style.display = 'none';
+            pdfFrame.style.display = 'block';
+            pdfFrame.src = item.URL ? item.URL.replace('/view?usp=sharing', '/preview') : "";
+        }
+
+        document.getElementById('viewer').style.display = 'flex';
+        loadComments(id);
+    }
+
+    function closeViewer() { 
+        document.getElementById('viewer').style.display = 'none'; 
+        document.getElementById('pdf-frame').src = ""; 
+        document.getElementById('html-content').innerHTML = "";
+    }
+
+    function toggleComments(show) { 
+        document.getElementById('comment-area').classList.toggle('open', show); 
+    }
+
+    async function loadComments(id) {
+        const list = document.getElementById('comment-list');
+        list.innerHTML = "<small>読込中...</small>";
+        try {
+            const res = await fetch(`${newsScriptUrl}?action=getComments&id=${id}`);
+            const data = await res.json();
+            list.innerHTML = data.length ? "" : "<small>コメントはありません</small>";
+            data.forEach(c => {
+                const div = document.createElement('div');
+                const isOfficial = (c.名前 === "篠ノ井乗務区");
+                div.className = 'comment-item' + (isOfficial ? ' comment-official' : '');
+                div.innerHTML = `<strong>${c.名前}${isOfficial ? '<span class="official-badge">公式</span>' : ''}</strong> <small style="color:#999;">${c.日付}</small><br>${c.内容}`;
+                list.appendChild(div);
+            });
+        } catch(e) { list.innerHTML = "<small>読み込み失敗</small>"; }
+    }
+
+    document.getElementById('comment-form').onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('comment-submit');
+        const nameInput = document.getElementById('u-name').value;
+        const passInput = document.getElementById('u-pass').value;
+
+        btn.disabled = true;
+        btn.innerText = "送信中...";
+
+        if (nameInput === "篠ノ井乗務区" && !isAuthorized(passInput)) {
+            alert("パスワードが違います。");
+            btn.disabled = false;
+            btn.innerText = "コメント送信";
+            return;
+        }
+
+        const idMatch = document.getElementById('v-title').innerText.match(/\d+/);
+        const data = { action: "postComment", id: idMatch ? idMatch[0] : "", name: nameInput, comment: document.getElementById('u-msg').value };
+
+        try {
+            await fetch(newsScriptUrl, { method: 'POST', body: JSON.stringify(data) });
+            alert("送信完了。承認をお待ちください。");
+            document.getElementById('u-msg').value = "";
+            toggleComments(false);
+        } catch(e) { alert("送信エラー"); } finally {
+            btn.disabled = false;
+            btn.innerText = "コメント送信";
+        }
+    };
+
+    // 初期化実行
+    setupFormAdminControl();
+    checkDeviceAndAppMode();
+</script>
+</body>
+</html>
