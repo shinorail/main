@@ -1,1 +1,22 @@
 
+{
+  "short_name": "鉄道新聞",
+  "name": "ShinoRail 鉄道新聞",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "./index.html",
+  "background_color": "#f8f9fa",
+  "theme_color": "#004da0",
+  "display": "standalone",
+  "orientation": "portrait"
+}
