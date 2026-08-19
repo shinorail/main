@@ -24,9 +24,7 @@ body{
   padding:20px;
   box-sizing:border-box;
 }
-body.modal-open {
-  overflow: hidden; /* 同意前は背景スクロール不可 */
-}
+body.modal-open { overflow: hidden; } /* 同意前の背景スクロール制限 */
 
 .credit{color:var(--p);font-weight:bold;letter-spacing:2px;margin-top:20px;margin-bottom:10px}
 .title-area{text-align:center;margin-bottom:30px}
@@ -60,66 +58,33 @@ p{font-size:0.9rem;line-height:1.8;color:#cbd5e1;margin-bottom:15px}
 .footer-copy{margin-bottom:40px;font-size:0.7rem;color:#64748b;letter-spacing:1px}
 section{scroll-margin-top:20px}
 
-/* モーダル（ポップアップ）用CSS */
+/* モーダル（同意ポップアップ）用CSS */
 .modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(5px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-  opacity: 0;
-  visibility: hidden;
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px);
+  display: flex; justify-content: center; align-items: center;
+  z-index: 9999; opacity: 0; visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
-  padding: 20px;
-  box-sizing: border-box;
+  padding: 20px; box-sizing: border-box;
 }
-
-.modal-overlay.is-active {
-  opacity: 1;
-  visibility: visible;
-}
-
+.modal-overlay.is-active { opacity: 1; visibility: visible; }
 .modal-content {
-  background: var(--card);
-  border: 2px solid var(--p);
-  border-radius: 20px;
-  padding: 30px;
-  max-width: 500px;
-  width: 100%;
-  text-align: center;
+  background: var(--card); border: 2px solid var(--p); border-radius: 20px;
+  padding: 30px; max-width: 500px; width: 100%; text-align: center;
   box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
 }
-
-.modal-content h3 {
-  color: var(--p);
-  font-size: 1.2rem;
-  margin-top: 0;
-  background: none;
-  padding: 0;
-}
-
-.modal-content p {
-  font-size: 0.85rem;
-  color: #cbd5e1;
-  margin: 15px 0 25px 0;
-  text-align: left;
-}
+.modal-content h3 { color: var(--p); font-size: 1.2rem; margin-top: 0; background: none; padding: 0; }
+.modal-content p { font-size: 0.85rem; color: #cbd5e1; margin: 15px 0 25px 0; text-align: left; }
 </style>
 </head>
 <body class="modal-open">
 
-<!-- 同意用ポップアップ（モーダル） -->
+<!-- 利用規約同意ポップアップ（初回訪問時のみ表示） -->
 <div id="consent-modal" class="modal-overlay">
   <div class="modal-content">
-    <h3>利用規約への同意</h3>
+    <h3>利用規約・ポリシーへの同意</h3>
     <p>
-      篠ノ井乗務区の各種サービス（シミュレーター・各種ツール等）をご利用いただくには、本規約およびプライバシーポリシーへの同意が必要です。<br><br>
+      篠ノ井乗務区の各種サービス（各種シミュレーター・Webツール・会員機能等）をご利用いただくには、総合利用規約およびプライバシーポリシーへの同意が必要です。<br><br>
       当サイトは<strong>個人による非公式ファンサイト</strong>であり、実在の鉄道事業者等とは一切関係ありません。内容をご確認の上、「同意して利用を開始する」ボタンを押してください。
     </p>
     <button id="agree-btn" class="btn">同意して利用を開始する</button>
@@ -133,121 +98,40 @@ section{scroll-margin-top:20px}
 </div>
 
 <div class="main-card">
+  <!-- 忍者AdMax 広告枠 1 -->
   <div class="ad-space">
     <script src="https://adm.shinobi.jp/s/c7ad42cb47e9c4896a30298280add186"></script>
   </div>
 
+  <!-- 最重要警告バナー -->
   <div class="alert-banner">
     <strong>【最重要：鉄道事業者等への問い合わせ厳禁】</strong>
     当サイトは個人による非公式ファンサイトです。掲載内容について鉄道事業者等へ直接問い合わせる行為は、相手方の業務を妨害する迷惑行為となります。確認された場合、即座に利用停止（BAN）措置を講じます。
   </div>
 
+  <!-- JSで自動描画される目次 -->
   <div class="nav-box">
     <p>CONTENTS / 目次</p>
-    <ul>
-      <li><a href="#privacy">第1章：プライバシー</a></li>
-      <li><a href="#membership">第2章：会員制度・守秘義務</a></li>
-      <li><a href="#comments">第3章：コメント基準</a></li>
-      <li><a href="#response">第4章：運営レスポンス</a></li>
-      <li><a href="#account-delete">第5章：退会手続き</a></li>
-      <li><a href="#ads-policy">第6章：広告配信同意</a></li>
-      <li><a href="#copyright">第7章：知的財産権</a></li>
-      <li><a href="#disclaimer">第8章：免責事項</a></li>
-    </ul>
+    <ul id="toc-list"></ul>
   </div>
 
-  <section id="privacy">
-    <h2>第1章：プライバシーポリシー</h2>
-    <h3>第1条（収集情報の種類）</h3>
-    <p>ユーザー名、メールアドレス、生年月日を収集します。また、シミュレーター機能等で端末の位置情報（GPS）を使用する場合、ブラウザ内での計算処理にのみ使用し、サーバー上への保存・蓄積は一切行いません。</p>
-    <h3>第2条（情報の安全性）</h3>
-    <p>SSL通信により保護し、パスワードは暗号化して保存します。</p>
-  </section>
+  <!-- JSで自動描画される規約本文エリア -->
+  <div id="terms-content"></div>
 
-  <div class="ad-space">
-    <script src="https://adm.shinobi.jp/s/9b7ba88cacde1619c31b839b2a95c8d3"></script>
-  </div>
-
-  <section id="membership">
-    <h2>第2章：会員登録制度・限定号厳秘義務</h2>
-    <p><span class="important-txt">会員専用情報およびシミュレーター等のデータのSNS無断転載、スクリーンショット公開は一切禁止です。</span>発見次第、アカウントの即時停止および法的措置を含めた対応を行います。</p>
-  </section>
-
-  <section id="comments">
-    <h2>第3章：コメント投稿基準</h2>
-    <p>完全承認制です。誹謗中傷やマナー違反、危険撮影・立入禁止エリアへの侵入を助長する投稿は管理者の判断で掲載拒否・削除します。</p>
-  </section>
-
-  <section id="response">
-    <h2>第4章：運営レスポンス方針</h2>
-    <p>全ての問い合わせへの返信を確約するものではありません。特に情報公開前の事項や運行情報等の問い合わせについては回答を差し控えます。</p>
-  </section>
-
-  <section id="account-delete">
-    <h2>第5章：アカウント削除（退会）手続き</h2>
-    <div class="contact-panel">
-      <p style="color:var(--txt); margin-bottom:20px">下記3点を正確に明記して申請してください。<br><strong>1. ユーザー名 / 2. メールアドレス / 3. 生年月日</strong></p>
-      <a href="https://shinorail.github.io/main/contact.html" class="btn" target="_blank">退会申請フォームへ</a>
-    </div>
-  </section>
-
-  <section id="ads-policy">
-    <h2>第6章：広告配信サービスへの同意</h2>
-    <p>サーバー維持費等のため忍者AdMax等の広告を表示しています。利用者はこれに同意したものとみなします。</p>
-  </section>
-
-  <section id="copyright">
-    <h2>第7章：知的財産権・転載禁止</h2>
-    <p>当サイトで提供するWebツール、シミュレーター、デザイン、コードの著作権は篠ノ井乗務区に帰属します。無断転載・再配布を固く禁じます。</p>
-  </section>
-
-  <section id="disclaimer">
-    <h2>第8章：免責事項</h2>
-    <p>提供するシミュレーション結果や各種情報の正確性には万全を期していますが、現地でのトラブル、撮影失敗、自己等について運営者は一切の責任を負いません。現地の指示や安全基準に従い自己責任でご利用ください。</p>
-  </section>
-
+  <!-- 忍者AdMax 広告枠 2 -->
   <div class="ad-space">
     <script src="https://adm.shinobi.jp/s/c7ad42cb47e9c4896a30298280add186"></script>
   </div>
 
-  <div style="text-align: right; font-size: 0.7rem; color: #64748b; margin-top: 40px;">
-    制定：2025年7月20日<br>
-    最終改訂：2026年2月14日
-  </div>
+  <!-- JSで自動挿入される日付情報 -->
+  <div id="date-info" style="text-align: right; font-size: 0.7rem; color: #64748b; margin-top: 40px;"></div>
 </div>
 
 <a href="menu.html" class="back-btn">← MENU / 戻る</a>
 <div class="footer-copy">&copy; 篠ノ井乗務区 All Rights Reserved.</div>
 
-<!-- 既存のmenu.jsの読み込み -->
+<!-- JavaScriptの読み込み -->
 <script src="menu.js"></script>
-
-<!-- 同意判定JavaScript -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const modal = document.getElementById('consent-modal');
-  const agreeBtn = document.getElementById('agree-btn');
-  const storageKey = 'shinorail_terms_agreed';
-
-  // ローカルストレージを確認（過去に同意済みか？）
-  if (!localStorage.getItem(storageKey)) {
-    // 未同意の場合はモーダルを表示
-    modal.classList.add('is-active');
-  } else {
-    // 同意済みの場合は背景スクロール解除
-    document.body.classList.remove('modal-open');
-  }
-
-  // 同意ボタンをクリックした時の処理
-  agreeBtn.addEventListener('click', function() {
-    // ローカルストレージに「同意済み」として保存
-    localStorage.setItem(storageKey, 'true');
-    
-    // モーダルを非表示にし、スクロールを解除
-    modal.classList.remove('is-active');
-    document.body.classList.remove('modal-open');
-  });
-});
-</script>
+<script src="terms.js"></script>
 </body>
 </html>
