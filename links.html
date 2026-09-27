@@ -1,201 +1,559 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LINKS - 篠ノ井乗務区</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>LINKS | 篠ノ井乗務区 Shinorail-Group</title>
 
-<!-- PWA・モバイル対応メタタグ -->
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#1a1a1a">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="apple-touch-icon" href="icon-192.png">
+    <!-- PWA & Mobile Web App Meta Tags -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#12141c">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icon-192.png">
 
-<!-- CSS / アイコンフォント -->
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CDN External Dependencies -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
 
-<style>
-/* ===== リンク集専用デザイン ===== */
-.link-container { 
-  max-width: 500px; 
-  margin: 40px auto; 
-  padding: 0 20px; 
-  text-align: center; 
-}
+    <style>
+        :root {
+            --bg-main: #0c0e14;
+            --bg-card: #161922;
+            --bg-card-hover: #1e2230;
+            --accent-blue: #0088ff;
+            --accent-green: #00e676;
+            --accent-gold: #ffd700;
+            --text-main: #f0f4f8;
+            --text-sub: #8a99ad;
+            --border-color: rgba(255, 255, 255, 0.08);
+        }
 
-.link-container h2 {
-  margin-bottom: 30px; 
-  letter-spacing: 2px; 
-  color: var(--accent-blue, #2196f3);
-}
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
 
-.link-grid { 
-  display: flex; 
-  flex-direction: column; 
-  gap: 15px; 
-  margin-bottom: 30px; 
-}
+        /* Glassmorphism Header */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(12, 14, 20, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+        }
 
-.btn { 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
-  gap: 12px; 
-  padding: 18px; 
-  border-radius: 15px; 
-  color: white; 
-  text-decoration: none; 
-  font-weight: bold; 
-  transition: 0.3s; 
-  border: none; 
-  font-size: 1.1rem; 
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3); 
-}
+        /* Hamburger Animation */
+        .hamburger-line {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: center;
+        }
 
-.btn:hover { 
-  transform: translateY(-3px); 
-  box-shadow: 0 6px 20px rgba(0,255,191,0.3); 
-}
+        .hamburger.active .line1 {
+            transform: translateY(7px) rotate(45deg);
+        }
 
-/* カラー設定 */
-.btn-multix { background: linear-gradient(135deg, #d4af37, #aa8a2e); } /* 金 */
-.btn-official { background: #00c853; } /* 緑 */
-.btn-lab { background: #333; border: 1px solid #444; } /* 黒 */
-.btn-twitter { background: #1da1f2; } /* 青 */
-.btn-contact { background: #78909c; } /* グレー */
+        .hamburger.active .line2 {
+            opacity: 0;
+            transform: translateX(-10px);
+        }
 
-/* 広告エリアのデザイン */
-.ad-area { 
-  margin: 20px 0; 
-  padding: 15px; 
-  background: var(--bg-card, #2a2a2a); 
-  border-radius: 15px; 
-  border: 1px solid #333; 
-  min-height: 250px; 
-  display: flex; 
-  flex-direction: column; 
-  align-items: center; 
-}
+        .hamburger.active .line3 {
+            transform: translateY(-7px) rotate(-45deg);
+        }
 
-.ad-label { 
-  font-size: 10px; 
-  color: var(--text-sub, #888); 
-  margin-bottom: 12px; 
-  letter-spacing: 2px; 
-}
+        /* Slide Drawer Navigation Overlay */
+        .nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 990;
+        }
 
-.link-footer { 
-  margin-top: 30px; 
-  font-size: 12px; 
-  color: var(--text-sub, #888); 
-  line-height: 1.6; 
-}
+        .nav-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
 
-/* ===== 更新通知トースト ===== */
-.update-toast {
-  position: fixed; 
-  bottom: 20px; 
-  left: 50%; 
-  transform: translateX(-50%); 
-  background: #323232; 
-  color: #fff; 
-  padding: 14px 20px; 
-  border-radius: 30px; 
-  font-size: 14px; 
-  display: none; 
-  z-index: 2000;
-}
-</style>
+        .drawer-menu {
+            position: fixed;
+            top: 0;
+            right: -320px;
+            width: 280px;
+            height: 100%;
+            background: rgba(20, 24, 34, 0.98);
+            border-left: 1px solid var(--border-color);
+            z-index: 995;
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 80px 24px 30px;
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
 
-<!-- Google AdSense 外部JS -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4068543578821342" crossorigin="anonymous"></script>
+        .drawer-menu.active {
+            transform: translateX(-320px);
+        }
+
+        /* Nav Link Hover Effects */
+        .nav-link {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            color: var(--text-sub);
+            font-weight: 500;
+            transition: all 0.25s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 25%;
+            height: 50%;
+            width: 4px;
+            background: var(--accent-blue);
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* Link Buttons Styling */
+        .link-btn {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            padding: 18px 24px;
+            border-radius: 14px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-decoration: none;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .link-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .link-btn:hover::before {
+            left: 100%;
+        }
+
+        .link-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Button Gradients */
+        .btn-multix {
+            background: linear-gradient(135deg, #d4af37, #9a7b1c);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+        }
+
+        .btn-official {
+            background: linear-gradient(135deg, #00c853, #00897b);
+        }
+
+        .btn-lab {
+            background: linear-gradient(135deg, #2c303e, #1a1c24);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-twitter {
+            background: linear-gradient(135deg, #1da1f2, #0d70b7);
+        }
+
+        .btn-contact {
+            background: linear-gradient(135deg, #607d8b, #37474f);
+        }
+
+        /* Pulse glowing highlight for MultiX */
+        .btn-multix::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #ffe57f, #d4af37);
+            z-index: -1;
+            opacity: 0.3;
+            filter: blur(8px);
+            transition: opacity 0.3s;
+        }
+
+        .btn-multix:hover::after {
+            opacity: 0.8;
+        }
+
+        /* Advertisement Card */
+        .ad-card {
+            background: var(--bg-card);
+            border: 1px dashed rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 20px;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* Modal Overlay & Animations */
+        .survey-modal {
+            transition: all 0.3s ease-out;
+            transform: scale(0.95);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .survey-modal.active {
+            transform: scale(1);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Toast Popup */
+        .toast-notification {
+            transform: translateY(100px);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .toast-notification.show {
+            transform: translateY(0);
+        }
+    </style>
 </head>
 <body>
 
-<header></header>
-<nav></nav>
+    <header class="w-full px-5 py-4 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-lg bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-blue-400 font-bold">
+                <i class="fa-solid fa-train text-sm"></i>
+            </div>
+            <div>
+                <a href="#" class="text-lg font-bold tracking-wider text-white hover:text-blue-400 transition-colors">
+                    篠ノ井乗務区 <span class="text-xs font-mono text-blue-400 font-semibold px-1.5 py-0.5 rounded bg-blue-500/10 border border-blue-500/20 ml-1">S.R.C.C.</span>
+                </a>
+            </div>
+        </div>
 
-<main>
-  <div class="link-container">
-    <h2>Shinorail-Group</h2>
+        <!-- Hamburger Icon Button -->
+        <button id="js-hamburger" class="hamburger p-2 rounded-lg focus:outline-none text-slate-300 hover:text-white" aria-label="Toggle Navigation Menu">
+            <div class="w-6 h-5 flex flex-col justify-between">
+                <span class="hamburger-line line1 w-full h-0.5 bg-current rounded"></span>
+                <span class="hamburger-line line2 w-full h-0.5 bg-current rounded"></span>
+                <span class="hamburger-line line3 w-full h-0.5 bg-current rounded"></span>
+            </div>
+        </button>
+    </header>
+
+    <div id="js-nav-overlay" class="nav-overlay"></div>
     
-    <div class="link-grid">
-      <a href="https://shinorail.github.io/multi-x-utility/" class="btn btn-multix">
-        <i class="fa-solid fa-microchip"></i> Multi-X Utility
-      </a>
-      <a href="https://t.co/P00r6U34D0" class="btn btn-official">
-        <i class="fa-brands fa-google"></i> 篠ノ井乗務区 公式（新）
-      </a>
-      <a href="https://shinorail.github.io/lab/" class="btn btn-lab">
-        <i class="fa-brands fa-github"></i> しのれーるらぼ
-      </a>
-      <a href="https://x.com/Shino_Rail" class="btn btn-twitter" target="_blank" rel="noopener">
-        <i class="fa-brands fa-x-twitter"></i> 篠ノ井乗務区 Twitter
-      </a>
-      <a href="contact.html" class="btn btn-contact">
-        <i class="fa-solid fa-file-signature"></i> お問い合わせ
-      </a>
+    <nav id="js-drawer" class="drawer-menu">
+        <div class="space-y-6">
+            <div class="border-b border-slate-800 pb-4">
+                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">NAVIGATION</p>
+                <p class="text-sm text-slate-300 mt-1">篠ノ井乗務区ポータル</p>
+            </div>
+            <div class="space-y-2">
+                <a href="index.html" class="nav-link">
+                    <i class="fa-solid fa-house w-5 text-center text-blue-400"></i>
+                    <span>ホーム</span>
+                </a>
+                <a href="news.html" class="nav-link">
+                    <i class="fa-solid fa-newspaper w-5 text-center text-emerald-400"></i>
+                    <span>お知らせ</span>
+                </a>
+                <a href="mission.html" class="nav-link">
+                    <i class="fa-solid fa-compass w-5 text-center text-amber-400"></i>
+                    <span>活動理念</span>
+                </a>
+                <a href="history.html" class="nav-link">
+                    <i class="fa-solid fa-clock-rotate-left w-5 text-center text-purple-400"></i>
+                    <span>沿革</span>
+                </a>
+                <a href="links.html" class="nav-link active">
+                    <i class="fa-solid fa-link w-5 text-center text-cyan-400"></i>
+                    <span>リンク集</span>
+                </a>
+                <a href="contact.html" class="nav-link">
+                    <i class="fa-solid fa-paper-plane w-5 text-center text-rose-400"></i>
+                    <span>お問い合わせ</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="pt-6 border-t border-slate-800">
+            <div class="text-xs text-slate-500 text-center">
+                &copy; 2026 Shinorail-Group
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow flex flex-col items-center px-4 py-8 max-w-xl mx-auto w-full">
+        <!-- Title Banner -->
+        <div class="text-center mb-8">
+            <h1 class="text-2xl sm:text-3xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-indigo-400">
+                Shinorail-Group
+            </h1>
+            <p class="text-xs text-slate-400 mt-2 font-medium">公式関連サービス・外部リンク</p>
+        </div>
+
+        <!-- Links Grid Container -->
+        <div class="w-full flex flex-col gap-4 mb-8">
+            <!-- Multi-X Utility -->
+            <a href="https://shinorail.github.io/multi-x-utility/" target="_blank" rel="noopener noreferrer" class="link-btn btn-multix">
+                <i class="fa-solid fa-microchip text-xl"></i>
+                <span>Multi-X Utility</span>
+            </a>
+
+            <!-- Official Google -->
+            <a href="https://t.co/P00r6U34D0" target="_blank" rel="noopener noreferrer" class="link-btn btn-official">
+                <i class="fa-brands fa-google text-xl"></i>
+                <span>篠ノ井乗務区 公式（新）</span>
+            </a>
+
+            <!-- Lab Github -->
+            <a href="https://shinorail.github.io/lab/" target="_blank" rel="noopener noreferrer" class="link-btn btn-lab">
+                <i class="fa-brands fa-github text-xl"></i>
+                <span>しのれーるらぼ</span>
+            </a>
+
+            <!-- Twitter / X -->
+            <a href="https://x.com/Shino_Rail" target="_blank" rel="noopener noreferrer" class="link-btn btn-twitter">
+                <i class="fa-brands fa-x-twitter text-xl"></i>
+                <span>篠ノ井乗務区 Twitter</span>
+            </a>
+
+            <!-- Contact Form -->
+            <a href="contact.html" class="link-btn btn-contact">
+                <i class="fa-solid fa-file-signature text-xl"></i>
+                <span>お問い合わせ</span>
+            </a>
+        </div>
+
+        <!-- Advertisement Container -->
+        <div class="w-full ad-card mb-8">
+            <span class="text-[10px] tracking-widest text-slate-500 font-semibold mb-3 uppercase">Advertisement</span>
+            <div class="w-full flex items-center justify-center">
+                <!-- Shinobi AD Script Slot -->
+                <script src="https://adm.shinobi.jp/o/2791c03bc086135607731d2a0eb484fd"></script>
+            </div>
+        </div>
+
+        <!-- Footer Info -->
+        <footer class="text-center text-xs text-slate-500 space-y-2 leading-relaxed">
+            <p>※ サービス維持のため、広告を表示しています。<br>ご理解とご協力をお願い申し上げます。</p>
+            <p class="pt-2 font-mono">&copy; 2026 Shinorail-Group. All Rights Reserved.</p>
+        </footer>
+    </main>
+
+    <!-- Floating Survey Trigger Button -->
+    <button id="survey-toggle" onclick="toggleSurveyModal()" class="fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-5 rounded-full shadow-lg shadow-blue-900/40 flex items-center gap-2 transition-all hover:scale-105 active:scale-95 z-50">
+        <i class="fa-solid fa-envelope-open-text"></i>
+        <span class="text-xs sm:text-sm">アンケート</span>
+    </button>
+
+    <!-- Survey Popup Window -->
+    <div id="survey-modal" class="survey-modal fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-sm rounded-2xl shadow-2xl overflow-hidden">
+            <div class="bg-blue-600 p-4 flex justify-between items-center text-white">
+                <h3 class="font-bold text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-comments"></i> 閲覧者アンケート
+                </h3>
+                <button onclick="toggleSurveyModal()" class="text-white/80 hover:text-white text-lg font-bold px-2">&times;</button>
+            </div>
+            
+            <form id="survey-form" class="p-5 space-y-4">
+                <div>
+                    <label class="block text-xs text-slate-400 mb-2">評価をお選びください</label>
+                    <div class="grid grid-cols-5 gap-1.5">
+                        <input id="r1" type="radio" name="rate" value="1" class="hidden peer/1">
+                        <label for="r1" class="bg-slate-800 text-slate-300 peer-checked/1:bg-blue-600 peer-checked/1:text-white text-center py-2 rounded-lg font-bold text-sm cursor-pointer hover:bg-slate-700 transition">1</label>
+
+                        <input id="r2" type="radio" name="rate" value="2" class="hidden peer/2">
+                        <label for="r2" class="bg-slate-800 text-slate-300 peer-checked/2:bg-blue-600 peer-checked/2:text-white text-center py-2 rounded-lg font-bold text-sm cursor-pointer hover:bg-slate-700 transition">2</label>
+
+                        <input id="r3" type="radio" name="rate" value="3" checked class="hidden peer/3">
+                        <label for="r3" class="bg-slate-800 text-slate-300 peer-checked/3:bg-blue-600 peer-checked/3:text-white text-center py-2 rounded-lg font-bold text-sm cursor-pointer hover:bg-slate-700 transition">3</label>
+
+                        <input id="r4" type="radio" name="rate" value="4" class="hidden peer/4">
+                        <label for="r4" class="bg-slate-800 text-slate-300 peer-checked/4:bg-blue-600 peer-checked/4:text-white text-center py-2 rounded-lg font-bold text-sm cursor-pointer hover:bg-slate-700 transition">4</label>
+
+                        <input id="r5" type="radio" name="rate" value="5" class="hidden peer/5">
+                        <label for="r5" class="bg-slate-800 text-slate-300 peer-checked/5:bg-blue-600 peer-checked/5:text-white text-center py-2 rounded-lg font-bold text-sm cursor-pointer hover:bg-slate-700 transition">5</label>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="msg" class="block text-xs text-slate-400 mb-1">ご意見・ご要望</label>
+                    <textarea id="msg" rows="3" placeholder="ご自由にお書きください" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition"></textarea>
+                </div>
+
+                <button type="submit" id="survey-btn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 rounded-lg text-sm transition">
+                    送信する
+                </button>
+            </form>
+
+            <div id="survey-thanks" class="hidden p-6 text-center space-y-2">
+                <i class="fa-solid fa-circle-check text-emerald-400 text-3xl"></i>
+                <h4 class="text-white font-bold text-base">ご協力ありがとうございました</h4>
+                <p class="text-xs text-slate-400">今後の運営参考にさせていただきます。</p>
+            </div>
+        </div>
     </div>
 
-    <div class="ad-area">
-      <div class="ad-label">ADVERTISEMENT</div>
-      <script src="https://adm.shinobi.jp/o/2791c03bc086135607731d2a0eb484fd"></script>
+    <!-- Update Toast Notification -->
+    <div id="update-toast" class="toast-notification fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-xs sm:text-sm px-5 py-3 rounded-full border border-slate-700 shadow-2xl flex items-center gap-3 z-[2000]">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span>新しい更新があります。まもなく反映されます。</span>
     </div>
 
-    <footer class="link-footer">
-      <p>※サービス維持のため、広告を表示しています。<br>ご理解とご協力をお願い申し上げます。</p>
-      <p>&copy; 2026 Shinorail-Group. All Rights Reserved.</p>
-    </footer>
-  </div>
-</main>
+    <!-- Google Translate Hidden Dynamic Holder -->
+    <div id="google_translate_element" style="display:none"></div>
 
-<footer></footer>
+    <script>
+        /* ===== Hamburger Menu Toggle Logic ===== */
+        const hamburgerBtn = document.getElementById('js-hamburger');
+        const drawerMenu = document.getElementById('js-drawer');
+        const navOverlay = document.getElementById('js-nav-overlay');
 
-<!-- 更新通知トースト -->
-<div id="update-toast" class="update-toast">新しい更新があります。まもなく反映されます。</div>
+        function toggleMenu() {
+            hamburgerBtn.classList.toggle('active');
+            drawerMenu.classList.toggle('active');
+            navOverlay.classList.toggle('active');
 
-<!-- 動的メニュー読込スクリプト -->
-<script src="menu.js"></script>
+            const isExpanded = hamburgerBtn.classList.contains('active');
+            hamburgerBtn.setAttribute('aria-expanded', isExpanded);
+        }
 
-<!-- Google 翻訳エレメント -->
-<div id="google_translate_element" style="display:none"></div>
-<script>
-function googleTranslateElementInit() {
-  new google.translate.TranslateElement(
-    { pageLanguage:'ja', includedLanguages:'ja,en', autoDisplay:false },
-    'google_translate_element'
-  );
-}
-</script>
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+        hamburgerBtn.addEventListener('click', toggleMenu);
+        navOverlay.addEventListener('click', toggleMenu);
 
-<!-- PWA / Service Worker 登録処理 -->
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js').then(reg => {
-      console.log('PWA Ready');
-      reg.addEventListener('updatefound', () => {
-        const nw = reg.installing;
-        nw.addEventListener('statechange', () => {
-          if (nw.state === 'installed' && navigator.serviceWorker.controller) {
-            showUpdate(nw);
-          }
+        /* Close menu on ESC key press */
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && drawerMenu.classList.contains('active')) {
+                toggleMenu();
+            }
         });
-      });
-    }).catch(err => console.log('PWA Error', err));
-  });
-}
 
-function showUpdate(waitingSW) {
-  if (window.innerWidth >= 768) return;
-  const t = document.getElementById('update-toast');
-  if (t) t.style.display = 'block'; 
-  if (waitingSW) waitingSW.postMessage({action: 'skipWaiting'});
-}
-</script>
+        /* ===== Survey Modal Control & Submission ===== */
+        const scriptUrl = "https://script.google.com/macros/s/AKfycbwbUTBxVeTkRlAJ1dnBlgcmpGaWI9B0SeMwkwKSwAJYjRDAtVcX67QwA5FcNGaJE9Cq/exec";
 
+        function toggleSurveyModal() {
+            const modal = document.getElementById('survey-modal');
+            modal.classList.toggle('active');
+        }
+
+        document.getElementById('survey-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('survey-btn');
+            btn.disabled = true;
+            btn.innerText = "送信中...";
+
+            const rate = document.querySelector('input[name="rate"]:checked').value;
+            const msg = document.getElementById('msg').value;
+            const name = localStorage.getItem("userName") || "ゲスト";
+
+            const payload = {
+                action: "postSurvey",
+                name: name,
+                rating: rate,
+                message: msg
+            };
+
+            try {
+                await fetch(scriptUrl, { method: 'POST', body: JSON.stringify(payload) });
+                document.getElementById('survey-form').classList.add('hidden');
+                document.getElementById('survey-thanks').classList.remove('hidden');
+                setTimeout(() => {
+                    toggleSurveyModal();
+                }, 2500);
+            } catch(err) {
+                alert("送信に失敗しました。時間をおいて再試行してください。");
+                btn.disabled = false;
+                btn.innerText = "送信する";
+            }
+        };
+
+        /* Check Online Status for Survey Toggle */
+        function checkOnlineStatus() {
+            const btn = document.getElementById('survey-toggle');
+            if (btn) btn.style.display = navigator.onLine ? 'flex' : 'none';
+        }
+        window.addEventListener('online', checkOnlineStatus);
+        window.addEventListener('offline', checkOnlineStatus);
+        checkOnlineStatus();
+
+        /* ===== Service Worker & PWA Logic ===== */
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js').then(reg => {
+                    console.log('PWA Service Worker Ready');
+                    reg.addEventListener('updatefound', () => {
+                        const newWorker = reg.installing;
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                showUpdateToast(newWorker);
+                            }
+                        });
+                    });
+                }).catch(err => console.error('PWA Registration Error', err));
+            });
+        }
+
+        function showUpdateToast(waitingSW) {
+            const toast = document.getElementById('update-toast');
+            if (toast) {
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 6000);
+            }
+            if (waitingSW) waitingSW.postMessage({ action: 'skipWaiting' });
+        }
+
+        /* ===== Google Translate Init ===== */
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement(
+                { pageLanguage: 'ja', includedLanguages: 'ja,en', autoDisplay: false },
+                'google_translate_element'
+            );
+        }
+    </script>
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
